@@ -9,19 +9,24 @@
 /* Begin PBXBuildFile section */
 		F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE02B23084600FA1F8E /* AppDelegate.swift */; };
 		F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE22B23084600FA1F8E /* SceneDelegate.swift */; };
-		F9739EE52B23084600FA1F8E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE42B23084600FA1F8E /* ViewController.swift */; };
 		F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9739EE92B23084900FA1F8E /* Assets.xcassets */; };
 		F9739EED2B23084900FA1F8E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */; };
+		F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EFE2B230F4F00FA1F8E /* TabBarController.swift */; };
+		F9739F022B230F6700FA1F8E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F012B230F6700FA1F8E /* SnapKit */; };
+		F9739F042B230F6700FA1F8E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F032B230F6700FA1F8E /* SnapKit-Dynamic */; };
+		F9739F072B230F8100FA1F8E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F062B230F8100FA1F8E /* Realm */; };
+		F9739F092B230F8100FA1F8E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F082B230F8100FA1F8E /* RealmSwift */; };
+		F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F9739EDD2B23084600FA1F8E /* VocaWeaveApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaWeaveApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9739EE02B23084600FA1F8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9739EE22B23084600FA1F8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F9739EE42B23084600FA1F8E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F9739EE92B23084900FA1F8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9739EEC2B23084900FA1F8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		F9739EEE2B23084900FA1F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F9739EFE2B230F4F00FA1F8E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +34,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9739F092B230F8100FA1F8E /* RealmSwift in Frameworks */,
+				F9739F072B230F8100FA1F8E /* Realm in Frameworks */,
+				F9739F022B230F6700FA1F8E /* SnapKit in Frameworks */,
+				F9739F042B230F6700FA1F8E /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +47,7 @@
 		F9739ED42B23084600FA1F8E = {
 			isa = PBXGroup;
 			children = (
+				F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */,
 				F9739EDF2B23084600FA1F8E /* VocaWeaveApp */,
 				F9739EDE2B23084600FA1F8E /* Products */,
 			);
@@ -54,14 +64,93 @@
 		F9739EDF2B23084600FA1F8E /* VocaWeaveApp */ = {
 			isa = PBXGroup;
 			children = (
-				F9739EE02B23084600FA1F8E /* AppDelegate.swift */,
-				F9739EE22B23084600FA1F8E /* SceneDelegate.swift */,
-				F9739EE42B23084600FA1F8E /* ViewController.swift */,
-				F9739EE92B23084900FA1F8E /* Assets.xcassets */,
-				F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */,
-				F9739EEE2B23084900FA1F8E /* Info.plist */,
+				F9739EFA2B230E8A00FA1F8E /* Resource */,
+				F9739EF92B230E8800FA1F8E /* App */,
+				F9739EF82B230E8500FA1F8E /* Helper */,
+				F9739EF72B230E8300FA1F8E /* Model */,
+				F9739EF62B230E8100FA1F8E /* Networking */,
+				F9739EF52B230E7E00FA1F8E /* Presenter */,
 			);
 			path = VocaWeaveApp;
+			sourceTree = "<group>";
+		};
+		F9739EF42B230E7A00FA1F8E /* DictionaryPage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DictionaryPage;
+			sourceTree = "<group>";
+		};
+		F9739EF52B230E7E00FA1F8E /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				F9739EFE2B230F4F00FA1F8E /* TabBarController.swift */,
+				F9739EFD2B230EF500FA1F8E /* VocaViewPage */,
+				F9739EFC2B230EF300FA1F8E /* CategoryWordspage */,
+				F9739EFB2B230EF000FA1F8E /* VocaWeavePage */,
+				F9739EF42B230E7A00FA1F8E /* DictionaryPage */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		F9739EF62B230E8100FA1F8E /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F9739EF72B230E8300FA1F8E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F9739EF82B230E8500FA1F8E /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
+		F9739EF92B230E8800FA1F8E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F9739EE02B23084600FA1F8E /* AppDelegate.swift */,
+				F9739EE22B23084600FA1F8E /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F9739EFA2B230E8A00FA1F8E /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F9739EE92B23084900FA1F8E /* Assets.xcassets */,
+				F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		F9739EFB2B230EF000FA1F8E /* VocaWeavePage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = VocaWeavePage;
+			sourceTree = "<group>";
+		};
+		F9739EFC2B230EF300FA1F8E /* CategoryWordspage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CategoryWordspage;
+			sourceTree = "<group>";
+		};
+		F9739EFD2B230EF500FA1F8E /* VocaViewPage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = VocaViewPage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,12 +163,19 @@
 				F9739ED92B23084600FA1F8E /* Sources */,
 				F9739EDA2B23084600FA1F8E /* Frameworks */,
 				F9739EDB2B23084600FA1F8E /* Resources */,
+				F9739F0A2B23109600FA1F8E /* SwiftLint Script */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = VocaWeaveApp;
+			packageProductDependencies = (
+				F9739F012B230F6700FA1F8E /* SnapKit */,
+				F9739F032B230F6700FA1F8E /* SnapKit-Dynamic */,
+				F9739F062B230F8100FA1F8E /* Realm */,
+				F9739F082B230F8100FA1F8E /* RealmSwift */,
+			);
 			productName = VocaWeaveApp;
 			productReference = F9739EDD2B23084600FA1F8E /* VocaWeaveApp.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +204,10 @@
 				Base,
 			);
 			mainGroup = F9739ED42B23084600FA1F8E;
+			packageReferences = (
+				F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+			);
 			productRefGroup = F9739EDE2B23084600FA1F8E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -122,6 +222,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */,
 				F9739EED2B23084900FA1F8E /* LaunchScreen.storyboard in Resources */,
 				F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */,
 			);
@@ -129,12 +230,33 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		F9739F0A2B23109600FA1F8E /* SwiftLint Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F9739ED92B23084600FA1F8E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9739EE52B23084600FA1F8E /* ViewController.swift in Sources */,
+				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
 			);
@@ -281,11 +403,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 52TADTDD5Y;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -313,11 +435,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 52TADTDD5Y;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -359,6 +481,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.6.0;
+			};
+		};
+		F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-cocoa.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F9739F012B230F6700FA1F8E /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		F9739F032B230F6700FA1F8E /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		F9739F062B230F8100FA1F8E /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = Realm;
+		};
+		F9739F082B230F8100FA1F8E /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F9739ED52B23084600FA1F8E /* Project object */;
 }
