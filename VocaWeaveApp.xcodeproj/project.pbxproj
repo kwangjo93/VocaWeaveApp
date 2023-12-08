@@ -17,6 +17,11 @@
 		F9739F072B230F8100FA1F8E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F062B230F8100FA1F8E /* Realm */; };
 		F9739F092B230F8100FA1F8E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F9739F082B230F8100FA1F8E /* RealmSwift */; };
 		F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */; };
+		F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F0D2B23157800FA1F8E /* VocaViewController.swift */; };
+		F9739F102B23158900FA1F8E /* VocaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F0F2B23158900FA1F8E /* VocaView.swift */; };
+		F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F112B23159400FA1F8E /* VocaViewModel.swift */; };
+		F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */; };
+		F9739F162B233A1800FA1F8E /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F152B233A1800FA1F8E /* extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +32,11 @@
 		F9739EEC2B23084900FA1F8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9739EFE2B230F4F00FA1F8E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		F9739F0D2B23157800FA1F8E /* VocaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaViewController.swift; sourceTree = "<group>"; };
+		F9739F0F2B23158900FA1F8E /* VocaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaView.swift; sourceTree = "<group>"; };
+		F9739F112B23159400FA1F8E /* VocaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaViewModel.swift; sourceTree = "<group>"; };
+		F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTableViewCell.swift; sourceTree = "<group>"; };
+		F9739F152B233A1800FA1F8E /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +120,7 @@
 		F9739EF82B230E8500FA1F8E /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				F9739F152B233A1800FA1F8E /* extension.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -149,6 +160,10 @@
 		F9739EFD2B230EF500FA1F8E /* VocaViewPage */ = {
 			isa = PBXGroup;
 			children = (
+				F9739F0D2B23157800FA1F8E /* VocaViewController.swift */,
+				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
+				F9739F112B23159400FA1F8E /* VocaViewModel.swift */,
+				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
 			);
 			path = VocaViewPage;
 			sourceTree = "<group>";
@@ -256,9 +271,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
+				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
+				F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */,
 				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
+				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
+				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
