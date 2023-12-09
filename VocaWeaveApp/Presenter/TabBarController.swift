@@ -11,7 +11,7 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let vocaViewController = UINavigationController(rootViewController: UIViewController())
+        let vocaViewController = UINavigationController(rootViewController: VocaViewController())
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",
             image: UIImage(systemName: "pencil.circle"),

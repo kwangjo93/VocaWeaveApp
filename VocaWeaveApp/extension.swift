@@ -18,7 +18,7 @@ extension UINavigationController {
         appearance.backgroundColor = .white
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         appearance.shadowColor = nil
-        
+
         self.navigationBar.tintColor = .black
         self.navigationBar.standardAppearance = appearance
         self.navigationBar.compactAppearance = appearance
