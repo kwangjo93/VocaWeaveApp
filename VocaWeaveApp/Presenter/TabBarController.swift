@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "pencil.circle.fill")
         )
 
-        let categoryWordsViewController = UIViewController()
+        let categoryWordsViewController = UINavigationController(rootViewController: CategoryViewController())
         categoryWordsViewController.tabBarItem = UITabBarItem(
             title: "암기장",
             image: UIImage(systemName: "book"),

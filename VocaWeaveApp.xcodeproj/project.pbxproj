@@ -22,6 +22,9 @@
 		F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F112B23159400FA1F8E /* VocaViewModel.swift */; };
 		F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */; };
 		F9739F162B233A1800FA1F8E /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F152B233A1800FA1F8E /* extension.swift */; };
+		F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */; };
+		F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F1D2B24B07400FA1F8E /* CategoryViewModel.swift */; };
+		F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,9 @@
 		F9739F112B23159400FA1F8E /* VocaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaViewModel.swift; sourceTree = "<group>"; };
 		F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTableViewCell.swift; sourceTree = "<group>"; };
 		F9739F152B233A1800FA1F8E /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
+		F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		F9739F1D2B24B07400FA1F8E /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CagtegoryCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +159,9 @@
 		F9739EFC2B230EF300FA1F8E /* CategoryWordspage */ = {
 			isa = PBXGroup;
 			children = (
+				F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */,
+				F9739F1D2B24B07400FA1F8E /* CategoryViewModel.swift */,
+				F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */,
 			);
 			path = CategoryWordspage;
 			sourceTree = "<group>";
@@ -273,11 +282,14 @@
 			files = (
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
+				F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */,
+				F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */,
 				F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */,
 				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
 				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
+				F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
