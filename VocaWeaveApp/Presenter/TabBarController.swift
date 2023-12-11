@@ -25,7 +25,7 @@ class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "book.fill")
         )
 
-        let vocaWeaveViewController = UIViewController()
+        let vocaWeaveViewController = UINavigationController(rootViewController: VocaWeaveViewController())
         vocaWeaveViewController.tabBarItem = UITabBarItem(
             title: "학습",
             image: UIImage(systemName: "puzzlepiece"),

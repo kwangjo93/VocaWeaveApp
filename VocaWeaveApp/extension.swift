@@ -25,3 +25,12 @@ extension UINavigationController {
         self.navigationBar.scrollEdgeAppearance = appearance
     }
 }
+
+extension UIViewController {
+    func nightModeBarButtonItem(target: Any?, action: Selector) -> UIBarButtonItem {
+            return UIBarButtonItem(image: UIImage(systemName: "moon"),
+                                   style: .plain,
+                                   target: target,
+                                   action: action)
+        }
+}
