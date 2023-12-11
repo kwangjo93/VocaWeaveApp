@@ -27,7 +27,6 @@
 		F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */; };
 		F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */; };
 		F9739F282B25C25600FA1F8E /* VocaWeaveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F272B25C25600FA1F8E /* VocaWeaveViewController.swift */; };
-		F9739F2A2B25C26200FA1F8E /* VocaWeaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F292B25C26200FA1F8E /* VocaWeaveViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,7 +47,6 @@
 		F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CagtegoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveView.swift; sourceTree = "<group>"; };
 		F9739F272B25C25600FA1F8E /* VocaWeaveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveViewController.swift; sourceTree = "<group>"; };
-		F9739F292B25C26200FA1F8E /* VocaWeaveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VocaWeaveViewModel.swift; path = ../../../../../VocaWeaveViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +158,6 @@
 			children = (
 				F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */,
 				F9739F272B25C25600FA1F8E /* VocaWeaveViewController.swift */,
-				F9739F292B25C26200FA1F8E /* VocaWeaveViewModel.swift */,
 			);
 			path = VocaWeavePage;
 			sourceTree = "<group>";
@@ -301,7 +298,6 @@
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
 				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
 				F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */,
-				F9739F2A2B25C26200FA1F8E /* VocaWeaveViewModel.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
