@@ -33,7 +33,11 @@ class VocaViewController: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-        navigationItem.rightBarButtonItem = plusButton
+
+        let nightModeButton = nightModeBarButtonItem(
+                                target: self,
+                                action: #selector(nightModeBuutonAction))
+        navigationItem.rightBarButtonItems = [nightModeButton, plusButton]
         navigationController?.configureBasicAppearance()
     }
 
@@ -67,6 +71,9 @@ class VocaViewController: UIViewController {
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         let selectedSegmentIndex = sender.selectedSegmentIndex
         print("Selected Segment Index: \(selectedSegmentIndex)")
+    }
+
+    @objc private func nightModeBuutonAction() {
     }
 }
 

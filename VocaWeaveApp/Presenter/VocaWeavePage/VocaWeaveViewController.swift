@@ -11,6 +11,11 @@ import SnapKit
 class VocaWeaveViewController: UIViewController {
     // MARK: - Property
     let vocaWeaveView = VocaWeaveView()
+
+    lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(refreshButtonAction))
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +35,11 @@ class VocaWeaveViewController: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
+
+        let nightModeButton = nightModeBarButtonItem(
+                                target: self,
+                                action: #selector(nightModeBuutonAction))
+        navigationItem.rightBarButtonItems = [refreshButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
 
@@ -40,11 +50,17 @@ class VocaWeaveViewController: UIViewController {
     private func setupLayout() {
         let defaultValue = 8
         vocaWeaveView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(defaultValue * 2)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview().inset(defaultValue * 2)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     // MARK: - Action
+    @objc private func refreshButtonAction() {
 
+    }
+
+    @objc private func nightModeBuutonAction() {
+
+    }
 }

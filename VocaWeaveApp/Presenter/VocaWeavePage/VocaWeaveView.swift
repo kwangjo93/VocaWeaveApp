@@ -12,9 +12,10 @@ class VocaWeaveView: UIView {
     // MARK: - Property
     let statusValueLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 30)
         label.textColor = .black
         label.text = "50 / 5"
+        label.textAlignment = .center
         return label
     }()
 
@@ -39,6 +40,15 @@ class VocaWeaveView: UIView {
         return button
     }()
 
+    lazy var buttonstackView1: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution  = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
@@ -53,44 +63,67 @@ class VocaWeaveView: UIView {
         return button
     }()
 
+    lazy var buttonstackView2: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution  = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 15
+        return stackView
+    }()
+
     let weaveVocaTextField: UITextField = {
-        let tf = UITextField()
-        tf.frame.size.height = 22
-        tf.textColor = .black
-        tf.borderStyle = .roundedRect
-        tf.autocapitalizationType = .none
-        tf.autocorrectionType = .no
-        tf.spellCheckingType = .no
-        tf.clearsOnBeginEditing = false
-        tf.placeholder = "영어를 입력해 주세요."
-        return tf
+        let textFeild = UITextField()
+        textFeild.frame.size.height = 22
+        textFeild.textColor = .black
+        textFeild.borderStyle = .roundedRect
+        textFeild.autocapitalizationType = .none
+        textFeild.autocorrectionType = .no
+        textFeild.spellCheckingType = .no
+        textFeild.clearsOnBeginEditing = false
+        textFeild.placeholder = "영어를 입력해 주세요."
+        return textFeild
     }()
 
     let responseLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .boldSystemFont(ofSize: 20)
         label.textColor = .black
-        label.text = "50 / 5"
-        return label
-    }()
-
-    let responseDataLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
-        label.textColor = .black
+        label.text = "해 석"
         return label
     }()
 
     let speakerButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let copyButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.imageView?.contentMode = .scaleToFill
         return button
+    }()
+
+    lazy var compsitionStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution  = .equalSpacing
+        stackView.alignment = .leading
+        stackView.spacing = 20
+        return stackView
+    }()
+
+    let responseDataLabel: UITextView = {
+        let textView = UITextView()
+        textView.font = .systemFont(ofSize: 14)
+        textView.textColor = .black
+        textView.layer.borderWidth = 1.0
+        textView.layer.borderColor = UIColor.black.cgColor
+        textView.layer.cornerRadius = 8.0
+        return textView
     }()
     // MARK: - init
     override init(frame: CGRect) {
@@ -106,71 +139,78 @@ class VocaWeaveView: UIView {
 
     // MARK: - Helper
     private func configure() {
-        [statusValueLabel,sourceTextButton1,sourceTextButton2,
-         sourceTextButton3,sourceTextButton4,sourceTextButton5,
-         weaveVocaTextField,responseLabel,responseDataLabel,
-         speakerButton,copyButton].forEach { self.addSubview($0) }
+        [sourceTextButton1, sourceTextButton2, sourceTextButton3].forEach { buttonstackView1.addArrangedSubview($0) }
+
+        [sourceTextButton4, sourceTextButton5].forEach { buttonstackView2.addArrangedSubview($0) }
+
+        [responseLabel, speakerButton, copyButton].forEach {compsitionStackView.addArrangedSubview($0)}
+
+        [statusValueLabel, weaveVocaTextField, responseDataLabel,
+         buttonstackView1, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
+
+        [sourceTextButton1, sourceTextButton2, sourceTextButton3,
+         sourceTextButton4, sourceTextButton5].forEach { setButtonBorder(button: $0) }
     }
 
     private func setupLayout() {
         let defaultValue = 8
         statusValueLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.width.equalTo(100)
+            $0.height.equalTo(50)
         }
 
-        sourceTextButton1.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+        buttonstackView1.snp.makeConstraints {
             $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
-        }
-
-        sourceTextButton2.snp.makeConstraints {
-            $0.leading.equalTo(sourceTextButton1.snp.trailing).offset(defaultValue * 2)
-            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
-        }
-
-        sourceTextButton3.snp.makeConstraints {
-            $0.leading.equalTo(sourceTextButton2.snp.trailing).offset(defaultValue * 2)
-            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
-            $0.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
         }
 
         sourceTextButton4.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(defaultValue * 4)
-            $0.top.equalTo(sourceTextButton1.snp.bottom).offset(defaultValue * 2)
+            $0.width.equalTo(sourceTextButton1)
         }
 
         sourceTextButton5.snp.makeConstraints {
-            $0.leading.equalTo(sourceTextButton4.snp.trailing).offset(defaultValue * 4)
-            $0.top.equalTo(sourceTextButton1.snp.bottom).offset(defaultValue * 2)
-            $0.trailing.equalToSuperview().inset(defaultValue * 4)
+            $0.width.equalTo(sourceTextButton3)
+        }
+
+        buttonstackView2.snp.makeConstraints {
+            $0.top.equalTo(buttonstackView1.snp.bottom).offset(defaultValue * 2)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 8)
         }
 
         weaveVocaTextField.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(sourceTextButton5.snp.bottom).offset(defaultValue * 2)
+            $0.top.equalTo(buttonstackView2.snp.bottom).offset(defaultValue * 3)
+            $0.height.equalTo(45)
         }
 
-        responseLabel.snp.makeConstraints {
-            $0.top.equalTo(weaveVocaTextField.snp.bottom).offset(defaultValue * 2)
+        compsitionStackView.snp.makeConstraints {
+            $0.top.equalTo(weaveVocaTextField.snp.bottom).offset(defaultValue * 4)
             $0.leading.equalToSuperview()
+            $0.height.equalTo(40)
         }
 
         responseDataLabel.snp.makeConstraints {
-            $0.top.equalTo(responseLabel.snp.bottom).offset(defaultValue)
+            $0.top.equalTo(responseLabel.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-(defaultValue * 10))
         }
+    }
 
-        copyButton.snp.makeConstraints {
-            $0.top.equalTo(responseDataLabel.snp.bottom).offset(defaultValue)
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(defaultValue * 2)
-        }
+    func setButtonBorder(button: UIButton) {
+        let borderWidth: CGFloat = 0.5
+        let cornerRadius: CGFloat = 15
+        let shadowOpacity: Float = 0.2
 
-        speakerButton.snp.makeConstraints {
-            $0.top.equalTo(responseDataLabel.snp.bottom).offset(defaultValue)
-            $0.trailing.equalTo(copyButton.snp.leading).offset(-(defaultValue * 2))
-            $0.bottom.equalToSuperview().inset(defaultValue * 2)
-        }
+        button.layer.borderWidth = borderWidth
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.cornerRadius = cornerRadius
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 2
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.masksToBounds = true
+        button.layer.shadowOpacity = shadowOpacity
+        button.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
     }
 }
