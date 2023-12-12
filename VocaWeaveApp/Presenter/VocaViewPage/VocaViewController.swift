@@ -14,6 +14,11 @@ class VocaViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(plustButtonAction))
+
+    lazy var searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(searchButtonAction))
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +42,7 @@ class VocaViewController: UIViewController {
         let nightModeButton = nightModeBarButtonItem(
                                 target: self,
                                 action: #selector(nightModeBuutonAction))
-        navigationItem.rightBarButtonItems = [nightModeButton, plusButton]
+        navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
 
@@ -74,6 +79,10 @@ class VocaViewController: UIViewController {
     }
 
     @objc private func nightModeBuutonAction() {
+    }
+
+    @objc private func searchButtonAction() {
+
     }
 }
 
