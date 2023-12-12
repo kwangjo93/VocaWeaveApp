@@ -74,7 +74,6 @@ class VocaWeaveView: UIView {
 
     let weaveVocaTextField: UITextField = {
         let textFeild = UITextField()
-        textFeild.frame.size.height = 22
         textFeild.textColor = .black
         textFeild.borderStyle = .roundedRect
         textFeild.autocapitalizationType = .none
