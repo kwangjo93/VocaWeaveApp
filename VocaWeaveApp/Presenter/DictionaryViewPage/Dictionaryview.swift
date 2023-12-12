@@ -128,6 +128,7 @@ class DictionaryView: UIView {
         backgroundColor = .white
         configure()
         setupLayout()
+        setupStackViewLayout()
     }
 
     required init?(coder: NSCoder) {
