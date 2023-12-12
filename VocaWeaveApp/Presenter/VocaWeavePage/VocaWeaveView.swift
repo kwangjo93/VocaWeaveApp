@@ -10,6 +10,8 @@ import SnapKit
 
 class VocaWeaveView: UIView {
     // MARK: - Property
+    let defaultValue = 8
+
     let statusValueLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 30)
@@ -43,7 +45,7 @@ class VocaWeaveView: UIView {
     lazy var buttonstackView1: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillEqually
+        stackView.distribution  = .fillProportionally
         stackView.alignment = .fill
         stackView.spacing = 10
         return stackView
@@ -66,7 +68,7 @@ class VocaWeaveView: UIView {
     lazy var buttonstackView2: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillEqually
+        stackView.distribution  = .fillProportionally
         stackView.alignment = .fill
         stackView.spacing = 15
         return stackView
@@ -130,6 +132,7 @@ class VocaWeaveView: UIView {
         backgroundColor = .white
         configure()
         setupLayout()
+        stackViewLayou()
     }
 
     required init?(coder: NSCoder) {
@@ -152,30 +155,11 @@ class VocaWeaveView: UIView {
     }
 
     private func setupLayout() {
-        let defaultValue = 8
         statusValueLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
             $0.width.equalTo(100)
             $0.height.equalTo(50)
-        }
-
-        buttonstackView1.snp.makeConstraints {
-            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue)
-        }
-
-        sourceTextButton4.snp.makeConstraints {
-            $0.width.equalTo(sourceTextButton1)
-        }
-
-        sourceTextButton5.snp.makeConstraints {
-            $0.width.equalTo(sourceTextButton3)
-        }
-
-        buttonstackView2.snp.makeConstraints {
-            $0.top.equalTo(buttonstackView1.snp.bottom).offset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue * 8)
         }
 
         weaveVocaTextField.snp.makeConstraints {
@@ -184,16 +168,28 @@ class VocaWeaveView: UIView {
             $0.height.equalTo(45)
         }
 
-        compsitionStackView.snp.makeConstraints {
-            $0.top.equalTo(weaveVocaTextField.snp.bottom).offset(defaultValue * 4)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(40)
-        }
-
         responseDataLabel.snp.makeConstraints {
             $0.top.equalTo(responseLabel.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-(defaultValue * 10))
+        }
+    }
+
+    private func stackViewLayou() {
+        buttonstackView1.snp.makeConstraints {
+            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
+        }
+
+        buttonstackView2.snp.makeConstraints {
+            $0.top.equalTo(buttonstackView1.snp.bottom).offset(defaultValue * 2)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 8)
+        }
+
+        compsitionStackView.snp.makeConstraints {
+            $0.top.equalTo(weaveVocaTextField.snp.bottom).offset(defaultValue * 4)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(40)
         }
     }
 
