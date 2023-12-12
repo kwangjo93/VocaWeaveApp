@@ -19,6 +19,7 @@ class VocaViewController: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(searchButtonAction))
+    let networking = NetworkingManager.shared
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,6 @@ class VocaViewController: UIViewController {
         configureUI()
         setup()
     }
-
     // MARK: - Helper
     private func configureNav() {
         let titleLabel: UILabel = {
@@ -70,9 +70,8 @@ class VocaViewController: UIViewController {
 
     // MARK: - Action
     @objc private func plustButtonAction() {
-        print("플러스 버튼")
+        fetchDataAndHandleResult()
     }
-
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         let selectedSegmentIndex = sender.selectedSegmentIndex
         print("Selected Segment Index: \(selectedSegmentIndex)")
@@ -84,6 +83,17 @@ class VocaViewController: UIViewController {
     @objc private func searchButtonAction() {
 
     }
+    func fetchDataAndHandleResult() {
+        Task {
+            do {
+                let result = try await networking.fetchData(source: "ko", target: "en", text: "안녕하세요")
+                print("번역 결과: \(result ?? "")")
+            } catch {
+                print("에러 발생: \(error)")
+            }
+        }
+    }
+
 }
 
 extension VocaViewController: UITableViewDataSource {

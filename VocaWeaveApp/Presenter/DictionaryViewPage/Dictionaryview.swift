@@ -10,6 +10,8 @@ import SnapKit
 
 class DictionaryView: UIView {
     // MARK: - Property
+    let defaultValue = 8
+
     let sourceTextSpeakerButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
@@ -145,12 +147,6 @@ class DictionaryView: UIView {
     }
 
     private func setupLayout() {
-        let defaultValue = 8
-        sourceStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(defaultValue * 4)
-        }
         cancelButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(defaultValue * 2)
             $0.trailing.equalToSuperview()
@@ -160,11 +156,7 @@ class DictionaryView: UIView {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(defaultValue * 5)
         }
-        explainStackView.snp.makeConstraints {
-            $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 2)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(defaultValue * 4)
-        }
+
         bookmarkButton.snp.makeConstraints {
             $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 2)
             $0.trailing.equalToSuperview()
@@ -198,6 +190,20 @@ class DictionaryView: UIView {
             $0.leading.equalTo(explainView.snp.leading)
             $0.trailing.equalTo(explainView.snp.trailing)
             $0.bottom.equalTo(explainView.snp.bottom)
+        }
+    }
+
+    private func setupStackViewLayout() {
+        sourceStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(defaultValue * 4)
+        }
+
+        explainStackView.snp.makeConstraints {
+            $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 2)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(defaultValue * 4)
         }
     }
 }
