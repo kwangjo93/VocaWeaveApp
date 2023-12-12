@@ -27,10 +27,10 @@
 		F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */; };
 		F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */; };
 		F9739F282B25C25600FA1F8E /* VocaWeaveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F272B25C25600FA1F8E /* VocaWeaveViewController.swift */; };
+		F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8642B28092900428D55 /* DictionaryControlller.swift */; };
+		F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8662B28093400428D55 /* Dictionaryview.swift */; };
+		F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */; };
 		F9E5D62A2B270236000A4377 /* VocaWeaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E5D6292B270236000A4377 /* VocaWeaveViewModel.swift */; };
-		F9E5D62C2B270250000A4377 /* DictionaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E5D62B2B270250000A4377 /* DictionaryViewController.swift */; };
-		F9E5D62E2B27025E000A4377 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E5D62D2B27025E000A4377 /* DictionaryView.swift */; };
-		F9E5D6302B270267000A4377 /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E5D62F2B270267000A4377 /* DictionaryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,10 +51,10 @@
 		F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CagtegoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveView.swift; sourceTree = "<group>"; };
 		F9739F272B25C25600FA1F8E /* VocaWeaveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveViewController.swift; sourceTree = "<group>"; };
+		F9C6C8642B28092900428D55 /* DictionaryControlller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryControlller.swift; sourceTree = "<group>"; };
+		F9C6C8662B28093400428D55 /* Dictionaryview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionaryview.swift; sourceTree = "<group>"; };
+		F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryviewModel.swift; sourceTree = "<group>"; };
 		F9E5D6292B270236000A4377 /* VocaWeaveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveViewModel.swift; sourceTree = "<group>"; };
-		F9E5D62B2B270250000A4377 /* DictionaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DictionaryViewController.swift; path = VocaWeaveApp/Presenter/VocaWeavePage/DictionaryViewController.swift; sourceTree = SOURCE_ROOT; };
-		F9E5D62D2B27025E000A4377 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DictionaryView.swift; path = VocaWeaveApp/Presenter/VocaWeavePage/DictionaryView.swift; sourceTree = SOURCE_ROOT; };
-		F9E5D62F2B270267000A4377 /* DictionaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DictionaryViewModel.swift; path = VocaWeaveApp/Presenter/VocaWeavePage/DictionaryViewModel.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,21 +95,11 @@
 				F9739EFA2B230E8A00FA1F8E /* Resource */,
 				F9739EF92B230E8800FA1F8E /* App */,
 				F9739EF82B230E8500FA1F8E /* Helper */,
-				F9739EF72B230E8300FA1F8E /* Model */,
-				F9739EF62B230E8100FA1F8E /* Networking */,
+				F9C6C86B2B28099A00428D55 /* Model */,
+				F9C6C86A2B28098F00428D55 /* Networking */,
 				F9739EF52B230E7E00FA1F8E /* Presenter */,
 			);
 			path = VocaWeaveApp;
-			sourceTree = "<group>";
-		};
-		F9739EF42B230E7A00FA1F8E /* DictionaryPage */ = {
-			isa = PBXGroup;
-			children = (
-				F9E5D62B2B270250000A4377 /* DictionaryViewController.swift */,
-				F9E5D62D2B27025E000A4377 /* DictionaryView.swift */,
-				F9E5D62F2B270267000A4377 /* DictionaryViewModel.swift */,
-			);
-			path = DictionaryPage;
 			sourceTree = "<group>";
 		};
 		F9739EF52B230E7E00FA1F8E /* Presenter */ = {
@@ -119,23 +109,9 @@
 				F9739EFD2B230EF500FA1F8E /* VocaViewPage */,
 				F9739EFC2B230EF300FA1F8E /* CategoryWordspage */,
 				F9739EFB2B230EF000FA1F8E /* VocaWeavePage */,
-				F9739EF42B230E7A00FA1F8E /* DictionaryPage */,
+				F9C6C8632B2808F300428D55 /* DictionaryViewPage */,
 			);
 			path = Presenter;
-			sourceTree = "<group>";
-		};
-		F9739EF62B230E8100FA1F8E /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		F9739EF72B230E8300FA1F8E /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		F9739EF82B230E8500FA1F8E /* Helper */ = {
@@ -193,6 +169,30 @@
 				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
 			);
 			path = VocaViewPage;
+			sourceTree = "<group>";
+		};
+		F9C6C8632B2808F300428D55 /* DictionaryViewPage */ = {
+			isa = PBXGroup;
+			children = (
+				F9C6C8642B28092900428D55 /* DictionaryControlller.swift */,
+				F9C6C8662B28093400428D55 /* Dictionaryview.swift */,
+				F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */,
+			);
+			path = DictionaryViewPage;
+			sourceTree = "<group>";
+		};
+		F9C6C86A2B28098F00428D55 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F9C6C86B2B28099A00428D55 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,6 +275,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		F9739F0A2B23109600FA1F8E /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -298,11 +299,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9E5D62E2B27025E000A4377 /* DictionaryView.swift in Sources */,
-				F9E5D62C2B270250000A4377 /* DictionaryViewController.swift in Sources */,
+				F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */,
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
-				F9E5D6302B270267000A4377 /* DictionaryViewModel.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
+				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */,
 				F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */,
@@ -314,6 +314,7 @@
 				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
 				F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */,
 				F9E5D62A2B270236000A4377 /* VocaWeaveViewModel.swift in Sources */,
+				F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
