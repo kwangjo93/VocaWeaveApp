@@ -18,11 +18,11 @@ class VocaListManager: VocaListType {
         }
     }
 
-    private var list: Results<RealmTranslateReponseModel>? {
-        return realm?.objects(RealmTranslateReponseModel.self)
+    private var list: Results<RealmTranslateModel>? {
+        return realm?.objects(RealmTranslateModel.self)
     }
 
-    var vocaList: [RealmTranslateReponseModel] {
+    var vocaList: [RealmTranslateModel] {
         if let todos = list {
             return Array(todos)
         } else {
@@ -30,7 +30,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func makeNewList(_ list: RealmTranslateReponseModel) {
+    func makeNewList(_ list: RealmTranslateModel) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -45,7 +45,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func updateListInfo(list: RealmTranslateReponseModel, text: String, isSelected: Bool) {
+    func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -61,7 +61,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func deleteList(_ list: RealmTranslateReponseModel) {
+    func deleteList(_ list: RealmTranslateModel) {
             do {
                 guard let realm = realm else { return }
                 try realm.write {

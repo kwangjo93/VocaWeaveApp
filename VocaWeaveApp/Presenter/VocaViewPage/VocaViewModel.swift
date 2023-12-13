@@ -16,15 +16,15 @@ class VocaViewModel {
 
     lazy var vocaList = datamanager.vocaList
 
-    func addVoca(_ list: RealmTranslateReponseModel) {
+    func addVoca(_ list: RealmTranslateModel) {
         datamanager.makeNewList(list)
     }
 
-    func updateVoca(list: RealmTranslateReponseModel, text: String, isSelected: Bool) {
+    func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
     }
 
-    func deleteVoca(_ list: RealmTranslateReponseModel) {
+    func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
     }
 }

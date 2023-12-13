@@ -11,6 +11,10 @@ class VocaViewController: UIViewController {
     // MARK: - Property
     let dataManager: VocaListType
     let vocaView = VocaView()
+
+    var dataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
+    var snapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
+
     lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                      style: .plain,
                                      target: self,
@@ -37,6 +41,8 @@ class VocaViewController: UIViewController {
         configureNav()
         configureUI()
         setup()
+        tableViewDatasourceSetup()
+        tableViewSnapshot()
     }
     // MARK: - Helper
     private func configureNav() {
@@ -69,7 +75,6 @@ class VocaViewController: UIViewController {
     }
 
     private func setup() {
-        vocaView.vocaTableView.dataSource = self
         vocaView.vocaTableView.register(
                                 VocaTableViewCell.self,
                                 forCellReuseIdentifier: VocaTableViewCell.identifier)
@@ -77,6 +82,27 @@ class VocaViewController: UIViewController {
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
                                                 for: .valueChanged)
+    }
+
+    private func tableViewDatasourceSetup() {
+        dataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
+            tableView: vocaView.vocaTableView
+        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmTranslateModel) -> UITableViewCell? in
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: VocaTableViewCell.identifier,
+                for: indexPath
+            ) as? VocaTableViewCell else {
+                return UITableViewCell()
+            }
+            return cell
+        }
+    }
+
+    private func tableViewSnapshot() {
+        snapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
+        snapshot.appendSections([.voca])
+        snapshot.appendItems(dataManager.vocaList, toSection: .voca)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - Action
@@ -105,19 +131,4 @@ class VocaViewController: UIViewController {
         }
     }
 
-}
-
-extension VocaViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-                                    withIdentifier: VocaTableViewCell.identifier,
-                                    for: indexPath)
-                            as? VocaTableViewCell else { return UITableViewCell()}
-        cell.bindingData()
-        return cell
-    }
 }

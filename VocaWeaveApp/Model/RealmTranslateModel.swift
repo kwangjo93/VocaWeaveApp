@@ -8,7 +8,8 @@
 import Foundation
 import RealmSwift
 
-class RealmTranslateReponseModel: Object {
+class RealmTranslateModel: Object {
+    @Persisted var uuid = UUID()
     @Persisted var translatedText: String
     @Persisted var isSelected: Bool
     convenience init(apiModel: TranslateReponseModel) {
