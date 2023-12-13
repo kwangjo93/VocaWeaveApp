@@ -9,10 +9,11 @@ import Foundation
 import RealmSwift
 
 class RealmTranslateReponseModel: Object {
-    @Persisted private var translatedText: String
-
+    @Persisted var translatedText: String
+    @Persisted var isSelected: Bool
     convenience init(apiModel: TranslateReponseModel) {
         self.init()
         self.translatedText = apiModel.translatedText
+        self.isSelected = false
     }
 }

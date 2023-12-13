@@ -8,8 +8,8 @@
 import Foundation
 
 protocol VocaListType {
-    func getvocaList() -> [RealmTranslateReponseModel]
-    func makeNewMember(_ list: RealmTranslateReponseModel)
-    func updateListInfo(index: Int, with list: RealmTranslateReponseModel)
-//    func deleteListInfo(list: RealmTranslateReponseModel)
+    var vocaList: [RealmTranslateReponseModel] { get }
+    func makeNewList(_ list: RealmTranslateReponseModel)
+    func updateListInfo(list: RealmTranslateReponseModel, text: String, isSelected: Bool)
+    func deleteList(_ list: RealmTranslateReponseModel)
 }

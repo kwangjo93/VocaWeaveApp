@@ -8,10 +8,24 @@
 import UIKit
 
 class TabBarController: UITabBarController {
+    // MARK: - Property
+    let dataManager: VocaListType
+
+    // MARK: - init
+    init(dataManager: VocaListType) {
+        self.dataManager = dataManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let vocaViewController = UINavigationController(rootViewController: VocaViewController())
+        let vocaViewController = UINavigationController(rootViewController: VocaViewController(
+                                                                            dataManager: dataManager))
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",
             image: UIImage(systemName: "pencil.circle"),

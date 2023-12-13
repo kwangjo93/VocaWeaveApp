@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let dataManager = VocaListManager()
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = TabBarController()
+        window?.rootViewController = TabBarController(dataManager: dataManager)
         window?.tintColor = UIColor.mainTintColor
         window?.makeKeyAndVisible()
     }
