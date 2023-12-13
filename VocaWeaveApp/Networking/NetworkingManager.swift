@@ -11,7 +11,7 @@ class NetworkingManager {
     static let shared = NetworkingManager()
     private init() {}
 
-    func fetchData(source: String, target: String, text: String) async throws -> String? {
+    func fetchData(source: String, target: String, text: String) async throws -> TranslateReponseModel {
         guard let file = Bundle.main.path(
                                     forResource: "APIInfo",
                                     ofType: "plist") else { throw NetworkError.invalidFile }
@@ -38,7 +38,7 @@ class NetworkingManager {
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
             let decodedData = try JSONDecoder().decode(TranslateReponseModel.self, from: data)
-            return decodedData.translatedText
+            return decodedData
         } catch {
             throw NetworkError.decodingError
         }

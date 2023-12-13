@@ -87,7 +87,7 @@ class VocaViewController: UIViewController {
         Task {
             do {
                 let result = try await networking.fetchData(source: "ko", target: "en", text: "안녕하세요")
-                print("번역 결과: \(result ?? "")")
+                print("번역 결과: \(result.translatedText )")
             } catch {
                 print("에러 발생: \(error)")
             }
