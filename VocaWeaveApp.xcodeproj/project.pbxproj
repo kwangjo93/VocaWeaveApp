@@ -33,6 +33,8 @@
 		F991418E2B2845E500770379 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991418D2B2845E500770379 /* Language.swift */; };
 		F99141902B2847FD00770379 /* APIInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F991418F2B2847FD00770379 /* APIInfo.plist */; };
 		F99141922B29505900770379 /* RealmTranslateReponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141912B29505900770379 /* RealmTranslateReponseModel.swift */; };
+		F99141952B29539F00770379 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141942B29539F00770379 /* DataManager.swift */; };
+		F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141962B2953D700770379 /* DependencyInjectable.swift */; };
 		F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8642B28092900428D55 /* DictionaryControlller.swift */; };
 		F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8662B28093400428D55 /* Dictionaryview.swift */; };
 		F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */; };
@@ -63,6 +65,8 @@
 		F991418D2B2845E500770379 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		F991418F2B2847FD00770379 /* APIInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIInfo.plist; sourceTree = "<group>"; };
 		F99141912B29505900770379 /* RealmTranslateReponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTranslateReponseModel.swift; sourceTree = "<group>"; };
+		F99141942B29539F00770379 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		F99141962B2953D700770379 /* DependencyInjectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjectable.swift; sourceTree = "<group>"; };
 		F9C6C8642B28092900428D55 /* DictionaryControlller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryControlller.swift; sourceTree = "<group>"; };
 		F9C6C8662B28093400428D55 /* Dictionaryview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionaryview.swift; sourceTree = "<group>"; };
 		F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryviewModel.swift; sourceTree = "<group>"; };
@@ -189,6 +193,8 @@
 		F99141932B29535500770379 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				F99141962B2953D700770379 /* DependencyInjectable.swift */,
+				F99141942B29539F00770379 /* DataManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -331,6 +337,7 @@
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
 				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
+				F99141952B29539F00770379 /* DataManager.swift in Sources */,
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F99141922B29505900770379 /* RealmTranslateReponseModel.swift in Sources */,
 				F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */,
@@ -346,6 +353,7 @@
 				F99141862B280C4100770379 /* NetworkingManager.swift in Sources */,
 				F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
+				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
 				F99141882B283CEF00770379 /* Error.swift in Sources */,
 				F991418E2B2845E500770379 /* Language.swift in Sources */,
 			);

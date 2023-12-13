@@ -10,7 +10,7 @@ import RealmSwift
 
 class RealmTranslateReponseModel: Object {
     @Persisted private var translatedText: String
-    
+
     convenience init(apiModel: TranslateReponseModel) {
         self.init()
         self.translatedText = apiModel.translatedText
