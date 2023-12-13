@@ -83,28 +83,6 @@ class VocaViewController: UIViewController {
                                                 action: #selector(vocaSegmentedControlValueChanged),
                                                 for: .valueChanged)
     }
-
-    private func tableViewDatasourceSetup() {
-        dataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
-            tableView: vocaView.vocaTableView
-        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmTranslateModel) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: VocaTableViewCell.identifier,
-                for: indexPath
-            ) as? VocaTableViewCell else {
-                return UITableViewCell()
-            }
-            return cell
-        }
-    }
-
-    private func tableViewSnapshot() {
-        snapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
-        snapshot.appendSections([.voca])
-        snapshot.appendItems(dataManager.vocaList, toSection: .voca)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-
     // MARK: - Action
     @objc private func plustButtonAction() {
         fetchDataAndHandleResult()
@@ -131,4 +109,36 @@ class VocaViewController: UIViewController {
         }
     }
 
+}
+
+// MARK: - TableView Diffable DataSource
+extension VocaViewController {
+    private func tableViewDatasourceSetup() {
+        dataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
+            tableView: vocaView.vocaTableView
+        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmTranslateModel) -> UITableViewCell? in
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: VocaTableViewCell.identifier,
+                for: indexPath
+            ) as? VocaTableViewCell else {
+                return UITableViewCell()
+            }
+            return cell
+        }
+    }
+
+    private func tableViewSnapshot() {
+        snapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
+        snapshot.appendSections([.voca])
+        snapshot.appendItems(dataManager.vocaList, toSection: .voca)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    func updateItem(with newData: RealmTranslateModel) {
+        var currentSnapshot = dataSource.snapshot()
+        if let existingItem = currentSnapshot.itemIdentifiers.first(where: { $0.uuid == newData.uuid }) {
+            currentSnapshot.reloadItems([existingItem])
+            dataSource.apply(currentSnapshot, animatingDifferences: true)
+        }
+    }
 }
