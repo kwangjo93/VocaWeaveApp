@@ -9,14 +9,14 @@ import Foundation
 import RealmSwift
 
 protocol RealmTranslateType {
-    var vocaList: [RealmTranslateModel] { get }
+    func getVocaList() -> [RealmTranslateModel]
     func makeNewList(_ list: RealmTranslateModel)
     func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool)
     func deleteList(_ list: RealmTranslateModel)
 }
 
 protocol RealmVocaModelType {
-    var vocaList: [RealmVocaModel] { get }
+    func getVocaList() -> [RealmVocaModel]
     func makeNewList(_ list: RealmVocaModel)
     func updateListInfo(list: RealmVocaModel, text: String, isSelected: Bool)
     func deleteList(_ list: RealmVocaModel)

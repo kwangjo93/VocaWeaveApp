@@ -22,7 +22,7 @@ class VocaListManager: RealmVocaModelType {
         return realm?.objects(RealmVocaModel.self)
     }
 
-    var vocaList: [RealmVocaModel] {
+    func getVocaList() -> [RealmVocaModel] {
         if let todos = list {
             return Array(todos)
         } else {

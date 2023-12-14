@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class VocaViewController: UIViewController {
     // MARK: - Property
@@ -13,18 +14,20 @@ class VocaViewController: UIViewController {
     let vocaListViewModel: VocaListViewModel
     let vocaView = VocaView()
 
-    var dataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
-    var snapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
+    var dataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
+    var snapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
+
+    var cancellables = Set<AnyCancellable>()
 
     lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(plustButtonAction))
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(plustButtonAction))
 
     lazy var searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(searchButtonAction))
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(searchButtonAction))
     let networking = NetworkingManager.shared
 
     // MARK: - init
@@ -44,12 +47,13 @@ class VocaViewController: UIViewController {
         setup()
         tableViewDatasourceSetup()
         tableViewSnapshot()
+        modelDataBinding()
     }
     // MARK: - Helper
     private func setup() {
         vocaView.vocaTableView.register(
-                                VocaTableViewCell.self,
-                                forCellReuseIdentifier: VocaTableViewCell.identifier)
+            VocaTableViewCell.self,
+            forCellReuseIdentifier: VocaTableViewCell.identifier)
         vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
@@ -70,8 +74,8 @@ class VocaViewController: UIViewController {
         navigationItem.leftBarButtonItem = titleItem
 
         let nightModeButton = nightModeBarButtonItem(
-                                target: self,
-                                action: #selector(nightModeBuutonAction))
+            target: self,
+            action: #selector(nightModeBuutonAction))
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -86,9 +90,23 @@ class VocaViewController: UIViewController {
             $0.bottom.equalToSuperview()
         }
     }
+
+    private func modelDataBinding() {
+        vocaListViewModel.alertPublisher
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true, completion: nil)
+            }
+            .store(in: &cancellables)
+        vocaListViewModel.tableViewUpdate
+            .sink { [weak self] updatedVocaList in
+                // TableView를 업데이트하는 로직
+                self?.updateItem(with: updatedVocaList)
+            }
+            .store(in: &cancellables)
+    }
     // MARK: - Action
     @objc private func plustButtonAction() {
-        fetchDataAndHandleResult()
+        vocaListViewModel.showAlertWithTextField()
     }
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         let selectedSegmentIndex = sender.selectedSegmentIndex
@@ -117,31 +135,34 @@ class VocaViewController: UIViewController {
 // MARK: - TableView Diffable DataSource
 extension VocaViewController {
     private func tableViewDatasourceSetup() {
-        dataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
+        dataSource = UITableViewDiffableDataSource<Section, RealmVocaModel>(
             tableView: vocaView.vocaTableView
-        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmTranslateModel) -> UITableViewCell? in
+        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmVocaModel) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: VocaTableViewCell.identifier,
                 for: indexPath
             ) as? VocaTableViewCell else {
                 return UITableViewCell()
             }
+            let dataArray = self.vocaListViewModel.getVocaList()[indexPath.row]
+            cell.sourceLabel.text = dataArray.sourceText
+            cell.translatedLabel.text = dataArray.translatedText
             return cell
         }
     }
 
     private func tableViewSnapshot() {
-        snapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
+        snapshot = NSDiffableDataSourceSnapshot<Section, RealmVocaModel>()
         snapshot.appendSections([.voca])
-        snapshot.appendItems(vocaTranslatedViewModel.vocaList, toSection: .voca)
+        snapshot.appendItems(vocaListViewModel.getVocaList(), toSection: .voca)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 
-    func updateItem(with newData: RealmTranslateModel) {
+    func updateItem(with newData: [RealmVocaModel]) {
         var currentSnapshot = dataSource.snapshot()
-        if let existingItem = currentSnapshot.itemIdentifiers.first(where: { $0.uuid == newData.uuid }) {
-            currentSnapshot.reloadItems([existingItem])
-            dataSource.apply(currentSnapshot, animatingDifferences: true)
-        }
+        currentSnapshot.deleteAllItems()
+        currentSnapshot.appendSections([.voca])
+        currentSnapshot.appendItems(vocaListViewModel.getVocaList(), toSection: .voca)
+        dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
 }

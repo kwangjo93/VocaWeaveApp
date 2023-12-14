@@ -16,7 +16,9 @@ class VocaTranslatedViewModel {
         self.datamanager = datamanager
     }
 
-    lazy var vocaList = datamanager.vocaList
+    func getVocaList() -> [RealmTranslateModel] {
+        return datamanager.getVocaList()
+    }
 
     func addVoca(_ list: RealmTranslateModel) {
         datamanager.makeNewList(list)

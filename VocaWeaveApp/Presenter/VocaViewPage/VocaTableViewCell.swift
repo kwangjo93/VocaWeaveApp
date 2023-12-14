@@ -11,7 +11,6 @@ import SnapKit
 class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
-
     let sourceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
@@ -85,9 +84,4 @@ class VocaTableViewCell: UITableViewCell {
     }
 
     // MARK: - Action
-    func bindingData() {
-        sourceLabel.text = "sadasdasdasdsadadas"
-        translatedLabel.text = "sakldjaskldsjaldjsalkd"
-    }
-
 }

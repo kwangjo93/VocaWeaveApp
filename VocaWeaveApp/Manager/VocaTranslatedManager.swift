@@ -22,9 +22,9 @@ class VocaTranslatedManager: RealmTranslateType {
         return realm?.objects(RealmTranslateModel.self)
     }
 
-    var vocaList: [RealmTranslateModel] {
-        if let lists = list {
-            return Array(lists)
+    func getVocaList() -> [RealmTranslateModel] {
+        if let todos = list {
+            return Array(todos)
         } else {
             return []
         }
