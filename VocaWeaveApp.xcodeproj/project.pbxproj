@@ -19,7 +19,7 @@
 		F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */; };
 		F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F0D2B23157800FA1F8E /* VocaViewController.swift */; };
 		F9739F102B23158900FA1F8E /* VocaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F0F2B23158900FA1F8E /* VocaView.swift */; };
-		F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F112B23159400FA1F8E /* VocaViewModel.swift */; };
+		F9739F122B23159400FA1F8E /* VocaTranslatedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F112B23159400FA1F8E /* VocaTranslatedViewModel.swift */; };
 		F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */; };
 		F9739F162B233A1800FA1F8E /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F152B233A1800FA1F8E /* extension.swift */; };
 		F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */; };
@@ -33,9 +33,12 @@
 		F991418E2B2845E500770379 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991418D2B2845E500770379 /* Language.swift */; };
 		F99141902B2847FD00770379 /* APIInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F991418F2B2847FD00770379 /* APIInfo.plist */; };
 		F99141922B29505900770379 /* RealmTranslateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141912B29505900770379 /* RealmTranslateModel.swift */; };
-		F99141952B29539F00770379 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141942B29539F00770379 /* DataManager.swift */; };
+		F99141952B29539F00770379 /* VocaTranslatedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141942B29539F00770379 /* VocaTranslatedManager.swift */; };
 		F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141962B2953D700770379 /* DependencyInjectable.swift */; };
-		F99141992B29DCE500770379 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141982B29DCE500770379 /* Enum.swift */; };
+		F99141992B29DCE500770379 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141982B29DCE500770379 /* Section.swift */; };
+		F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991419C2B2A94A400770379 /* RealmVocaModel.swift */; };
+		F991419F2B2A951900770379 /* VocaListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991419E2B2A951900770379 /* VocaListManager.swift */; };
+		F99141A12B2ABF7300770379 /* VocaListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141A02B2ABF7300770379 /* VocaListViewModel.swift */; };
 		F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8642B28092900428D55 /* DictionaryControlller.swift */; };
 		F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8662B28093400428D55 /* Dictionaryview.swift */; };
 		F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */; };
@@ -52,7 +55,7 @@
 		F9739F0B2B23111E00FA1F8E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		F9739F0D2B23157800FA1F8E /* VocaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaViewController.swift; sourceTree = "<group>"; };
 		F9739F0F2B23158900FA1F8E /* VocaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaView.swift; sourceTree = "<group>"; };
-		F9739F112B23159400FA1F8E /* VocaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaViewModel.swift; sourceTree = "<group>"; };
+		F9739F112B23159400FA1F8E /* VocaTranslatedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTranslatedViewModel.swift; sourceTree = "<group>"; };
 		F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTableViewCell.swift; sourceTree = "<group>"; };
 		F9739F152B233A1800FA1F8E /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
@@ -66,9 +69,12 @@
 		F991418D2B2845E500770379 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		F991418F2B2847FD00770379 /* APIInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIInfo.plist; sourceTree = "<group>"; };
 		F99141912B29505900770379 /* RealmTranslateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTranslateModel.swift; sourceTree = "<group>"; };
-		F99141942B29539F00770379 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		F99141942B29539F00770379 /* VocaTranslatedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTranslatedManager.swift; sourceTree = "<group>"; };
 		F99141962B2953D700770379 /* DependencyInjectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjectable.swift; sourceTree = "<group>"; };
-		F99141982B29DCE500770379 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
+		F99141982B29DCE500770379 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		F991419C2B2A94A400770379 /* RealmVocaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmVocaModel.swift; sourceTree = "<group>"; };
+		F991419E2B2A951900770379 /* VocaListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaListManager.swift; sourceTree = "<group>"; };
+		F99141A02B2ABF7300770379 /* VocaListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaListViewModel.swift; sourceTree = "<group>"; };
 		F9C6C8642B28092900428D55 /* DictionaryControlller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryControlller.swift; sourceTree = "<group>"; };
 		F9C6C8662B28093400428D55 /* Dictionaryview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionaryview.swift; sourceTree = "<group>"; };
 		F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryviewModel.swift; sourceTree = "<group>"; };
@@ -138,7 +144,6 @@
 			children = (
 				F9739F152B233A1800FA1F8E /* extension.swift */,
 				F99141872B283CEF00770379 /* Error.swift */,
-				F99141982B29DCE500770379 /* Enum.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -185,10 +190,11 @@
 		F9739EFD2B230EF500FA1F8E /* VocaViewPage */ = {
 			isa = PBXGroup;
 			children = (
-				F9739F0D2B23157800FA1F8E /* VocaViewController.swift */,
-				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
-				F9739F112B23159400FA1F8E /* VocaViewModel.swift */,
 				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
+				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
+				F9739F0D2B23157800FA1F8E /* VocaViewController.swift */,
+				F99141A02B2ABF7300770379 /* VocaListViewModel.swift */,
+				F9739F112B23159400FA1F8E /* VocaTranslatedViewModel.swift */,
 			);
 			path = VocaViewPage;
 			sourceTree = "<group>";
@@ -197,7 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				F99141962B2953D700770379 /* DependencyInjectable.swift */,
-				F99141942B29539F00770379 /* DataManager.swift */,
+				F99141942B29539F00770379 /* VocaTranslatedManager.swift */,
+				F991419E2B2A951900770379 /* VocaListManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -223,9 +230,11 @@
 		F9C6C86B2B28099A00428D55 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F99141982B29DCE500770379 /* Section.swift */,
 				F991418B2B28440800770379 /* TranslateResponseModel.swift */,
 				F991418D2B2845E500770379 /* Language.swift */,
 				F99141912B29505900770379 /* RealmTranslateModel.swift */,
+				F991419C2B2A94A400770379 /* RealmVocaModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -338,26 +347,29 @@
 				F991418C2B28440800770379 /* TranslateResponseModel.swift in Sources */,
 				F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */,
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
+				F99141A12B2ABF7300770379 /* VocaListViewModel.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
 				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
-				F99141952B29539F00770379 /* DataManager.swift in Sources */,
+				F99141952B29539F00770379 /* VocaTranslatedManager.swift in Sources */,
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F99141922B29505900770379 /* RealmTranslateModel.swift in Sources */,
 				F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */,
 				F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */,
+				F991419F2B2A951900770379 /* VocaListManager.swift in Sources */,
 				F9739F282B25C25600FA1F8E /* VocaWeaveViewController.swift in Sources */,
-				F9739F122B23159400FA1F8E /* VocaViewModel.swift in Sources */,
+				F9739F122B23159400FA1F8E /* VocaTranslatedViewModel.swift in Sources */,
 				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
 				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
 				F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */,
 				F9E5D62A2B270236000A4377 /* VocaWeaveViewModel.swift in Sources */,
-				F99141992B29DCE500770379 /* Enum.swift in Sources */,
+				F99141992B29DCE500770379 /* Section.swift in Sources */,
 				F99141862B280C4100770379 /* NetworkingManager.swift in Sources */,
 				F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
+				F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */,
 				F99141882B283CEF00770379 /* Error.swift in Sources */,
 				F991418E2B2845E500770379 /* Language.swift in Sources */,
 			);

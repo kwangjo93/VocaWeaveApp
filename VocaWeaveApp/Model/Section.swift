@@ -9,4 +9,5 @@ import Foundation
 
 enum Section {
     case voca
+    case dictionary
 }

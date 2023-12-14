@@ -1,22 +1,23 @@
 //
-//  RealmTranslateReponseModel.swift
+//  RealmVocaModel.swift
 //  VocaWeaveApp
 //
-//  Created by 천광조 on 12/13/23.
+//  Created by 천광조 on 12/14/23.
 //
 
 import Foundation
 import RealmSwift
 
-class RealmTranslateModel: Object {
+class RealmVocaModel: Object {
     @Persisted var uuid = UUID()
     @Persisted var sourceText: String
     @Persisted var translatedText: String
     @Persisted var isSelected: Bool
-    convenience init(apiModel: TranslateReponseModel, sourceText: String) {
+
+    convenience init(sourceText: String, translatedText: String) {
         self.init()
         self.sourceText = sourceText
-        self.translatedText = apiModel.translatedText
+        self.translatedText = translatedText
         self.isSelected = false
     }
 }

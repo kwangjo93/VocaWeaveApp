@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import Combine
+import RealmSwift
 
-class VocaViewModel {
-    let datamanager: VocaListType
+class VocaTranslatedViewModel {
+    let datamanager: RealmTranslateType
 
-    init(datamanager: VocaListType) {
+    init(datamanager: RealmTranslateType) {
         self.datamanager = datamanager
     }
 
@@ -27,4 +29,5 @@ class VocaViewModel {
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
     }
+
 }

@@ -1,14 +1,14 @@
 //
-//  DataManager.swift
+//  VocaListManager.swift
 //  VocaWeaveApp
 //
-//  Created by 천광조 on 12/13/23.
+//  Created by 천광조 on 12/14/23.
 //
 
 import Foundation
 import RealmSwift
 
-class VocaListManager: VocaListType {
+class VocaListManager: RealmVocaModelType {
     private var realm: Realm? {
         do {
             return try Realm()
@@ -18,11 +18,11 @@ class VocaListManager: VocaListType {
         }
     }
 
-    private var list: Results<RealmTranslateModel>? {
-        return realm?.objects(RealmTranslateModel.self)
+    private var list: Results<RealmVocaModel>? {
+        return realm?.objects(RealmVocaModel.self)
     }
 
-    var vocaList: [RealmTranslateModel] {
+    var vocaList: [RealmVocaModel] {
         if let todos = list {
             return Array(todos)
         } else {
@@ -30,7 +30,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func makeNewList(_ list: RealmTranslateModel) {
+    func makeNewList(_ list: RealmVocaModel) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -45,7 +45,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool) {
+    func updateListInfo(list: RealmVocaModel, text: String, isSelected: Bool) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -61,7 +61,7 @@ class VocaListManager: VocaListType {
         }
     }
 
-    func deleteList(_ list: RealmTranslateModel) {
+    func deleteList(_ list: RealmVocaModel) {
             do {
                 guard let realm = realm else { return }
                 try realm.write {

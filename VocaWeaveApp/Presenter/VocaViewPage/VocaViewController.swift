@@ -9,7 +9,8 @@ import UIKit
 
 class VocaViewController: UIViewController {
     // MARK: - Property
-    let dataManager: VocaListType
+    let vocaTranslatedViewModel: VocaTranslatedViewModel
+    let vocaListViewModel: VocaListViewModel
     let vocaView = VocaView()
 
     var dataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
@@ -27,8 +28,9 @@ class VocaViewController: UIViewController {
     let networking = NetworkingManager.shared
 
     // MARK: - init
-    init(dataManager: VocaListType) {
-        self.dataManager = dataManager
+    init(vocaTranslatedManager: VocaTranslatedViewModel, vocaListManager: VocaListViewModel) {
+        self.vocaTranslatedViewModel = vocaTranslatedManager
+        self.vocaListViewModel = vocaListManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -38,13 +40,24 @@ class VocaViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNav()
-        configureUI()
+        print()
         setup()
         tableViewDatasourceSetup()
         tableViewSnapshot()
     }
     // MARK: - Helper
+    private func setup() {
+        vocaView.vocaTableView.register(
+                                VocaTableViewCell.self,
+                                forCellReuseIdentifier: VocaTableViewCell.identifier)
+        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
+        vocaView.vocaSegmentedControl.addTarget(self,
+                                                action: #selector(vocaSegmentedControlValueChanged),
+                                                for: .valueChanged)
+        configureNav()
+        configureUI()
+    }
+
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -72,16 +85,6 @@ class VocaViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-    }
-
-    private func setup() {
-        vocaView.vocaTableView.register(
-                                VocaTableViewCell.self,
-                                forCellReuseIdentifier: VocaTableViewCell.identifier)
-        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
-        vocaView.vocaSegmentedControl.addTarget(self,
-                                                action: #selector(vocaSegmentedControlValueChanged),
-                                                for: .valueChanged)
     }
     // MARK: - Action
     @objc private func plustButtonAction() {
@@ -130,7 +133,7 @@ extension VocaViewController {
     private func tableViewSnapshot() {
         snapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
         snapshot.appendSections([.voca])
-        snapshot.appendItems(dataManager.vocaList, toSection: .voca)
+        snapshot.appendItems(vocaTranslatedViewModel.vocaList, toSection: .voca)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 

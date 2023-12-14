@@ -6,10 +6,18 @@
 //
 
 import Foundation
+import RealmSwift
 
-protocol VocaListType {
+protocol RealmTranslateType {
     var vocaList: [RealmTranslateModel] { get }
     func makeNewList(_ list: RealmTranslateModel)
     func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool)
     func deleteList(_ list: RealmTranslateModel)
+}
+
+protocol RealmVocaModelType {
+    var vocaList: [RealmVocaModel] { get }
+    func makeNewList(_ list: RealmVocaModel)
+    func updateListInfo(list: RealmVocaModel, text: String, isSelected: Bool)
+    func deleteList(_ list: RealmVocaModel)
 }

@@ -9,11 +9,14 @@ import UIKit
 
 class TabBarController: UITabBarController {
     // MARK: - Property
-    let dataManager: VocaListType
-
+    let vocaListManager: VocaListManager
+    let vocaTranslatedManager: VocaTranslatedManager
+    lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
+    lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
     // MARK: - init
-    init(dataManager: VocaListType) {
-        self.dataManager = dataManager
+    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
+        self.vocaListManager = vocaListManager
+        self.vocaTranslatedManager = vocaTranslatedManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -24,8 +27,8 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let vocaViewController = UINavigationController(rootViewController: VocaViewController(
-                                                                            dataManager: dataManager))
+        let vocaViewController = UINavigationController(rootViewController: VocaViewController(vocaTranslatedManager: vocaTranslatedViewModel,
+                                     vocaListManager: vocaListViewModel))
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",
             image: UIImage(systemName: "pencil.circle"),
