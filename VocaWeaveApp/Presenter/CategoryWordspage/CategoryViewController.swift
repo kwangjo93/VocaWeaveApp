@@ -24,7 +24,7 @@ class CategoryViewController: UIViewController {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "암기장"
-            label.textColor = .black
+            label.textColor = UIColor.label
             label.font = .boldSystemFont(ofSize: 32)
             return label
         }()
@@ -36,7 +36,7 @@ class CategoryViewController: UIViewController {
     private func setup() {
         let layout = createLayout()
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         collectionView.register(CagtegoryCollectionViewCell.self,
                                 forCellWithReuseIdentifier: CagtegoryCollectionViewCell.identifier)
         collectionView.dataSource = self

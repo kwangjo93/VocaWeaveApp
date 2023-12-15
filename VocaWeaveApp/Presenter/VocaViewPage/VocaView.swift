@@ -16,7 +16,7 @@ class VocaView: UIView {
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         configure()
         setupLayout()
     }

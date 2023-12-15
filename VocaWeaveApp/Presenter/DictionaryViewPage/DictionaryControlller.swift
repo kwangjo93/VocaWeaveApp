@@ -32,7 +32,7 @@ class DictionaryViewController: UIViewController {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "사 전"
-            label.textColor = .black
+            label.textColor = UIColor.label
             label.font = .boldSystemFont(ofSize: 32)
             return label
         }()
@@ -64,7 +64,19 @@ class DictionaryViewController: UIViewController {
     }
 
     @objc private func nightModeBuutonAction() {
-
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                        dictionaryView.explainView.layer.borderColor = UIColor.label.cgColor
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                        dictionaryView.explainView.layer.borderColor = UIColor.white.cgColor
+                    }
+                }
+            }
+        }
     }
 
     @objc private func backBarButtonAction() {

@@ -44,7 +44,7 @@ class DictionaryView: UIView {
 
     let sourceTextField: UITextField = {
         let textFeild = UITextField()
-        textFeild.textColor = .black
+        textFeild.textColor = UIColor.label
         textFeild.borderStyle = .roundedRect
         textFeild.autocapitalizationType = .none
         textFeild.autocorrectionType = .no
@@ -87,7 +87,7 @@ class DictionaryView: UIView {
     let explainView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.borderWidth = 0.3
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = UIColor.label.cgColor
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 15
         return imageView
@@ -96,7 +96,7 @@ class DictionaryView: UIView {
     let translationLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.text = "번역"
         return label
     }()
@@ -104,14 +104,14 @@ class DictionaryView: UIView {
     let translationTextLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = .black
+        label.textColor = UIColor.label
         return label
     }()
 
     let explanationLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.text = "설 명"
         return label
     }()
@@ -119,13 +119,13 @@ class DictionaryView: UIView {
     let explanationTextLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = .black
+        label.textColor = UIColor.label
         return label
     }()
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         configure()
         setupLayout()
         setupStackViewLayout()

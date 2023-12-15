@@ -14,13 +14,13 @@ class CagtegoryCollectionViewCell: UICollectionViewCell {
     let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = UIColor.label
         return label
     }()
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.backgroundColor = .yellow
+        contentView.backgroundColor = .systemCyan
         contentView.layer.cornerRadius = 15
 
         contentView.addSubview(categoryLabel)

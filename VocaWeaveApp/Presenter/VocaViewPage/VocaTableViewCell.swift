@@ -14,7 +14,7 @@ class VocaTableViewCell: UITableViewCell {
     let sourceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
     }()
@@ -22,7 +22,7 @@ class VocaTableViewCell: UITableViewCell {
     let translatedLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
     }()

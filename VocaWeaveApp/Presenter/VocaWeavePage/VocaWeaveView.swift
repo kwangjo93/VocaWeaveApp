@@ -15,7 +15,7 @@ class VocaWeaveView: UIView {
     let statusValueLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 30)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.text = "50 / 5"
         label.textAlignment = .center
         return label
@@ -24,21 +24,21 @@ class VocaWeaveView: UIView {
     let sourceTextButton1: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton2: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton3: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
@@ -54,14 +54,14 @@ class VocaWeaveView: UIView {
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton5: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("UPDATE", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
@@ -76,7 +76,7 @@ class VocaWeaveView: UIView {
 
     let weaveVocaTextField: UITextField = {
         let textFeild = UITextField()
-        textFeild.textColor = .black
+        textFeild.textColor = UIColor.label
         textFeild.borderStyle = .roundedRect
         textFeild.autocapitalizationType = .none
         textFeild.autocorrectionType = .no
@@ -89,7 +89,7 @@ class VocaWeaveView: UIView {
     let responseLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = .black
+        label.textColor = UIColor.label
         label.text = "해 석"
         return label
     }()
@@ -120,16 +120,16 @@ class VocaWeaveView: UIView {
     let responseDataLabel: UITextView = {
         let textView = UITextView()
         textView.font = .systemFont(ofSize: 14)
-        textView.textColor = .black
+        textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
-        textView.layer.borderColor = UIColor.black.cgColor
+        textView.layer.borderColor = UIColor.label.cgColor
         textView.layer.cornerRadius = 8.0
         return textView
     }()
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         configure()
         setupLayout()
         stackViewLayou()
@@ -149,9 +149,6 @@ class VocaWeaveView: UIView {
 
         [statusValueLabel, weaveVocaTextField, responseDataLabel,
          buttonstackView1, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
-
-        [sourceTextButton1, sourceTextButton2, sourceTextButton3,
-         sourceTextButton4, sourceTextButton5].forEach { setButtonBorder(button: $0) }
     }
 
     private func setupLayout() {
@@ -193,17 +190,17 @@ class VocaWeaveView: UIView {
         }
     }
 
-    func setButtonBorder(button: UIButton) {
-        let borderWidth: CGFloat = 0.5
+    func setButtonBorder(button: UIButton, color: CGColor) {
+        let borderWidth: CGFloat = 0.7
         let cornerRadius: CGFloat = 15
         let shadowOpacity: Float = 0.2
 
         button.layer.borderWidth = borderWidth
-        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderColor = color
         button.layer.cornerRadius = cornerRadius
         button.layer.shadowOffset = CGSize(width: 0, height: 2)
         button.layer.shadowRadius = 2
-        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowColor = color
         button.layer.masksToBounds = true
         button.layer.shadowOpacity = shadowOpacity
         button.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)

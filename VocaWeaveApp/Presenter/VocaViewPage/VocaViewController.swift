@@ -43,10 +43,7 @@ class VocaViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print()
         setup()
-        tableViewDatasourceSetup()
-        tableViewSnapshot()
         modelDataBinding()
     }
     // MARK: - Helper
@@ -60,13 +57,15 @@ class VocaViewController: UIViewController {
                                                 for: .valueChanged)
         configureNav()
         configureUI()
+        tableViewDatasourceSetup()
+        tableViewSnapshot()
     }
 
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "단어장"
-            label.textColor = .black
+            label.textColor = UIColor.label
             label.font = .boldSystemFont(ofSize: 32)
             return label
         }()
@@ -75,7 +74,7 @@ class VocaViewController: UIViewController {
 
         let nightModeButton = nightModeBarButtonItem(
             target: self,
-            action: #selector(nightModeBuutonAction))
+            action: #selector(nightModeButtonAction))
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -99,7 +98,6 @@ class VocaViewController: UIViewController {
             .store(in: &cancellables)
         vocaListViewModel.tableViewUpdate
             .sink { [weak self] updatedVocaList in
-                // TableView를 업데이트하는 로직
                 self?.updateItem(with: updatedVocaList)
             }
             .store(in: &cancellables)
@@ -113,7 +111,18 @@ class VocaViewController: UIViewController {
         print("Selected Segment Index: \(selectedSegmentIndex)")
     }
 
-    @objc private func nightModeBuutonAction() {
+    @objc private func nightModeButtonAction() {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                    }
+                }
+            }
+        }
     }
 
     @objc private func searchButtonAction() {
