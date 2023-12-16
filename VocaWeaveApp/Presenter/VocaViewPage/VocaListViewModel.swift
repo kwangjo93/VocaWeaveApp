@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class VocaListViewModel {
+final class VocaListViewModel {
     // MARK: - Property
     let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -73,10 +73,18 @@ class VocaListViewModel {
         alertPublisher.send(alert)
     }
 
-    func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
+  private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
         // 이미 존재하는 데이터인지 확인하는 로직
         let existingVocaList: [RealmVocaModel] = getVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
+    }
+
+    func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
+        let itemsInSection = getVocaList().filter { $0.section == sectionTitle }
+        headerView.isHidden = itemsInSection.isEmpty
+        if let tableView = headerView.superview as? UITableView {
+            tableView.reloadData()
+        }
     }
 }

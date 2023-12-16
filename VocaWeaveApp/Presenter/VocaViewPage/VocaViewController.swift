@@ -14,7 +14,7 @@ class VocaViewController: UIViewController {
     let vocaListViewModel: VocaListViewModel
     let vocaView = VocaView()
     var selectedSegmentIndex = 0
-    
+
     var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
     var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
     var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
@@ -231,17 +231,19 @@ extension VocaViewController {
 extension VocaViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
+
+        let sectionTitle: String
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
-            let sectionIdentifier = snapshot.sectionIdentifiers[section]
-            headerView.configure(title: sectionIdentifier.title)
-            return headerView
+            sectionTitle = snapshot.sectionIdentifiers[section].title
         } else {
             let snapshot = vocaTranslatedDataSource.snapshot()
-            let sectionIdentifier = snapshot.sectionIdentifiers[section]
-            headerView.configure(title: sectionIdentifier.title)
-            return headerView
+            sectionTitle = snapshot.sectionIdentifiers[section].title
         }
+
+        headerView.configure(title: sectionTitle)
+        vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle, headerView: headerView)
+        return headerView
     }
 
     func tableView(_ tableView: UITableView,
@@ -271,7 +273,6 @@ extension VocaViewController: UITableViewDelegate {
     }
 }
 
-/// 삭제하기
 /// 수정하기
 /// 발음 듣기
 /// 북마크 표시 시 데이터 저장
