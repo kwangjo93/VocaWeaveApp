@@ -243,6 +243,32 @@ extension VocaViewController: UITableViewDelegate {
             return headerView
         }
     }
+
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive,
+                                              title: "Delete") { [weak self] (_, _, completionHandler) in
+                   guard let self = self else { return }
+            if selectedSegmentIndex == 0 {
+                if let item = self.vocaListDataSource.itemIdentifier(for: indexPath) {
+                    var snapshot = self.vocaListDataSource.snapshot()
+                    snapshot.deleteItems([item])
+                    self.vocaListDataSource.apply(snapshot, animatingDifferences: true)
+                    vocaListViewModel.deleteVoca(item)
+                }
+                completionHandler(true)
+            } else {
+                if let item = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath) {
+                    var snapshot = self.vocaTranslatedDataSource.snapshot()
+                    snapshot.deleteItems([item])
+                    self.vocaTranslatedDataSource.apply(snapshot, animatingDifferences: true)
+                    vocaTranslatedViewModel.deleteVoca(item)
+                }
+                completionHandler(true)
+                }
+            }
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
 
 /// 삭제하기
