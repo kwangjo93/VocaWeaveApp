@@ -18,6 +18,9 @@ protocol RealmTranslateType {
 protocol RealmVocaModelType {
     func getVocaList() -> [RealmVocaModel]
     func makeNewList(_ list: RealmVocaModel)
-    func updateListInfo(list: RealmVocaModel, text: String, isSelected: Bool)
+    func updateListInfo(list: RealmVocaModel,
+                        sourceText: String,
+                        translatedText: String,
+                        isSelected: Bool)
     func deleteList(_ list: RealmVocaModel)
 }

@@ -111,7 +111,7 @@ class VocaViewController: UIViewController {
     }
     // MARK: - Action
     @objc private func plustButtonAction() {
-        vocaListViewModel.showAlertWithTextField()
+        vocaListViewModel.showAlertWithTextField(newData: nil)
     }
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
@@ -228,6 +228,7 @@ extension VocaViewController {
     }
 }
 
+// MARK: - TableView Delegate
 extension VocaViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
@@ -270,6 +271,15 @@ extension VocaViewController: UITableViewDelegate {
                 }
             }
         return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if selectedSegmentIndex == 0 {
+            let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
+            vocaListViewModel.showAlertWithTextField(newData: vocaData)
+        } else {
+
+        }
     }
 }
 

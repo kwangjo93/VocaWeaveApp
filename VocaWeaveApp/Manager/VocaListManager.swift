@@ -45,7 +45,10 @@ class VocaListManager: RealmVocaModelType {
         }
     }
 
-    func updateListInfo(list: RealmVocaModel, text: String, isSelected: Bool) {
+    func updateListInfo(list: RealmVocaModel,
+                        sourceText: String,
+                        translatedText: String,
+                        isSelected: Bool) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -53,7 +56,8 @@ class VocaListManager: RealmVocaModelType {
 
         do {
             try realm.write {
-                list.translatedText = text
+                list.sourceText = sourceText
+                list.translatedText = translatedText
                 list.isSelected = isSelected
             }
         } catch {
