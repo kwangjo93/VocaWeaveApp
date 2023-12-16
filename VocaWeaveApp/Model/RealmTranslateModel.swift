@@ -13,10 +13,13 @@ class RealmTranslateModel: Object {
     @Persisted var sourceText: String
     @Persisted var translatedText: String
     @Persisted var isSelected: Bool
+    @Persisted var section: String
+
     convenience init(apiModel: TranslateReponseModel, sourceText: String) {
         self.init()
         self.sourceText = sourceText
         self.translatedText = apiModel.translatedText
         self.isSelected = false
+        self.section = (sourceText.first?.uppercased())!
     }
 }

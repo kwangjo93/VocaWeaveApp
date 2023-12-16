@@ -13,11 +13,13 @@ class RealmVocaModel: Object {
     @Persisted var sourceText: String
     @Persisted var translatedText: String
     @Persisted var isSelected: Bool
+    @Persisted var section: String
 
     convenience init(sourceText: String, translatedText: String) {
         self.init()
         self.sourceText = sourceText
         self.translatedText = translatedText
         self.isSelected = false
+        self.section = (sourceText.first?.uppercased())!
     }
 }

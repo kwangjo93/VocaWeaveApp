@@ -7,7 +7,35 @@
 
 import Foundation
 
-enum Section {
-    case voca
-    case dictionary
+enum Section: String, CaseIterable {
+    case alphabetA = "A"
+    case alphabetB = "B"
+    case alphabetC = "C"
+    case alphabetD = "D"
+    case alphabetE = "E"
+    case alphabetF = "F"
+    case alphabetG = "G"
+    case alphabetH = "H"
+    case alphabetI = "I"
+    case alphabetJ = "J"
+    case alphabetK = "K"
+    case alphabetL = "L"
+    case alphabetM = "M"
+    case alphabetN = "N"
+    case alphabetO = "O"
+    case alphabetP = "P"
+    case alphabetQ = "Q"
+    case alphabetR = "R"
+    case alphabetS = "S"
+    case alphabetT = "T"
+    case alphabetU = "U"
+    case alphabetV = "V"
+    case alphabetW = "W"
+    case alphabetX = "X"
+    case alphabetY = "Y"
+    case alphabetZ = "Z"
+
+    var title: String {
+        return self.rawValue
+    }
 }

@@ -13,7 +13,8 @@ class VocaViewController: UIViewController {
     let vocaTranslatedViewModel: VocaTranslatedViewModel
     let vocaListViewModel: VocaListViewModel
     let vocaView = VocaView()
-
+    var selectedSegmentIndex = 0
+    
     var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
     var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
     var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
@@ -53,6 +54,8 @@ class VocaViewController: UIViewController {
         vocaView.vocaTableView.register(
             VocaTableViewCell.self,
             forCellReuseIdentifier: VocaTableViewCell.identifier)
+        vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
+                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
@@ -60,7 +63,9 @@ class VocaViewController: UIViewController {
         configureNav()
         configureUI()
         vocaListTableViewDatasourceSetup()
-        vocaListTableViewSnapshot()
+        vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+
+        vocaView.vocaTableView.delegate = self
     }
 
     private func configureNav() {
@@ -100,7 +105,7 @@ class VocaViewController: UIViewController {
             .store(in: &cancellables)
         vocaListViewModel.tableViewUpdate
             .sink { [weak self] updatedVocaList in
-                self?.updateItem(with: updatedVocaList)
+                self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
     }
@@ -109,14 +114,14 @@ class VocaViewController: UIViewController {
         vocaListViewModel.showAlertWithTextField()
     }
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        let selectedSegmentIndex = sender.selectedSegmentIndex
+        selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot()
+            vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
         case 1:
             vocaTranslatedTableViewDatasourceSetup()
-            vocaTranslatedTableViewSnapshot()
+            vocaTranslatedTableViewSnapshot(with: vocaTranslatedViewModel.getVocaList())
         default:
             break
         }
@@ -157,34 +162,35 @@ extension VocaViewController {
     private func vocaListTableViewDatasourceSetup() {
         vocaListDataSource = UITableViewDiffableDataSource<Section, RealmVocaModel>(
             tableView: vocaView.vocaTableView
-        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmVocaModel) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: VocaTableViewCell.identifier,
-                for: indexPath
-            ) as? VocaTableViewCell else {
+        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmVocaModel) -> UITableViewCell? in
+            guard let self = self,
+                  let cell = tableView.dequeueReusableCell(
+                      withIdentifier: VocaTableViewCell.identifier,
+                      for: indexPath
+                  ) as? VocaTableViewCell else {
                 return UITableViewCell()
             }
-            let dataArray = self.vocaListViewModel.getVocaList()[indexPath.row]
-            cell.sourceLabel.text = dataArray.sourceText
-            cell.translatedLabel.text = dataArray.translatedText
+
+            let data = self.vocaListDataSource.itemIdentifier(for: indexPath)
+            cell.sourceLabel.text = data?.sourceText
+            cell.translatedLabel.text = data?.translatedText
             return cell
         }
     }
 
-    private func vocaListTableViewSnapshot() {
+    private func vocaListTableViewSnapshot(with newData: [RealmVocaModel]) {
         vocaListSnapshot = NSDiffableDataSourceSnapshot<Section, RealmVocaModel>()
-        vocaListSnapshot.appendSections([.voca])
-        vocaListSnapshot.appendItems(vocaListViewModel.getVocaList(), toSection: .voca)
+        let sections = Section.allCases
+        for section in sections {
+                   let itemsInSection = newData.filter { $0.section == section.title }
+                   if !itemsInSection.isEmpty {
+                       vocaListSnapshot.appendSections([section])
+                       vocaListSnapshot.appendItems(itemsInSection, toSection: section)
+                   }
+               }
         vocaListDataSource.apply(vocaListSnapshot, animatingDifferences: true)
     }
 
-    func updateItem(with newData: [RealmVocaModel]) {
-        var currentSnapshot = vocaListDataSource.snapshot()
-        currentSnapshot.deleteAllItems()
-        currentSnapshot.appendSections([.voca])
-        currentSnapshot.appendItems(vocaListViewModel.getVocaList(), toSection: .voca)
-        vocaListDataSource.apply(currentSnapshot, animatingDifferences: true)
-    }
 }
 
 // MARK: - VocaTranslated TableView Diffable DataSource
@@ -192,35 +198,56 @@ extension VocaViewController {
     private func vocaTranslatedTableViewDatasourceSetup() {
         vocaTranslatedDataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
             tableView: vocaView.vocaTableView
-        ) { (tableView: UITableView, indexPath: IndexPath, identifier: RealmTranslateModel) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: VocaTableViewCell.identifier,
-                for: indexPath
-            ) as? VocaTableViewCell else {
+        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel) -> UITableViewCell? in
+            guard let self = self,
+                  let cell = tableView.dequeueReusableCell(
+                      withIdentifier: VocaTableViewCell.identifier,
+                      for: indexPath
+                  ) as? VocaTableViewCell else {
                 return UITableViewCell()
             }
-            let dataArray = self.vocaTranslatedViewModel.getVocaList()[indexPath.row]
-            cell.sourceLabel.text = dataArray.sourceText
-            cell.translatedLabel.text = dataArray.translatedText
+
+            let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
+            cell.sourceLabel.text = data?.sourceText
+            cell.translatedLabel.text = data?.translatedText
             return cell
         }
     }
 
-    private func vocaTranslatedTableViewSnapshot() {
+    private func vocaTranslatedTableViewSnapshot(with newData: [RealmTranslateModel]) {
         vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
-        vocaTranslatedSnapshot.appendSections([.voca])
-        vocaTranslatedSnapshot.appendItems(vocaTranslatedViewModel.getVocaList(), toSection: .voca)
+        let sections = Section.allCases
+        for section in sections {
+                   let itemsInSection = newData.filter { $0.section == section.title }
+                   if !itemsInSection.isEmpty {
+                       vocaTranslatedSnapshot.appendSections([section])
+                       vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
+                   }
+               }
         vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
     }
-
 }
 
+extension VocaViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
+        if selectedSegmentIndex == 0 {
+            let snapshot = vocaListDataSource.snapshot()
+            let sectionIdentifier = snapshot.sectionIdentifiers[section]
+            headerView.configure(title: sectionIdentifier.title)
+            return headerView
+        } else {
+            let snapshot = vocaTranslatedDataSource.snapshot()
+            let sectionIdentifier = snapshot.sectionIdentifiers[section]
+            headerView.configure(title: sectionIdentifier.title)
+            return headerView
+        }
+    }
+}
 
-///데이터 창고 두개 만들기 -> 세크먼트를 눌렀을 경우 다른 뷰 보이기
-///테이블 뷰의 섹션 알파벳순으로 나누기
-///삭제하기
-///수정하기
-///발음 듣기
-///북마크 표시 시 데이터 저장
-///사전 API 연결
-///검색 서치바 구현
+/// 삭제하기
+/// 수정하기
+/// 발음 듣기
+/// 북마크 표시 시 데이터 저장
+/// 사전 API 연결
+/// 검색 서치바 구현

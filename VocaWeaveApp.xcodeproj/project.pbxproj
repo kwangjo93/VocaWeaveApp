@@ -39,6 +39,7 @@
 		F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991419C2B2A94A400770379 /* RealmVocaModel.swift */; };
 		F991419F2B2A951900770379 /* VocaListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F991419E2B2A951900770379 /* VocaListManager.swift */; };
 		F99141A12B2ABF7300770379 /* VocaListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141A02B2ABF7300770379 /* VocaListViewModel.swift */; };
+		F99141A32B2C3B0000770379 /* VocaTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99141A22B2C3B0000770379 /* VocaTableViewHeaderView.swift */; };
 		F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8642B28092900428D55 /* DictionaryControlller.swift */; };
 		F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8662B28093400428D55 /* Dictionaryview.swift */; };
 		F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */; };
@@ -75,6 +76,7 @@
 		F991419C2B2A94A400770379 /* RealmVocaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmVocaModel.swift; sourceTree = "<group>"; };
 		F991419E2B2A951900770379 /* VocaListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaListManager.swift; sourceTree = "<group>"; };
 		F99141A02B2ABF7300770379 /* VocaListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaListViewModel.swift; sourceTree = "<group>"; };
+		F99141A22B2C3B0000770379 /* VocaTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaTableViewHeaderView.swift; sourceTree = "<group>"; };
 		F9C6C8642B28092900428D55 /* DictionaryControlller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryControlller.swift; sourceTree = "<group>"; };
 		F9C6C8662B28093400428D55 /* Dictionaryview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionaryview.swift; sourceTree = "<group>"; };
 		F9C6C8682B28094300428D55 /* DictionaryviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryviewModel.swift; sourceTree = "<group>"; };
@@ -190,8 +192,7 @@
 		F9739EFD2B230EF500FA1F8E /* VocaViewPage */ = {
 			isa = PBXGroup;
 			children = (
-				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
-				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
+				F99141A42B2C3B0D00770379 /* View */,
 				F9739F0D2B23157800FA1F8E /* VocaViewController.swift */,
 				F99141A02B2ABF7300770379 /* VocaListViewModel.swift */,
 				F9739F112B23159400FA1F8E /* VocaTranslatedViewModel.swift */,
@@ -207,6 +208,16 @@
 				F991419E2B2A951900770379 /* VocaListManager.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		F99141A42B2C3B0D00770379 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
+				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
+				F99141A22B2C3B0000770379 /* VocaTableViewHeaderView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		F9C6C8632B2808F300428D55 /* DictionaryViewPage */ = {
@@ -370,6 +381,7 @@
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
 				F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */,
+				F99141A32B2C3B0000770379 /* VocaTableViewHeaderView.swift in Sources */,
 				F99141882B283CEF00770379 /* Error.swift in Sources */,
 				F991418E2B2845E500770379 /* Language.swift in Sources */,
 			);
