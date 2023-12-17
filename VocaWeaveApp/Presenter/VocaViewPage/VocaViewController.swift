@@ -172,12 +172,13 @@ extension VocaViewController {
             }
 
             let data = self.vocaListDataSource.itemIdentifier(for: indexPath)
-            cell.vocaData = data
+            cell.vocaListData = data
             cell.vocaListViewModel = self.vocaListViewModel
             cell.sourceLabel.text = data?.sourceText
             cell.translatedLabel.text = data?.translatedText
             cell.isSelect = data!.isSelected
             cell.configureBookmark()
+            cell.speakerButtonAction()
             return cell
         }
     }
@@ -212,8 +213,12 @@ extension VocaViewController {
             }
 
             let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
+            cell.vocaTanslatedData = data
+            cell.vocaTanslatedViewModel = self.vocaTranslatedViewModel
             cell.sourceLabel.text = data?.sourceText
             cell.translatedLabel.text = data?.translatedText
+            cell.isSelect = data!.isSelected
+            cell.configureBookmark()
             cell.speakerButtonAction()
             return cell
         }
@@ -288,6 +293,5 @@ extension VocaViewController: UITableViewDelegate {
     }
 }
 
-/// 북마크 표시 시 데이터 저장
 /// 사전 API 연결
 /// 검색 서치바 구현
