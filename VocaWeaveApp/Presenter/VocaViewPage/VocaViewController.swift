@@ -210,6 +210,7 @@ extension VocaViewController {
             let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
             cell.sourceLabel.text = data?.sourceText
             cell.translatedLabel.text = data?.translatedText
+            cell.speakerButtonAction()
             return cell
         }
     }
@@ -283,7 +284,6 @@ extension VocaViewController: UITableViewDelegate {
     }
 }
 
-/// 수정하기
 /// 발음 듣기
 /// 북마크 표시 시 데이터 저장
 /// 사전 API 연결

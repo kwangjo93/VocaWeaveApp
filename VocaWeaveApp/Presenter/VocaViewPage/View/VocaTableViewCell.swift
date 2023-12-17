@@ -7,10 +7,13 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
 class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
+    let speaker = AVSpeechSynthesizer()
+
     let sourceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
@@ -45,6 +48,7 @@ class VocaTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
         setupLayout()
+        speakerButtonTapped()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -83,5 +87,19 @@ class VocaTableViewCell: UITableViewCell {
         }
     }
 
+    // MARK: - Helper
+    private func speakerButtonTapped() {
+        speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
+    }
+
     // MARK: - Action
+    @objc func speakerButtonAction() {
+        print("버튼 눌림")
+        if let text = sourceLabel.text {
+            let speechUtterance = AVSpeechUtterance(string: text)
+            speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US") // 설정한 언어로 음성 선택
+            let speechSynthesizer = AVSpeechSynthesizer()
+            speechSynthesizer.speak(speechUtterance)
+        }
+    }
 }
