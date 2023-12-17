@@ -13,10 +13,13 @@ class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
     let speaker = AVSpeechSynthesizer()
+    var vocaData: RealmVocaModel?
+    var vocaListViewModel: VocaListViewModel?
+    var isSelect = false
 
     let sourceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 18)
         label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
@@ -24,23 +27,23 @@ class VocaTableViewCell: UITableViewCell {
 
     let translatedLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 18)
         label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
     }()
 
     let speakerButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         let button = UIButton(type: .custom)
         button.frame.size.height = 40
-        button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
+                        for: .normal)
         return button
     }()
 
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.frame.size.height = 40
-        button.setImage(UIImage(systemName: "star"), for: .normal)
         return button
     }()
     // MARK: - init
@@ -49,6 +52,7 @@ class VocaTableViewCell: UITableViewCell {
         configure()
         setupLayout()
         speakerButtonTapped()
+        bookmarkButtonTapped()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -92,14 +96,53 @@ class VocaTableViewCell: UITableViewCell {
         speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
     }
 
+    private func bookmarkButtonTapped() {
+        bookmarkButton.addTarget(self, action: #selector(bookmarkButtonAction), for: .touchUpInside)
+    }
+
+    func configureBookmark() {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
+        if isSelect == true {
+            bookmarkButton.setImage(UIImage(systemName: "star.fill",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
+        } else {
+            bookmarkButton.setImage(UIImage(systemName: "star",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
+        }
+    }
+
     // MARK: - Action
     @objc func speakerButtonAction() {
-        print("버튼 눌림")
         if let text = sourceLabel.text {
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US") // 설정한 언어로 음성 선택
             let speechSynthesizer = AVSpeechSynthesizer()
             speechSynthesizer.speak(speechUtterance)
+        }
+    }
+
+    @objc func bookmarkButtonAction() {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
+        guard let vocaData = vocaData else { return }
+        isSelect.toggle()
+        if isSelect {
+            vocaListViewModel?.updateVoca(list: vocaData,
+                                          sourceText: vocaData.sourceText,
+                                          translatedText: vocaData.translatedText,
+                                          isSelected: true)
+            bookmarkButton.setImage(UIImage(systemName: "star.fill",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
+        } else {
+            vocaListViewModel?.updateVoca(list: vocaData,
+                                          sourceText: vocaData.sourceText,
+                                          translatedText: vocaData.translatedText,
+                                          isSelected: false)
+            bookmarkButton.setImage(UIImage(systemName: "star",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
         }
     }
 }

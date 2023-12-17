@@ -26,7 +26,7 @@ final class VocaListViewModel {
         datamanager.makeNewList(list)
     }
 
-    private func updateVoca(list: RealmVocaModel, sourceText: String, translatedText: String, isSelected: Bool) {
+    func updateVoca(list: RealmVocaModel, sourceText: String, translatedText: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list,
                                    sourceText: sourceText,
                                    translatedText: translatedText,

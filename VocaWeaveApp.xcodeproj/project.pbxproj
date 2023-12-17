@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F93319D82B2ECEB5007D69F6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F93319D72B2ECEB5007D69F6 /* SnapKit */; };
+		F93319DC2B2ECED1007D69F6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F93319DB2B2ECED1007D69F6 /* Realm */; };
+		F93319DE2B2ECED1007D69F6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F93319DD2B2ECED1007D69F6 /* RealmSwift */; };
 		F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE02B23084600FA1F8E /* AppDelegate.swift */; };
 		F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE22B23084600FA1F8E /* SceneDelegate.swift */; };
 		F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9739EE92B23084900FA1F8E /* Assets.xcassets */; };
@@ -101,10 +104,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F93319DE2B2ECED1007D69F6 /* RealmSwift in Frameworks */,
+				F93319DC2B2ECED1007D69F6 /* Realm in Frameworks */,
 				F9739F092B230F8100FA1F8E /* RealmSwift in Frameworks */,
 				F99141A82B2E8ED400770379 /* SnapKit in Frameworks */,
 				F9739F072B230F8100FA1F8E /* Realm in Frameworks */,
 				F9739F022B230F6700FA1F8E /* SnapKit in Frameworks */,
+				F93319D82B2ECEB5007D69F6 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +292,9 @@
 				F9739F062B230F8100FA1F8E /* Realm */,
 				F9739F082B230F8100FA1F8E /* RealmSwift */,
 				F99141A72B2E8ED400770379 /* SnapKit */,
+				F93319D72B2ECEB5007D69F6 /* SnapKit */,
+				F93319DB2B2ECED1007D69F6 /* Realm */,
+				F93319DD2B2ECED1007D69F6 /* RealmSwift */,
 			);
 			productName = VocaWeaveApp;
 			productReference = F9739EDD2B23084600FA1F8E /* VocaWeaveApp.app */;
@@ -638,13 +647,28 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-cocoa.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F93319D72B2ECEB5007D69F6 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		F93319DB2B2ECED1007D69F6 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = Realm;
+		};
+		F93319DD2B2ECED1007D69F6 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9739F052B230F8100FA1F8E /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
 		F9739F012B230F6700FA1F8E /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9739F002B230F6700FA1F8E /* XCRemoteSwiftPackageReference "SnapKit" */;

@@ -172,8 +172,12 @@ extension VocaViewController {
             }
 
             let data = self.vocaListDataSource.itemIdentifier(for: indexPath)
+            cell.vocaData = data
+            cell.vocaListViewModel = self.vocaListViewModel
             cell.sourceLabel.text = data?.sourceText
             cell.translatedLabel.text = data?.translatedText
+            cell.isSelect = data!.isSelected
+            cell.configureBookmark()
             return cell
         }
     }
@@ -284,7 +288,6 @@ extension VocaViewController: UITableViewDelegate {
     }
 }
 
-/// 발음 듣기
 /// 북마크 표시 시 데이터 저장
 /// 사전 API 연결
 /// 검색 서치바 구현
