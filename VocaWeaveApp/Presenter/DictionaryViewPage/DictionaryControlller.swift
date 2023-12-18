@@ -10,6 +10,9 @@ import UIKit
 class DictionaryViewController: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
+    let dictionaryViewModel = DictionaryViewModel()
+    var vocaTranslatedData: RealmTranslateModel?
+    var dictionaryEnum: DictionaryEnum = .new
 
     lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
                                      style: .plain,
@@ -23,11 +26,27 @@ class DictionaryViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+
+    // MARK: - init
+    init(vocaTranslatedData: RealmTranslateModel?,
+         dictionaryEnum: DictionaryEnum) {
+        self.vocaTranslatedData = vocaTranslatedData
+        self.dictionaryEnum = dictionaryEnum
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Helper
+    private func setup() {
+        view.addSubview(dictionaryView)
         configureNav()
         configure()
         setupLayout()
     }
-    // MARK: - Helper
+
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -47,7 +66,11 @@ class DictionaryViewController: UIViewController {
     }
 
     private func configure() {
-        view.addSubview(dictionaryView)
+        guard let vocaTranslatedData = vocaTranslatedData else { return }
+        if dictionaryEnum == .response {
+            dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
+            dictionaryView.translationTextLabel.text = vocaTranslatedData.translatedText
+        }
     }
 
     private func setupLayout() {
@@ -58,9 +81,11 @@ class DictionaryViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(defaultValue * 2)
         }
     }
+
     // MARK: - Action
     @objc private func addRightBarButtonAction() {
-
+        dictionaryView
+        dictionaryView
     }
 
     @objc private func nightModeBuutonAction() {

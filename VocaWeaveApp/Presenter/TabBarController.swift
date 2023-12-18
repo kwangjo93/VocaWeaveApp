@@ -53,7 +53,10 @@ class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "puzzlepiece.fill")
         )
 
-        let dictionaryViewController = UINavigationController(rootViewController: DictionaryViewController())
+        let dictionaryViewController = UINavigationController(
+            rootViewController: DictionaryViewController(
+                                    vocaTranslatedData: nil,
+                                    dictionaryEnum: .new))
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),

@@ -31,8 +31,6 @@ class VocaViewController: UIViewController {
                                             style: .plain,
                                             target: self,
                                             action: #selector(searchButtonAction))
-    let networking = NetworkingManager.shared
-
     // MARK: - init
     init(vocaTranslatedManager: VocaTranslatedViewModel, vocaListManager: VocaListViewModel) {
         self.vocaTranslatedViewModel = vocaTranslatedManager
@@ -108,10 +106,29 @@ class VocaViewController: UIViewController {
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
+
+        vocaTranslatedViewModel.alertPublisher
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true, completion: nil)
+            }
+            .store(in: &cancellables)
+
+        vocaTranslatedViewModel.tableViewUpdate
+            .sink { [weak self] updatedVocaList in
+                self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
+            }
+            .store(in: &cancellables)
     }
     // MARK: - Action
     @objc private func plustButtonAction() {
-        vocaListViewModel.showAlertWithTextField(newData: nil)
+        switch selectedSegmentIndex {
+        case 0:
+            vocaListViewModel.showAlertWithTextField(newData: nil)
+        case 1:
+            vocaTranslatedViewModel.showAlertWithTextField(currentView: self)
+        default:
+            break
+        }
     }
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
@@ -143,16 +160,6 @@ class VocaViewController: UIViewController {
 
     @objc private func searchButtonAction() {
 
-    }
-    func fetchDataAndHandleResult() {
-        Task {
-            do {
-                let result = try await networking.fetchData(source: "ko", target: "en", text: "안녕하세요")
-                print("번역 결과: \(result.translatedText )")
-            } catch {
-                print("에러 발생: \(error)")
-            }
-        }
     }
 
 }
@@ -294,4 +301,6 @@ extension VocaViewController: UITableViewDelegate {
 }
 
 /// 사전 API 연결
+/// dictionaryView의 저장버튼
+///dictionaryView text UI 처리(정렬, 간격 등)
 /// 검색 서치바 구현

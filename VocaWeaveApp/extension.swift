@@ -34,3 +34,16 @@ extension UIViewController {
                                    action: action)
         }
 }
+
+extension String {
+    func containsOnlyKorean() -> Bool {
+        let koreanRegex = "^[ㄱ-ㅎㅏ-ㅣ가-힣]*$"
+        return range(of: koreanRegex, options: .regularExpression) != nil
+    }
+
+    func containsOnlyEnglish() -> Bool {
+        let englishRegex = "^[a-zA-Z]*$"
+        return range(of: englishRegex, options: .regularExpression) != nil
+    }
+
+}

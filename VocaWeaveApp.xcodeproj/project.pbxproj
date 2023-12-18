@@ -10,6 +10,7 @@
 		F93319D82B2ECEB5007D69F6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F93319D72B2ECEB5007D69F6 /* SnapKit */; };
 		F93319DC2B2ECED1007D69F6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F93319DB2B2ECED1007D69F6 /* Realm */; };
 		F93319DE2B2ECED1007D69F6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F93319DD2B2ECED1007D69F6 /* RealmSwift */; };
+		F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */; };
 		F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE02B23084600FA1F8E /* AppDelegate.swift */; };
 		F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE22B23084600FA1F8E /* SceneDelegate.swift */; };
 		F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9739EE92B23084900FA1F8E /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEnum.swift; sourceTree = "<group>"; };
 		F9739EDD2B23084600FA1F8E /* VocaWeaveApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaWeaveApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9739EE02B23084600FA1F8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9739EE22B23084600FA1F8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				F9739F152B233A1800FA1F8E /* extension.swift */,
 				F99141872B283CEF00770379 /* Error.swift */,
+				F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				F99141862B280C4100770379 /* NetworkingManager.swift in Sources */,
 				F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
+				F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */,
 				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
 				F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */,
 				F99141A32B2C3B0000770379 /* VocaTableViewHeaderView.swift in Sources */,

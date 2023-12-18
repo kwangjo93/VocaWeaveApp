@@ -114,21 +114,17 @@ extension VocaListViewModel {
                 return
             }
             let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext)
-
-            // 이미 존재하는지 확인하고 중복된 데이터를 추가하지 않음
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
                 let newVocaList: [RealmVocaModel] = self.getVocaList()
                 self.tableViewUpdate.send(newVocaList)
             } else {
-                // 이미 존재하는 데이터라는 메시지 출력 또는 다른 처리
                 print("이미 존재하는 데이터입니다.")
             }
         }
         alert.addAction(saveAction)
     }
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
-        // 이미 존재하는 데이터인지 확인하는 로직
         let existingVocaList: [RealmVocaModel] = getVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
