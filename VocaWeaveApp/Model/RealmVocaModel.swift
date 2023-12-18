@@ -20,6 +20,6 @@ class RealmVocaModel: Object {
         self.sourceText = sourceText
         self.translatedText = translatedText
         self.isSelected = false
-        self.section = (sourceText.first?.uppercased())!
+        self.section = sourceText.getFirstLetter()
     }
 }

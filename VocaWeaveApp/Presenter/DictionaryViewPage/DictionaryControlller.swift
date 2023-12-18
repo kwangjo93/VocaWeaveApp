@@ -11,6 +11,7 @@ class DictionaryViewController: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
     let dictionaryViewModel = DictionaryViewModel()
+    let vocaTranslatedViewModel: VocaTranslatedViewModel
     var vocaTranslatedData: RealmTranslateModel?
     var dictionaryEnum: DictionaryEnum = .new
 
@@ -31,9 +32,11 @@ class DictionaryViewController: UIViewController {
 
     // MARK: - init
     init(vocaTranslatedData: RealmTranslateModel?,
-         dictionaryEnum: DictionaryEnum) {
+         dictionaryEnum: DictionaryEnum,
+         vocaTranslatedViewModel: VocaTranslatedViewModel) {
         self.vocaTranslatedData = vocaTranslatedData
         self.dictionaryEnum = dictionaryEnum
+        self.vocaTranslatedViewModel = vocaTranslatedViewModel
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -56,12 +59,12 @@ class DictionaryViewController: UIViewController {
             return label
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
-        navigationItem.leftBarButtonItem = titleItem
+        navigationItem.leftBarButtonItems = [titleItem]
 
         let nightModeButton = nightModeBarButtonItem(
                                 target: self,
                                 action: #selector(nightModeBuutonAction))
-        navigationItem.rightBarButtonItem = nightModeButton
+        navigationItem.rightBarButtonItems = [nightModeButton]
         navigationController?.configureBasicAppearance()
     }
 
@@ -70,6 +73,8 @@ class DictionaryViewController: UIViewController {
         if dictionaryEnum == .response {
             dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
             dictionaryView.translationTextLabel.text = vocaTranslatedData.translatedText
+            navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
+            navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
         }
     }
 
@@ -84,8 +89,9 @@ class DictionaryViewController: UIViewController {
 
     // MARK: - Action
     @objc private func addRightBarButtonAction() {
-        dictionaryView
-        dictionaryView
+        guard let vocaTranslatedData = vocaTranslatedData else { return }
+        vocaTranslatedViewModel.saveDictionaryData(vocaTranslatedData)
+        self.dismiss(animated: true)
     }
 
     @objc private func nightModeBuutonAction() {
@@ -105,6 +111,8 @@ class DictionaryViewController: UIViewController {
     }
 
     @objc private func backBarButtonAction() {
-
+        self.dismiss(animated: true)
     }
 }
+
+// 검색을 하고 해당 검색한 데이터를 넘어온 데이터와 비교를 한 후에 추가하기를 했을 경우 중복인지 확인하는 과정 필요

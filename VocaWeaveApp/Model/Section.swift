@@ -35,6 +35,21 @@ enum Section: String, CaseIterable {
     case alphabetY = "Y"
     case alphabetZ = "Z"
 
+    case koreanA = "ㄱ"
+    case koreanB = "ㄴ"
+    case koreanC = "ㄷ"
+    case koreanD = "ㄹ"
+    case koreanE = "ㅁ"
+    case koreanF = "ㅂ"
+    case koreanG = "ㅅ"
+    case koreanH = "ㅇ"
+    case koreanI = "ㅈ"
+    case koreanJ = "ㅊ"
+    case koreanK = "ㅋ"
+    case koreanL = "ㅌ"
+    case koreanM = "ㅍ"
+    case koreanN = "ㅎ"
+
     var title: String {
         return self.rawValue
     }

@@ -20,6 +20,6 @@ class RealmTranslateModel: Object {
         self.sourceText = sourceText
         self.translatedText = apiModel.translatedText
         self.isSelected = false
-        self.section = (sourceText.first?.uppercased())!
+        self.section = sourceText.getFirstLetter()
     }
 }

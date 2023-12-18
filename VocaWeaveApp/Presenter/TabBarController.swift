@@ -56,7 +56,8 @@ class TabBarController: UITabBarController {
         let dictionaryViewController = UINavigationController(
             rootViewController: DictionaryViewController(
                                     vocaTranslatedData: nil,
-                                    dictionaryEnum: .new))
+                                    dictionaryEnum: .new,
+                                    vocaTranslatedViewModel: vocaTranslatedViewModel))
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),

@@ -44,6 +44,8 @@ class VocaViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let text = "감자"
+        print(text.getFirstLetter())
         setup()
         modelDataBinding()
     }
@@ -254,13 +256,15 @@ extension VocaViewController: UITableViewDelegate {
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
+            vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
+                                                     headerView: headerView)
         } else {
             let snapshot = vocaTranslatedDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
+            vocaTranslatedViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
+                                                           headerView: headerView)
         }
-
         headerView.configure(title: sectionTitle)
-        vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle, headerView: headerView)
         return headerView
     }
 
@@ -295,12 +299,16 @@ extension VocaViewController: UITableViewDelegate {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
             vocaListViewModel.showAlertWithTextField(newData: vocaData)
         } else {
-
+            guard let sourceText = vocaTranslatedDataSource.itemIdentifier(
+                                                            for: indexPath)?.sourceText else { return}
+            vocaTranslatedViewModel.fetchDictionaryData(sourceText: sourceText,
+                                                        currentView: self)
         }
     }
 }
 
-/// 사전 API 연결
-/// dictionaryView의 저장버튼
-///dictionaryView text UI 처리(정렬, 간격 등)
+/// dictionaryView text UI 처리(정렬, 간격 등)
+/// 한글 대응
 /// 검색 서치바 구현
+/// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
+/// 다른 언어로 검색 시 경고알림

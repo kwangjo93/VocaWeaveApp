@@ -60,9 +60,18 @@ class VocaTranslatedViewModel {
         }
     }
 
+    func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
+        let itemsInSection = getVocaList().filter { $0.section == sectionTitle }
+        headerView.isHidden = itemsInSection.isEmpty
+        if let tableView = headerView.superview as? UITableView {
+            tableView.reloadData()
+        }
+    }
+
     private func nextGoPage(currentView: VocaViewController,
-                            nextView: DictionaryViewController) {
+                            nextView: UINavigationController) {
         DispatchQueue.main.async {
+            nextView.modalPresentationStyle = .fullScreen
             currentView.present(nextView, animated: true)
         }
     }
@@ -78,7 +87,7 @@ extension VocaTranslatedViewModel {
     }
 
     private func configureAlert(currentView: VocaViewController) -> UIAlertController {
-        let alert = UIAlertController(title: "단어와 뜻을 입력해 주세요.", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "검색할 단어를 입력해 주세요.", message: nil, preferredStyle: .alert)
             addPlaceholders(to: alert)
         addAction(for: alert, currentView: currentView)
         return alert
@@ -96,28 +105,38 @@ extension VocaTranslatedViewModel {
                   let alert = alert,
                   let sourcetextField = alert.textFields?[0],
                   let sourcetext = sourcetextField.text else { return }
-            Task {
-                do {
-                    let responseData = try await self.fetchDataAndHandleResult(sourceText: sourcetext)
-                    let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourcetext)
-                    let dictionaryView = await DictionaryViewController(
-                                                vocaTranslatedData: voca,
-                                                dictionaryEnum: .response)
-                    self.nextGoPage(currentView: currentView, nextView: dictionaryView)
-//                    if !self.isVocaAlreadyExists(voca) {
-//                        self.addVoca(voca)
-//                        let newVocaList: [RealmTranslateModel] = self.getVocaList()
-//                        self.tableViewUpdate.send(newVocaList)
-//                    } else {
-//                        print("이미 존재하는 데이터입니다.")
-//                    }
-                } catch {
-                    print("Task Response error")
-                }
-            }
+            fetchDictionaryData(sourceText: sourcetext, currentView: currentView)
         }
         alert.addAction(searchAction)
     }
+
+    func fetchDictionaryData(sourceText: String, currentView: VocaViewController) {
+        Task {
+            do {
+                let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
+                let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
+                let dictionaryView = await UINavigationController(
+                    rootViewController: DictionaryViewController(
+                                                                vocaTranslatedData: voca,
+                                                                dictionaryEnum: .response,
+                                                                vocaTranslatedViewModel: self))
+                self.nextGoPage(currentView: currentView, nextView: dictionaryView)
+            } catch {
+                print("Task Response error")
+            }
+        }
+    }
+
+    func saveDictionaryData(_ voca: RealmTranslateModel) {
+        if !self.isVocaAlreadyExists(voca) {
+            self.addVoca(voca)
+            let newVocaList: [RealmTranslateModel] = self.getVocaList()
+            self.tableViewUpdate.send(newVocaList)
+        } else {
+            print("이미 존재하는 데이터입니다.")
+        }
+    }
+
   private  func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
         let existingVocaList: [RealmTranslateModel] = getVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText

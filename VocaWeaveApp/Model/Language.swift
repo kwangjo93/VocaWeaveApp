@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum Language: String, CaseIterable {
+enum Language: String {
     case korean = "ko"
     case english = "en"
 
