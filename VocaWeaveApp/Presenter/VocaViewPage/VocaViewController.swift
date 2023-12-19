@@ -374,6 +374,5 @@ extension VocaViewController: UISearchBarDelegate {
 }
 
 /// dictionaryView text UI 처리(정렬, 간격 등)
-/// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자
 /// 페이지네이션 구현

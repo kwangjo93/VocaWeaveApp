@@ -94,7 +94,8 @@ extension VocaListViewModel {
                   let translatedtext = translatedtextField.text else {
                 return
             }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+                translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }
@@ -118,7 +119,8 @@ extension VocaListViewModel {
                   let translatedtext = translatedtextField.text else {
                 return
             }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+                translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }
@@ -140,7 +142,6 @@ extension VocaListViewModel {
         alert.addAction(okAction)
         whitespacesAlertPublisher.send(alert)
     }
-
 
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
         let existingVocaList: [RealmVocaModel] = getVocaList()

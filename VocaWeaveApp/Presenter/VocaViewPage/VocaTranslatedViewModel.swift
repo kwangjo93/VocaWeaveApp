@@ -115,7 +115,7 @@ extension VocaTranslatedViewModel {
                   let alert = alert,
                   let sourcetextField = alert.textFields?[0],
                   let sourcetext = sourcetextField.text else { return }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty{
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }
