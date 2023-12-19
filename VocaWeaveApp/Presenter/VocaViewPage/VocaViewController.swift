@@ -52,15 +52,6 @@ final class VocaViewController: UIViewController {
     }
     // MARK: - Helper
     private func setup() {
-        vocaView.vocaTableView.register(
-            VocaTableViewCell.self,
-            forCellReuseIdentifier: VocaTableViewCell.identifier)
-        vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
-                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
-        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
-        vocaView.vocaSegmentedControl.addTarget(self,
-                                                action: #selector(vocaSegmentedControlValueChanged),
-                                                for: .valueChanged)
         configureNav()
         configureUI()
         vocaListTableViewDatasourceSetup()
@@ -88,9 +79,18 @@ final class VocaViewController: UIViewController {
     }
 
     private func configureUI() {
-        let defaultValue = 8
         view.addSubview(vocaView)
+        vocaView.vocaTableView.register(
+            VocaTableViewCell.self,
+            forCellReuseIdentifier: VocaTableViewCell.identifier)
+        vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
+                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
+        vocaView.vocaSegmentedControl.addTarget(self,
+                                                action: #selector(vocaSegmentedControlValueChanged),
+                                                for: .valueChanged)
 
+        let defaultValue = 8
         vocaView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview().inset(defaultValue)
@@ -118,6 +118,12 @@ final class VocaViewController: UIViewController {
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
+        vocaListViewModel.whitespacesAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
 
         vocaTranslatedViewModel.alertPublisher
             .sink { [weak self] alert in
@@ -136,6 +142,17 @@ final class VocaViewController: UIViewController {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
+        vocaTranslatedViewModel.whitespacesAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("터치")
+        self.searchController.searchBar.searchTextField.resignFirstResponder()
     }
     // MARK: - Action
     @objc private func plustButtonAction() {
@@ -355,6 +372,7 @@ extension VocaViewController: UISearchBarDelegate {
         }
     }
 }
+
 /// dictionaryView text UI 처리(정렬, 간격 등)
 /// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자

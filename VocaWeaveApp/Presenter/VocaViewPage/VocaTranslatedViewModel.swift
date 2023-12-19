@@ -14,6 +14,7 @@ class VocaTranslatedViewModel {
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let networking = NetworkingManager.shared
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
@@ -114,6 +115,10 @@ extension VocaTranslatedViewModel {
                   let alert = alert,
                   let sourcetextField = alert.textFields?[0],
                   let sourcetext = sourcetextField.text else { return }
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty{
+                self.showEmptyTextFieldAlert()
+                return
+            }
             fetchDictionaryData(sourceText: sourcetext, currentView: currentView)
         }
         alert.addAction(searchAction)
@@ -160,5 +165,12 @@ extension VocaTranslatedViewModel {
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
         alert.addAction(cancel)
         errorAlertPublisher.send(alert)
+    }
+
+    private func showEmptyTextFieldAlert() {
+        let alert = UIAlertController(title: "경고", message: "단어가 비어 있습니다.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        whitespacesAlertPublisher.send(alert)
     }
 }

@@ -13,6 +13,7 @@ final class VocaListViewModel {
     let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
+    let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     // MARK: - init
     init(datamanager: RealmVocaModelType) {
         self.datamanager = datamanager
@@ -93,6 +94,10 @@ extension VocaListViewModel {
                   let translatedtext = translatedtextField.text else {
                 return
             }
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                self.showEmptyTextFieldAlert()
+                return
+            }
             self.updateVoca(list: newData,
                        sourceText: sourcetext,
                        translatedText: translatedtext,
@@ -113,6 +118,10 @@ extension VocaListViewModel {
                   let translatedtext = translatedtextField.text else {
                 return
             }
+            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                self.showEmptyTextFieldAlert()
+                return
+            }
             let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext)
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
@@ -124,6 +133,14 @@ extension VocaListViewModel {
         }
         alert.addAction(saveAction)
     }
+
+    private func showEmptyTextFieldAlert() {
+        let alert = UIAlertController(title: "경고", message: "단어가 비어 있습니다.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        whitespacesAlertPublisher.send(alert)
+    }
+
 
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
         let existingVocaList: [RealmVocaModel] = getVocaList()
