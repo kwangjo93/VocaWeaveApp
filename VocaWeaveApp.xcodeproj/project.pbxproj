@@ -119,6 +119,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F93319E82B312E32007D69F6 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */,
+				F991418D2B2845E500770379 /* Language.swift */,
+				F99141982B29DCE500770379 /* Section.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
 		F9739ED42B23084600FA1F8E = {
 			isa = PBXGroup;
 			children = (
@@ -167,7 +177,6 @@
 			children = (
 				F9739F152B233A1800FA1F8E /* extension.swift */,
 				F99141872B283CEF00770379 /* Error.swift */,
-				F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -263,9 +272,8 @@
 		F9C6C86B2B28099A00428D55 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F99141982B29DCE500770379 /* Section.swift */,
+				F93319E82B312E32007D69F6 /* Enum */,
 				F991418B2B28440800770379 /* TranslateResponseModel.swift */,
-				F991418D2B2845E500770379 /* Language.swift */,
 				F99141912B29505900770379 /* RealmTranslateModel.swift */,
 				F991419C2B2A94A400770379 /* RealmVocaModel.swift */,
 			);

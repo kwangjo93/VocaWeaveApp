@@ -5,7 +5,7 @@
 //  Created by 천광조 on 12/12/23.
 //
 
-import Foundation
+import UIKit
 
 class NetworkingManager {
     static let shared = NetworkingManager()
@@ -13,8 +13,8 @@ class NetworkingManager {
 
     func fetchData(source: String, target: String, text: String) async throws -> TranslateReponseModel {
         guard let file = Bundle.main.path(
-                                    forResource: "APIInfo",
-                                    ofType: "plist") else { throw NetworkError.invalidFile }
+            forResource: "APIInfo",
+            ofType: "plist") else { throw NetworkError.invalidFile }
         guard let resource = NSDictionary(contentsOfFile: file),
               let keyId = resource["API_id"] as? String,
               let keyscret = resource["API_scret"] as? String else {
@@ -36,7 +36,10 @@ class NetworkingManager {
         request.httpBody = data
 
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse, (400...499).contains(httpResponse.statusCode) {
+                throw NetworkError.httpError
+            }
             let decodedData = try JSONDecoder().decode(TranslateReponseModel.self, from: data)
             return decodedData
         } catch {

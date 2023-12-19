@@ -13,6 +13,7 @@ class VocaTranslatedViewModel {
     let datamanager: RealmTranslateType
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let networking = NetworkingManager.shared
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
@@ -37,27 +38,35 @@ class VocaTranslatedViewModel {
         datamanager.deleteList(list)
     }
 
-    private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel {
-        detectLanguage(text: sourceText)
-        do {
-            let result = try await networking.fetchData(source: sourceLanguage.languageCode,
-                                                        target: targetLanguage.languageCode,
-                                                        text: sourceText)
-            return result
-        } catch {
-            print("에러 발생: \(error)")
-            throw error
+    private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
+        if detectLanguage(text: sourceText) {
+            do {
+                let result = try await networking.fetchData(source: sourceLanguage.languageCode,
+                                                            target: targetLanguage.languageCode,
+                                                            text: sourceText)
+                return result
+            } catch {
+                print("에러 발생: \(error)")
+                throw error
+            }
+        } else {
+            errorResponseAlert()
+            return nil
         }
+
     }
 
-    private func detectLanguage(text: String) {
+    private func detectLanguage(text: String) -> Bool {
         if text.containsOnlyKorean() {
             sourceLanguage = .korean
             targetLanguage = .english
+            return true
         } else if text.containsOnlyEnglish() {
             sourceLanguage = .english
             targetLanguage = .korean
+           return true
         }
+        return false
     }
 
     func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
@@ -113,7 +122,8 @@ extension VocaTranslatedViewModel {
     func fetchDictionaryData(sourceText: String, currentView: VocaViewController) {
         Task {
             do {
-                let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
+                guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
+                else { return }
                 let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
                 let dictionaryView = await UINavigationController(
                     rootViewController: DictionaryViewController(
@@ -137,9 +147,18 @@ extension VocaTranslatedViewModel {
         }
     }
 
-  private  func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
+  private func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
         let existingVocaList: [RealmTranslateModel] = getVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
+    }
+
+    private func errorResponseAlert() {
+        let alert = UIAlertController(title: "오류!!",
+                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
+                                      preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        alert.addAction(cancel)
+        errorAlertPublisher.send(alert)
     }
 }

@@ -44,8 +44,6 @@ class VocaViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let text = "감자"
-        print(text.getFirstLetter())
         setup()
         modelDataBinding()
     }
@@ -100,7 +98,7 @@ class VocaViewController: UIViewController {
     private func modelDataBinding() {
         vocaListViewModel.alertPublisher
             .sink { [weak self] alert in
-                self?.present(alert, animated: true, completion: nil)
+                self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
         vocaListViewModel.tableViewUpdate
@@ -111,13 +109,19 @@ class VocaViewController: UIViewController {
 
         vocaTranslatedViewModel.alertPublisher
             .sink { [weak self] alert in
-                self?.present(alert, animated: true, completion: nil)
+                self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
 
         vocaTranslatedViewModel.tableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
+            }
+            .store(in: &cancellables)
+        vocaTranslatedViewModel.errorAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
     }
@@ -308,7 +312,8 @@ extension VocaViewController: UITableViewDelegate {
 }
 
 /// dictionaryView text UI 처리(정렬, 간격 등)
-/// 한글 대응
+/// //페이지네이션 구현
 /// 검색 서치바 구현
 /// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
 /// 다른 언어로 검색 시 경고알림
+/// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자
