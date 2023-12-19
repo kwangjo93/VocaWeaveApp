@@ -90,8 +90,8 @@ class VocaViewController: UIViewController {
 
         vocaView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
 
@@ -299,6 +299,7 @@ extension VocaViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
         if selectedSegmentIndex == 0 {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
             vocaListViewModel.showAlertWithTextField(newData: vocaData)
@@ -312,8 +313,7 @@ extension VocaViewController: UITableViewDelegate {
 }
 
 /// dictionaryView text UI 처리(정렬, 간격 등)
-/// //페이지네이션 구현
+/// 스피커 언어에 따른 구현.
 /// 검색 서치바 구현
 /// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
-/// 다른 언어로 검색 시 경고알림
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자

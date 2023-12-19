@@ -123,7 +123,7 @@ class VocaTableViewCell: UITableViewCell {
 
     // MARK: - Action
     @objc func speakerButtonAction() {
-        if let text = sourceLabel.text {
+        if let text = sourceLabel.text, text.containsOnlyEnglish() {
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US") // 설정한 언어로 음성 선택
             let speechSynthesizer = AVSpeechSynthesizer()
