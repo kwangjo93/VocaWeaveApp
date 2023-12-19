@@ -8,10 +8,31 @@
 import UIKit
 
 class TabBarController: UITabBarController {
+    // MARK: - Property
+    let vocaListManager: VocaListManager
+    let vocaTranslatedManager: VocaTranslatedManager
+    lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
+    lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
+    // MARK: - init
+    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
+        self.vocaListManager = vocaListManager
+        self.vocaTranslatedManager = vocaTranslatedManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let vocaViewController = UINavigationController(rootViewController: VocaViewController())
+        let vocaViewController = UINavigationController(
+            rootViewController: VocaViewController(
+                vocaTranslatedManager: vocaTranslatedViewModel,
+                vocaListManager: vocaListViewModel
+            )
+        )
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",
             image: UIImage(systemName: "pencil.circle"),
@@ -32,7 +53,11 @@ class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "puzzlepiece.fill")
         )
 
-        let dictionaryViewController = UINavigationController(rootViewController: DictionaryViewController())
+        let dictionaryViewController = UINavigationController(
+            rootViewController: DictionaryViewController(
+                                    vocaTranslatedData: nil,
+                                    dictionaryEnum: .new,
+                                    vocaTranslatedViewModel: vocaTranslatedViewModel))
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),

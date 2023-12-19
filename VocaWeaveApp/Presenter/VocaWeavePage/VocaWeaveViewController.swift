@@ -11,7 +11,9 @@ import SnapKit
 class VocaWeaveViewController: UIViewController {
     // MARK: - Property
     let vocaWeaveView = VocaWeaveView()
-
+    lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
+                       vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
+                       vocaWeaveView.sourceTextButton5]
     lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                      style: .plain,
                                      target: self,
@@ -29,7 +31,7 @@ class VocaWeaveViewController: UIViewController {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "학습장"
-            label.textColor = .black
+            label.textColor = UIColor.label
             label.font = .boldSystemFont(ofSize: 32)
             return label
         }()
@@ -38,13 +40,14 @@ class VocaWeaveViewController: UIViewController {
 
         let nightModeButton = nightModeBarButtonItem(
                                 target: self,
-                                action: #selector(nightModeBuutonAction))
+                                action: #selector(nightModeButtonAction))
         navigationItem.rightBarButtonItems = [refreshButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
 
     private func configure() {
         view.addSubview(vocaWeaveView)
+        buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
     }
 
     private func setupLayout() {
@@ -60,7 +63,21 @@ class VocaWeaveViewController: UIViewController {
 
     }
 
-    @objc private func nightModeBuutonAction() {
-
+    @objc private func nightModeButtonAction() {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                        vocaWeaveView.responseDataLabel.layer.borderColor = UIColor.label.cgColor
+                        buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                        vocaWeaveView.responseDataLabel.layer.borderColor = UIColor.white.cgColor
+                        buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.white.cgColor) }
+                    }
+                }
+            }
+        }
     }
 }

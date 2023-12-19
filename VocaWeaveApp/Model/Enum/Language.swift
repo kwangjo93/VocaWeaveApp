@@ -6,9 +6,9 @@
 //
 
 import Foundation
-enum Language: String, Codable {
-    case ko
-    case en
+enum Language: String {
+    case korean = "ko"
+    case english = "en"
 
     var languageCode: String {
         self.rawValue

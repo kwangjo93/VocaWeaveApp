@@ -10,7 +10,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let vocaListManager = VocaListManager()
+    let vocaTranslatedManager = VocaTranslatedManager()
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -20,7 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = TabBarController()
+        window?.rootViewController = TabBarController(vocaListManager: vocaListManager,
+                                                      vocaTranslatedManager: vocaTranslatedManager)
         window?.tintColor = UIColor.mainTintColor
         window?.makeKeyAndVisible()
     }

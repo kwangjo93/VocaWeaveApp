@@ -11,5 +11,6 @@ enum NetworkError: Error {
     case invalidFile
     case invalidURL
     case invalidCredentials
+    case httpError
     case decodingError
 }
