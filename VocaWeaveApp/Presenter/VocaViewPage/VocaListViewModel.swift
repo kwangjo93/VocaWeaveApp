@@ -124,9 +124,11 @@ extension VocaListViewModel {
         }
         alert.addAction(saveAction)
     }
+
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
         let existingVocaList: [RealmVocaModel] = getVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
     }
+
 }

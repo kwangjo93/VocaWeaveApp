@@ -8,11 +8,13 @@
 import UIKit
 import Combine
 
-class VocaViewController: UIViewController {
+final class VocaViewController: UIViewController {
     // MARK: - Property
     let vocaTranslatedViewModel: VocaTranslatedViewModel
     let vocaListViewModel: VocaListViewModel
     let vocaView = VocaView()
+    let searchController = UISearchController()
+    var isSearchBarVisible = false
     var selectedSegmentIndex = 0
 
     var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
@@ -46,6 +48,7 @@ class VocaViewController: UIViewController {
         super.viewDidLoad()
         setup()
         modelDataBinding()
+        setupSearchBar()
     }
     // MARK: - Helper
     private func setup() {
@@ -93,6 +96,15 @@ class VocaViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(defaultValue)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+    }
+
+    private func setupSearchBar() {
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.searchBar.placeholder = "검색어 입력"
+        definesPresentationContext = true
+        searchController.isActive = false // 초기에는 검색 바를 숨김
     }
 
     private func modelDataBinding() {
@@ -165,7 +177,11 @@ class VocaViewController: UIViewController {
     }
 
     @objc private func searchButtonAction() {
-
+        if navigationItem.searchController != nil {
+                navigationItem.searchController = nil
+            } else {
+                navigationItem.searchController = searchController
+            }
     }
 
 }
@@ -310,10 +326,36 @@ extension VocaViewController: UITableViewDelegate {
                                                         currentView: self)
         }
     }
-}
 
+}
+// MARK: - UISearchBarDelegate Delegate
+extension VocaViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        switch selectedSegmentIndex {
+        case 0:
+            guard !searchText.isEmpty else {
+                vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+                   return
+               }
+            let filteredData = vocaListViewModel.getVocaList().filter { model in
+                return model.sourceText.lowercased().contains(searchText.lowercased())
+            }
+            vocaListTableViewSnapshot(with: filteredData)
+        case 1:
+            guard !searchText.isEmpty else {
+                vocaTranslatedTableViewSnapshot(with: vocaTranslatedViewModel.getVocaList())
+                   return
+               }
+            let filteredData = vocaTranslatedViewModel.getVocaList().filter { model in
+                return model.sourceText.lowercased().contains(searchText.lowercased())
+            }
+            vocaTranslatedTableViewSnapshot(with: filteredData)
+        default:
+            break
+        }
+    }
+}
 /// dictionaryView text UI 처리(정렬, 간격 등)
-/// 스피커 언어에 따른 구현.
-/// 검색 서치바 구현
 /// 키보드 설정(return 키, 아무것도 입력하지 않았을 때의 표시,) - textField Delegate
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자
+/// 페이지네이션 구현
