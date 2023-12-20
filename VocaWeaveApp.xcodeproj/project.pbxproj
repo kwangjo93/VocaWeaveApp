@@ -11,6 +11,16 @@
 		F93319F72B3184E0007D69F6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F62B3184E0007D69F6 /* Realm */; };
 		F93319F92B3184E0007D69F6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F82B3184E0007D69F6 /* RealmSwift */; };
 		F93319FC2B3184F1007D69F6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F93319FB2B3184F1007D69F6 /* SnapKit */; };
+		F9331A012B328948007D69F6 /* Transportation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A002B328948007D69F6 /* Transportation.swift */; };
+		F9331A032B3289BE007D69F6 /* Accommodation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A022B3289BE007D69F6 /* Accommodation.swift */; };
+		F9331A052B3289EA007D69F6 /* TravelActivitiesVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A042B3289EA007D69F6 /* TravelActivitiesVoca.swift */; };
+		F9331A072B328A00007D69F6 /* TravelEssentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A062B328A00007D69F6 /* TravelEssentials.swift */; };
+		F9331A092B328A25007D69F6 /* DiningVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A082B328A25007D69F6 /* DiningVoca.swift */; };
+		F9331A0B2B328A52007D69F6 /* LeisuretravelVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A0A2B328A52007D69F6 /* LeisuretravelVoca.swift */; };
+		F9331A0D2B328A5F007D69F6 /* CommunicationtravelVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A0C2B328A5F007D69F6 /* CommunicationtravelVoca.swift */; };
+		F9331A0F2B328A69007D69F6 /* FacilitiestravelVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A0E2B328A69007D69F6 /* FacilitiestravelVoca.swift */; };
+		F9331A112B328A7F007D69F6 /* CulturetravelVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A102B328A7F007D69F6 /* CulturetravelVoca.swift */; };
+		F9331A132B32BE39007D69F6 /* CategoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9331A122B32BE39007D69F6 /* CategoryDetailViewController.swift */; };
 		F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE02B23084600FA1F8E /* AppDelegate.swift */; };
 		F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739EE22B23084600FA1F8E /* SceneDelegate.swift */; };
 		F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9739EE92B23084900FA1F8E /* Assets.xcassets */; };
@@ -61,6 +71,16 @@
 
 /* Begin PBXFileReference section */
 		F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEnum.swift; sourceTree = "<group>"; };
+		F9331A002B328948007D69F6 /* Transportation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transportation.swift; sourceTree = "<group>"; };
+		F9331A022B3289BE007D69F6 /* Accommodation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accommodation.swift; sourceTree = "<group>"; };
+		F9331A042B3289EA007D69F6 /* TravelActivitiesVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelActivitiesVoca.swift; sourceTree = "<group>"; };
+		F9331A062B328A00007D69F6 /* TravelEssentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelEssentials.swift; sourceTree = "<group>"; };
+		F9331A082B328A25007D69F6 /* DiningVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningVoca.swift; sourceTree = "<group>"; };
+		F9331A0A2B328A52007D69F6 /* LeisuretravelVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeisuretravelVoca.swift; sourceTree = "<group>"; };
+		F9331A0C2B328A5F007D69F6 /* CommunicationtravelVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationtravelVoca.swift; sourceTree = "<group>"; };
+		F9331A0E2B328A69007D69F6 /* FacilitiestravelVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilitiestravelVoca.swift; sourceTree = "<group>"; };
+		F9331A102B328A7F007D69F6 /* CulturetravelVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CulturetravelVoca.swift; sourceTree = "<group>"; };
+		F9331A122B32BE39007D69F6 /* CategoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailViewController.swift; sourceTree = "<group>"; };
 		F9739EDD2B23084600FA1F8E /* VocaWeaveApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaWeaveApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9739EE02B23084600FA1F8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9739EE22B23084600FA1F8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +141,22 @@
 			path = Enum;
 			sourceTree = "<group>";
 		};
+		F93319FF2B328931007D69F6 /* VocaData */ = {
+			isa = PBXGroup;
+			children = (
+				F9331A002B328948007D69F6 /* Transportation.swift */,
+				F9331A022B3289BE007D69F6 /* Accommodation.swift */,
+				F9331A042B3289EA007D69F6 /* TravelActivitiesVoca.swift */,
+				F9331A062B328A00007D69F6 /* TravelEssentials.swift */,
+				F9331A082B328A25007D69F6 /* DiningVoca.swift */,
+				F9331A0A2B328A52007D69F6 /* LeisuretravelVoca.swift */,
+				F9331A0C2B328A5F007D69F6 /* CommunicationtravelVoca.swift */,
+				F9331A0E2B328A69007D69F6 /* FacilitiestravelVoca.swift */,
+				F9331A102B328A7F007D69F6 /* CulturetravelVoca.swift */,
+			);
+			path = VocaData;
+			sourceTree = "<group>";
+		};
 		F9739ED42B23084600FA1F8E = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +181,7 @@
 				F9739EF92B230E8800FA1F8E /* App */,
 				F9739EF82B230E8500FA1F8E /* Helper */,
 				F9C6C86B2B28099A00428D55 /* Model */,
+				F93319FF2B328931007D69F6 /* VocaData */,
 				F99141932B29535500770379 /* Manager */,
 				F9C6C86A2B28098F00428D55 /* Networking */,
 				F9739EF52B230E7E00FA1F8E /* Presenter */,
@@ -208,6 +245,7 @@
 				F9739F1B2B24B03300FA1F8E /* CategoryViewController.swift */,
 				F9739F1D2B24B07400FA1F8E /* CategoryViewModel.swift */,
 				F9739F212B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift */,
+				F9331A122B32BE39007D69F6 /* CategoryDetailViewController.swift */,
 			);
 			path = CategoryWordspage;
 			sourceTree = "<group>";
@@ -378,35 +416,45 @@
 			buildActionMask = 2147483647;
 			files = (
 				F991418C2B28440800770379 /* TranslateResponseModel.swift in Sources */,
+				F9331A092B328A25007D69F6 /* DiningVoca.swift in Sources */,
 				F9C6C8692B28094300428D55 /* DictionaryviewModel.swift in Sources */,
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
 				F99141A12B2ABF7300770379 /* VocaListViewModel.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
 				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
+				F9331A0F2B328A69007D69F6 /* FacilitiestravelVoca.swift in Sources */,
 				F99141952B29539F00770379 /* VocaTranslatedManager.swift in Sources */,
+				F9331A132B32BE39007D69F6 /* CategoryDetailViewController.swift in Sources */,
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F99141922B29505900770379 /* RealmTranslateModel.swift in Sources */,
 				F9739F1E2B24B07400FA1F8E /* CategoryViewModel.swift in Sources */,
 				F9739F222B25AF7A00FA1F8E /* CagtegoryCollectionViewCell.swift in Sources */,
+				F9331A112B328A7F007D69F6 /* CulturetravelVoca.swift in Sources */,
 				F991419F2B2A951900770379 /* VocaListManager.swift in Sources */,
 				F9739F282B25C25600FA1F8E /* VocaWeaveViewController.swift in Sources */,
 				F9739F122B23159400FA1F8E /* VocaTranslatedViewModel.swift in Sources */,
 				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
 				F9739EE32B23084600FA1F8E /* SceneDelegate.swift in Sources */,
+				F9331A0D2B328A5F007D69F6 /* CommunicationtravelVoca.swift in Sources */,
 				F9739F0E2B23157800FA1F8E /* VocaViewController.swift in Sources */,
 				F9739F1C2B24B03300FA1F8E /* CategoryViewController.swift in Sources */,
 				F9E5D62A2B270236000A4377 /* VocaWeaveViewModel.swift in Sources */,
 				F99141992B29DCE500770379 /* Section.swift in Sources */,
 				F99141862B280C4100770379 /* NetworkingManager.swift in Sources */,
+				F9331A052B3289EA007D69F6 /* TravelActivitiesVoca.swift in Sources */,
+				F9331A012B328948007D69F6 /* Transportation.swift in Sources */,
+				F9331A0B2B328A52007D69F6 /* LeisuretravelVoca.swift in Sources */,
 				F9C6C8652B28092900428D55 /* DictionaryControlller.swift in Sources */,
 				F9739F162B233A1800FA1F8E /* extension.swift in Sources */,
 				F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */,
 				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
 				F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */,
 				F99141A32B2C3B0000770379 /* VocaTableViewHeaderView.swift in Sources */,
+				F9331A072B328A00007D69F6 /* TravelEssentials.swift in Sources */,
 				F99141882B283CEF00770379 /* Error.swift in Sources */,
 				F991418E2B2845E500770379 /* Language.swift in Sources */,
+				F9331A032B3289BE007D69F6 /* Accommodation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

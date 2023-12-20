@@ -46,7 +46,6 @@ final class VocaListViewModel {
         }
     }
 }
-
 // MARK: - Alert - Add, Update Method
 extension VocaListViewModel {
     func showAlertWithTextField(newData: RealmVocaModel?) {

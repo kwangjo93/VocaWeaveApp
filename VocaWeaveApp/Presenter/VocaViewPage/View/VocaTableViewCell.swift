@@ -14,9 +14,12 @@ class VocaTableViewCell: UITableViewCell {
     static let identifier = "VocaTableViewCell"
     let speaker = AVSpeechSynthesizer()
     var vocaListData: RealmVocaModel?
-    var vocaListViewModel: VocaListViewModel?
     var vocaTanslatedData: RealmTranslateModel?
+
+    var vocaListViewModel: VocaListViewModel?
     var vocaTanslatedViewModel: VocaTranslatedViewModel?
+
+    var distinguishSavedData = true
     var isSelect = false
     var selectedSegmentIndex = 0
 
@@ -56,7 +59,6 @@ class VocaTableViewCell: UITableViewCell {
         setupLayout()
         speakerButtonTapped()
         vocaBookmarkButtonTapped()
-        translatedBookmarkButtonTapped()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -104,10 +106,6 @@ class VocaTableViewCell: UITableViewCell {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
 
-    private func translatedBookmarkButtonTapped() {
-        bookmarkButton.addTarget(self, action: #selector(translatedBookmarkButtonAction), for: .touchUpInside)
-    }
-
     func configureBookmark() {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         if isSelect == true {
@@ -132,46 +130,50 @@ class VocaTableViewCell: UITableViewCell {
     }
 
     @objc func vocaBookmarkButtonAction() {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
-        guard let vocaData = vocaListData else { return }
+        guard let vocaListData = vocaListData else { return }
+        guard let vocaTanslatedData = vocaTanslatedData else { return }
         isSelect.toggle()
         if isSelect {
-            vocaListViewModel?.updateVoca(list: vocaData,
-                                          sourceText: vocaData.sourceText,
-                                          translatedText: vocaData.translatedText,
-                                          isSelected: true)
-            bookmarkButton.setImage(UIImage(systemName: "star.fill",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
+            bookmarkUpdateData(vocaList: vocaListData,
+                               vocaTranslate: vocaTanslatedData,
+                               isSelect: true)
         } else {
-            vocaListViewModel?.updateVoca(list: vocaData,
-                                          sourceText: vocaData.sourceText,
-                                          translatedText: vocaData.translatedText,
-                                          isSelected: false)
-            bookmarkButton.setImage(UIImage(systemName: "star",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
+            bookmarkUpdateData(vocaList: vocaListData,
+                               vocaTranslate: vocaTanslatedData,
+                               isSelect: false)
         }
     }
 
-    @objc func translatedBookmarkButtonAction() {
+    private func bookmarkUpdateData(vocaList: RealmVocaModel, vocaTranslate: RealmTranslateModel, isSelect: Bool) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
-        guard let vocaData = vocaTanslatedData else { return }
-        isSelect.toggle()
-        if isSelect {
-            vocaTanslatedViewModel?.updateVoca(list: vocaData,
-                                               text: vocaData.sourceText,
-                                               isSelected: true)
-            bookmarkButton.setImage(UIImage(systemName: "star.fill",
+        switch selectedSegmentIndex {
+        case 0:
+            vocaListViewModel?.updateVoca(list: vocaList,
+                                          sourceText: vocaList.sourceText,
+                                          translatedText: vocaList.translatedText,
+                                          isSelected: isSelect)
+            bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
                                             withConfiguration: imageConfig),
                                             for: .normal)
-        } else {
-            vocaTanslatedViewModel?.updateVoca(list: vocaData,
-                                               text: vocaData.sourceText,
-                                               isSelected: false)
-            bookmarkButton.setImage(UIImage(systemName: "star",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
+        case 1:
+            if distinguishSavedData {
+                vocaTanslatedViewModel?.updateVoca(list: vocaTranslate,
+                                                   text: vocaTranslate.sourceText,
+                                                   isSelected: isSelect)
+                bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
+                                                withConfiguration: imageConfig),
+                                                for: .normal)
+            } else {
+                vocaListViewModel?.updateVoca(list: vocaList,
+                                              sourceText: vocaList.sourceText,
+                                              translatedText: vocaList.translatedText,
+                                              isSelected: isSelect)
+                bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
+                                                withConfiguration: imageConfig),
+                                                for: .normal)
+            }
+        default:
+            break
         }
     }
 }

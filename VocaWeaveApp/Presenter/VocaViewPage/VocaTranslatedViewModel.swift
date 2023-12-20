@@ -10,6 +10,7 @@ import RealmSwift
 import UIKit
 
 class VocaTranslatedViewModel {
+    // MARK: - Property
     let datamanager: RealmTranslateType
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -19,10 +20,12 @@ class VocaTranslatedViewModel {
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
 
+    // MARK: - init
     init(datamanager: RealmTranslateType) {
         self.datamanager = datamanager
     }
 
+    // MARK: - Helper
     func getVocaList() -> [RealmTranslateModel] {
         return datamanager.getVocaList()
     }
@@ -38,7 +41,7 @@ class VocaTranslatedViewModel {
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
     }
-
+    // MARK: - Action
     private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
         if detectLanguage(text: sourceText) {
             do {

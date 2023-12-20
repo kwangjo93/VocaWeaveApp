@@ -10,12 +10,17 @@ import SnapKit
 
 class VocaView: UIView {
     // MARK: - Property
-    let vocaSegmentedControl = UISegmentedControl(items: ["나의 단어장", "사진 단어장"])
+    let firstSegmentTitle: String
+    let secondSegmentTitle: String
+    var vocaSegmentedControl: UISegmentedControl
     let vocaTableView = UITableView()
 
     // MARK: - init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(firstString: String, secondString: String) {
+        self.firstSegmentTitle = firstString
+        self.secondSegmentTitle = secondString
+        self.vocaSegmentedControl = UISegmentedControl(items: [firstSegmentTitle, secondSegmentTitle])
+        super.init(frame: .zero)
         backgroundColor = .systemBackground
         configure()
         setupLayout()
@@ -28,22 +33,32 @@ class VocaView: UIView {
     // MARK: - Helper
 
     private func configure() {
-        [vocaSegmentedControl, vocaTableView].forEach { self.addSubview($0) }
+        if firstSegmentTitle == "", secondSegmentTitle == "" {
+            self.addSubview(vocaTableView)
+        } else {
+            [vocaSegmentedControl, vocaTableView].forEach { self.addSubview($0) }
+        }
     }
 
     private func setupLayout() {
         let defaultValue = 8
 
-        vocaSegmentedControl.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().inset(defaultValue * 3)
-            $0.height.equalTo(30)
-        }
-
-        vocaTableView.snp.makeConstraints {
-            $0.top.equalTo(vocaSegmentedControl.snp.bottom).offset(defaultValue)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue)
-            $0.bottom.equalToSuperview()
+        if firstSegmentTitle == "", secondSegmentTitle == "" {
+            vocaTableView.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(defaultValue)
+                $0.top.bottom.equalToSuperview()
+            }
+        } else {
+            vocaSegmentedControl.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.trailing.equalToSuperview().inset(defaultValue * 3)
+                $0.height.equalTo(30)
+            }
+            vocaTableView.snp.makeConstraints {
+                $0.top.equalTo(vocaSegmentedControl.snp.bottom).offset(defaultValue)
+                $0.leading.trailing.equalToSuperview().inset(defaultValue)
+                $0.bottom.equalToSuperview()
+            }
         }
     }
 

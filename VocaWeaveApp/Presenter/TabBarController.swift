@@ -7,12 +7,14 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
     // MARK: - Property
-    let vocaListManager: VocaListManager
-    let vocaTranslatedManager: VocaTranslatedManager
-    lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
-    lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
+    private let vocaListManager: VocaListManager
+    private let vocaTranslatedManager: VocaTranslatedManager
+    private lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
+    private lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
+    private lazy var categoryViewModel = CategoryViewModel(vocaTranslatedViewModel: vocaTranslatedManager,
+                                                   vocaListViewModel: vocaListManager)
     // MARK: - init
     init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
         self.vocaListManager = vocaListManager
@@ -39,7 +41,11 @@ class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "pencil.circle.fill")
         )
 
-        let categoryWordsViewController = UINavigationController(rootViewController: CategoryViewController())
+        let categoryWordsViewController = UINavigationController(
+            rootViewController: CategoryViewController(
+                                                    categoryViewModel: categoryViewModel,
+                                                    vocaListViewModel: vocaListViewModel,
+                                                    vocaTranslatedViewModel: vocaTranslatedViewModel))
         categoryWordsViewController.tabBarItem = UITabBarItem(
             title: "암기장",
             image: UIImage(systemName: "book"),

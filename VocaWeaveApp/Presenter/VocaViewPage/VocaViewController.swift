@@ -12,7 +12,7 @@ final class VocaViewController: UIViewController {
     // MARK: - Property
     let vocaTranslatedViewModel: VocaTranslatedViewModel
     let vocaListViewModel: VocaListViewModel
-    let vocaView = VocaView()
+    let vocaView = VocaView(firstString: "나의 단어장", secondString: "사진 단어장")
     let searchController = UISearchController()
     var isSearchBarVisible = false
     var selectedSegmentIndex = 0
@@ -151,8 +151,22 @@ final class VocaViewController: UIViewController {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("터치")
         self.searchController.searchBar.searchTextField.resignFirstResponder()
+        navigationItem.searchController = nil
+    }
+
+    private func setupCell(cell: VocaTableViewCell,
+                           sourceText: String,
+                           translatedText: String,
+                           isSelected: Bool,
+                           selectedSegmentIndex: Int) {
+        cell.sourceLabel.text = sourceText
+        cell.translatedLabel.text = translatedText
+        cell.isSelect = isSelected
+        cell.selectedSegmentIndex = selectedSegmentIndex
+        cell.configureBookmark()
+        cell.speakerButtonAction()
+        cell.selectionStyle = .none
     }
     // MARK: - Action
     @objc private func plustButtonAction() {
@@ -217,14 +231,14 @@ extension VocaViewController {
                 return UITableViewCell()
             }
 
-            let data = self.vocaListDataSource.itemIdentifier(for: indexPath)
+            guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
             cell.vocaListData = data
             cell.vocaListViewModel = self.vocaListViewModel
-            cell.sourceLabel.text = data?.sourceText
-            cell.translatedLabel.text = data?.translatedText
-            cell.isSelect = data!.isSelected
-            cell.configureBookmark()
-            cell.speakerButtonAction()
+            setupCell(cell: cell,
+                      sourceText: data.sourceText,
+                      translatedText: data.translatedText,
+                      isSelected: data.isSelected,
+                      selectedSegmentIndex: self.selectedSegmentIndex)
             return cell
         }
     }
@@ -258,14 +272,15 @@ extension VocaViewController {
                 return UITableViewCell()
             }
 
-            let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
+            guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
+                                                                                else { return cell}
             cell.vocaTanslatedData = data
             cell.vocaTanslatedViewModel = self.vocaTranslatedViewModel
-            cell.sourceLabel.text = data?.sourceText
-            cell.translatedLabel.text = data?.translatedText
-            cell.isSelect = data!.isSelected
-            cell.configureBookmark()
-            cell.speakerButtonAction()
+            setupCell(cell: cell,
+                      sourceText: data.sourceText,
+                      translatedText: data.translatedText,
+                      isSelected: data.isSelected,
+                      selectedSegmentIndex: self.selectedSegmentIndex)
             return cell
         }
     }
@@ -376,3 +391,4 @@ extension VocaViewController: UISearchBarDelegate {
 /// dictionaryView text UI 처리(정렬, 간격 등)
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자
 /// 페이지네이션 구현
+/// 텍스트 인식 (후행 스페이스 포함시키도록)
