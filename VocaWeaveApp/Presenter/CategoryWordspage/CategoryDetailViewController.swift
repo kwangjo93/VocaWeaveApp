@@ -15,11 +15,12 @@ class CategoryDetailViewController: UIViewController {
     let navigationTitle: String
     lazy var detailView = VocaView(firstString: firstString, secondString: secondString)
     var selectedSegmentIndex = 0
+    var indexPath: Int
     let distinguishSavedData: Bool
     var cancellables = Set<AnyCancellable>()
     let categoryViewModel: CategoryViewModel
 
-    var firstVocaData: [RealmVocaModel]
+    var firstVocaData: [RealmVocaModel]?
     var secondVocaData: [RealmVocaModel]?
     var dicData: [RealmTranslateModel]?
 
@@ -41,18 +42,14 @@ class CategoryDetailViewController: UIViewController {
     init(firstString: String,
          secondString: String,
          navigationTitle: String,
+         indexPath: Int,
          categoryViewModel: CategoryViewModel,
-         firstVocaData: [RealmVocaModel],
-         secondVocaData: [RealmVocaModel]?,
-         dicData: [RealmTranslateModel]?,
          distinguishSavedData: Bool) {
         self.firstString = firstString
         self.secondString = secondString
         self.navigationTitle = navigationTitle
+        self.indexPath = indexPath
         self.categoryViewModel = categoryViewModel
-        self.firstVocaData = firstVocaData
-        self.secondVocaData = secondVocaData
-        self.dicData = dicData
         self.distinguishSavedData = distinguishSavedData
         super.init(nibName: nil, bundle: nil)
     }
@@ -116,6 +113,45 @@ class CategoryDetailViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
+
+    private func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?, _ secondVocaDatas: [RealmVocaModel]?) {
+        self.firstVocaData = firstVocaDatas
+        guard let firstData = firstVocaData else { return }
+
+        vocaListTableViewDatasourceSetup()
+        vocaListTableViewSnapshot(with: firstData)
+
+        if let secondData = secondVocaData {
+            self.secondVocaData = secondData
+            vocaListTableViewDatasourceSetup()
+            vocaListTableViewSnapshot(with: secondVocaData)
+        }
+    }
+
+    func bindVocaData(index: Int) {
+        switch index {
+        case 0:
+            let selectedVoca = categoryViewModel.selectedVoca.filter { $0.isSelected }
+            self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
+            guard let dicData = dicData else { return }
+            setupVocaData(selectedVoca, nil)
+            vocaTranslatedTableViewDatasourceSetup()
+            vocaTranslatedTableViewSnapshot(with: dicData)
+        case 1...7:
+            switch index {
+            case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
+            case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
+            case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentials)
+            case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
+            case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
+            case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
+            case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
+            default: return
+            }
+        default:
+            break
+        }
+    }
     // MARK: - Action
 
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
@@ -169,7 +205,7 @@ extension CategoryDetailViewController {
                 cell.configureBookmark()
                 cell.speakerButtonAction()
                 bindCellData(cell: cell)
-//                cell.selectionStyle = .none
+                cell.selectionStyle = .none
                 return cell
             }
         }

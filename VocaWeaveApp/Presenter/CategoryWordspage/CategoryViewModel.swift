@@ -15,9 +15,7 @@ final class CategoryViewModel {
     let vocaTranslatedViewModel: VocaTranslatedViewModel
 
     lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getVocaList()
-                                                                    .filter {$0.isSelected == true}
     lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewManager.getVocaList()
-                                                                    .filter { $0.isSelected == true }
     var transportationVoca: [RealmVocaModel] = Transportation().transportationVoca
     var accommodationVoca: [RealmVocaModel] = Accommodation().accommodationVoca
     var travelActivitiesVoca: [RealmVocaModel] = TravelActivitiesVoca().travelActivitiesVoca

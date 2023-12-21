@@ -129,68 +129,40 @@ extension CategoryViewController: UICollectionViewDelegate {
                 firstString: "나의 단어장",
                 secondString: "사전 단어장",
                 navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
-                firstVocaData: categoryViewModel.selectedVoca,
-                secondVocaData: nil,
-                dicData: categoryViewModel.selectedDic,
                 distinguishSavedData: true)
+            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        case 1, 2:
+        case 1, 2, 5, 6, 7:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "",
                 secondString: "",
                 navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
-                firstVocaData: indexPath.row == 1 ? categoryViewModel.transportationVoca
-                                                    : categoryViewModel.accommodationVoca,
-                secondVocaData: nil,
-                dicData: nil,
                 distinguishSavedData: false)
+            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 3:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "여행 관련 활동",
                 secondString: "여행 준비물",
                 navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
-                firstVocaData: categoryViewModel.travelActivitiesVoca,
-                secondVocaData: categoryViewModel.travelEssentials,
-                dicData: nil,
                 distinguishSavedData: false)
+            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 4:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "식사",
                 secondString: "지역 문화",
                 navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
-                firstVocaData: categoryViewModel.diningVoca,
-                secondVocaData: categoryViewModel.cultureVoca,
-                dicData: nil,
                 distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: false)
-        case 5, 6:
-            categoryDetailView = CategoryDetailViewController(
-                firstString: "",
-                secondString: "",
-                navigationTitle: categoryTittle,
-                categoryViewModel: categoryViewModel,
-                firstVocaData: indexPath.row == 5 ? categoryViewModel.leisureVoca
-                                                : categoryViewModel.communicationVoca,
-                secondVocaData: nil,
-                dicData: nil,
-                distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: false)
-        case 7:
-            categoryDetailView = CategoryDetailViewController(
-                firstString: "",
-                secondString: "",
-                navigationTitle: categoryTittle,
-                categoryViewModel: categoryViewModel,
-                firstVocaData: categoryViewModel.facilitiesVoca,
-                secondVocaData: nil,
-                dicData: nil,
-                distinguishSavedData: false)
+            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         default:
             break
@@ -199,4 +171,5 @@ extension CategoryViewController: UICollectionViewDelegate {
 }
 
 /// 더미데이터에서 북마크를 눌렀을 경우에 나의 단어장에 북마크 표시  -> distinguishSavedData Bool 값 활용
-/// didSelect 로직 줄이기.
+/// didSelect에서 북마크 해제 시 다시 메인 페이지로 오면 북마크가 업데이트되어 있지 않는 문제 발견.
+///  북마크 해제 시 메인페이지에 가서 북마크가 해제된 것을 체크하지 않으면 데이터가 그대로 남아 있다.

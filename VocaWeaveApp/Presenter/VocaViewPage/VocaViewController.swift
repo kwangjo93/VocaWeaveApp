@@ -56,7 +56,6 @@ final class VocaViewController: UIViewController {
         configureUI()
         vocaListTableViewDatasourceSetup()
         vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
-
         vocaView.vocaTableView.delegate = self
     }
 
