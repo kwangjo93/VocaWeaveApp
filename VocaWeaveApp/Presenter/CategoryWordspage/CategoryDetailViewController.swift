@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class CategoryDetailViewController: UIViewController {
     // MARK: - Property
@@ -15,9 +16,8 @@ class CategoryDetailViewController: UIViewController {
     lazy var detailView = VocaView(firstString: firstString, secondString: secondString)
     var selectedSegmentIndex = 0
     let distinguishSavedData: Bool
-
-    let vocaTranslatedViewModel: VocaTranslatedViewModel
-    let vocaListViewModel: VocaListViewModel
+    var cancellables = Set<AnyCancellable>()
+    let categoryViewModel: CategoryViewModel
 
     var firstVocaData: [RealmVocaModel]
     var secondVocaData: [RealmVocaModel]?
@@ -41,8 +41,7 @@ class CategoryDetailViewController: UIViewController {
     init(firstString: String,
          secondString: String,
          navigationTitle: String,
-         vocaListViewModel: VocaListViewModel,
-         vocaTranslatedViewModel: VocaTranslatedViewModel,
+         categoryViewModel: CategoryViewModel,
          firstVocaData: [RealmVocaModel],
          secondVocaData: [RealmVocaModel]?,
          dicData: [RealmTranslateModel]?,
@@ -50,8 +49,7 @@ class CategoryDetailViewController: UIViewController {
         self.firstString = firstString
         self.secondString = secondString
         self.navigationTitle = navigationTitle
-        self.vocaListViewModel = vocaListViewModel
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
+        self.categoryViewModel = categoryViewModel
         self.firstVocaData = firstVocaData
         self.secondVocaData = secondVocaData
         self.dicData = dicData
@@ -104,18 +102,18 @@ class CategoryDetailViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
-    private func setupCell(cell: VocaTableViewCell,
-                           sourceText: String,
-                           translatedText: String,
-                           isSelected: Bool,
-                           selectedSegmentIndex: Int,
-                           distinguishSavedData: Bool) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.distinguishSavedData = distinguishSavedData
-        cell.selectionStyle = .none
+
+    private func bindCellData(cell: VocaTableViewCell) {
+        cell.vocaListTableViewUpdate
+            .sink { [weak self] updatedVocaList in
+                self?.vocaListTableViewSnapshot(with: updatedVocaList)
+            }
+            .store(in: &cancellables)
+        cell.vocaTranslatedTableViewUpdate
+            .sink { [weak self] updatedVocaList in
+                self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
+            }
+            .store(in: &cancellables)
     }
     // MARK: - Action
 
@@ -161,15 +159,15 @@ extension CategoryDetailViewController {
 
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
                 cell.vocaListData = data
-                cell.vocaListViewModel = self.vocaListViewModel
-                setupCell(cell: cell,
-                          sourceText: data.sourceText,
-                          translatedText: data.translatedText,
-                          isSelected: data.isSelected,
-                          selectedSegmentIndex: selectedSegmentIndex,
-                          distinguishSavedData: distinguishSavedData)
+                cell.vocaListViewModel = categoryViewModel.vocaListViewModel
+                cell.sourceLabel.text = data.sourceText
+                cell.translatedLabel.text = data.translatedText
+                cell.isSelect = data.isSelected
+                cell.selectedSegmentIndex = selectedSegmentIndex
+                cell.distinguishSavedData = distinguishSavedData
                 cell.configureBookmark()
                 cell.speakerButtonAction()
+                bindCellData(cell: cell)
                 return cell
             }
         }
@@ -205,15 +203,15 @@ extension CategoryDetailViewController {
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
             cell.vocaTanslatedData = data
-            cell.vocaTanslatedViewModel = self.vocaTranslatedViewModel
-            setupCell(cell: cell,
-                      sourceText: data.sourceText,
-                      translatedText: data.translatedText,
-                      isSelected: data.isSelected,
-                      selectedSegmentIndex: selectedSegmentIndex,
-                      distinguishSavedData: distinguishSavedData)
+            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedViewModel
+            cell.sourceLabel.text = data.sourceText
+            cell.translatedLabel.text = data.translatedText
+            cell.isSelect = data.isSelected
+            cell.selectedSegmentIndex = selectedSegmentIndex
+            cell.distinguishSavedData = distinguishSavedData
             cell.configureBookmark()
             cell.speakerButtonAction()
+            bindCellData(cell: cell)
             return cell
         }
     }
@@ -240,19 +238,19 @@ extension CategoryDetailViewController: UITableViewDelegate {
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
-            vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
-                                                     headerView: headerView)
+            categoryViewModel.vocaListViewModel.toggleHeaderVisibility(
+                                                sectionTitle: sectionTitle, headerView: headerView)
         } else {
             if distinguishSavedData {
                 let snapshot = vocaTranslatedDataSource.snapshot()
                 sectionTitle = snapshot.sectionIdentifiers[section].title
-                vocaTranslatedViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
-                                                               headerView: headerView)
+                categoryViewModel.vocaTranslatedViewModel.toggleHeaderVisibility(
+                                                        sectionTitle: sectionTitle, headerView: headerView)
             } else {
                 let snapshot = vocaListDataSource.snapshot()
                 sectionTitle = snapshot.sectionIdentifiers[section].title
-                vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
-                                                         headerView: headerView)
+                categoryViewModel.vocaListViewModel.toggleHeaderVisibility(
+                                                        sectionTitle: sectionTitle, headerView: headerView)
             }
         }
         headerView.configure(title: sectionTitle)

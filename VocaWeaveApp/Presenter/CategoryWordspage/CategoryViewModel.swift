@@ -9,12 +9,14 @@ import Foundation
 
 final class CategoryViewModel {
     // MARK: - Property
-    private let vocaTranslatedViewModel: VocaTranslatedManager
-    private let vocaListViewModel: VocaListManager
+    private let vocaTranslatedViewManager: VocaTranslatedManager
+    private let vocaListManager: VocaListManager
+    let vocaListViewModel: VocaListViewModel
+    let vocaTranslatedViewModel: VocaTranslatedViewModel
 
-    lazy var selectedVoca: [RealmVocaModel] = vocaListViewModel.getVocaList()
+    lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getVocaList()
                                                                     .filter {$0.isSelected == true}
-    lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewModel.getVocaList()
+    lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewManager.getVocaList()
                                                                     .filter { $0.isSelected == true }
     var transportationVoca: [RealmVocaModel] = Transportation().transportationVoca
     var accommodationVoca: [RealmVocaModel] = Accommodation().accommodationVoca
@@ -26,10 +28,16 @@ final class CategoryViewModel {
     var facilitiesVoca: [RealmVocaModel] = FacilitiestravelVoca().facilitiesVoca
     var cultureVoca: [RealmVocaModel] = CulturetravelVoca().cultureVoca
     // MARK: - init
-    init(vocaTranslatedViewModel: VocaTranslatedManager, vocaListViewModel: VocaListManager) {
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
+    init(vocaTranslatedViewManager: VocaTranslatedManager,
+         vocaListManager: VocaListManager,
+         vocaListViewModel: VocaListViewModel,
+         vocaTranslatedViewModel: VocaTranslatedViewModel) {
+        self.vocaTranslatedViewManager = vocaTranslatedViewManager
+        self.vocaListManager = vocaListManager
         self.vocaListViewModel = vocaListViewModel
+        self.vocaTranslatedViewModel = vocaTranslatedViewModel
     }
     // MARK: - Helper
     // MARK: - Action
+
 }

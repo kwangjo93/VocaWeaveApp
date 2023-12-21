@@ -89,6 +89,17 @@ class VocaTranslatedViewModel {
         }
     }
 
+    private func removeLeadingAndTrailingSpaces(from string: String) -> String {
+        var modifiedString = string
+        while modifiedString.hasPrefix(" ") {
+            modifiedString.removeFirst()
+        }
+        while modifiedString.hasSuffix(" ") {
+            modifiedString.removeLast()
+        }
+        return modifiedString
+    }
+
 }
 // MARK: - Alert - Add, Update Method
 extension VocaTranslatedViewModel {
@@ -117,8 +128,10 @@ extension VocaTranslatedViewModel {
             guard let self = self,
                   let alert = alert,
                   let sourcetextField = alert.textFields?[0],
-                  let sourcetext = sourcetextField.text else { return }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                  var sourcetext = sourcetextField.text else { return }
+            sourcetext = self.removeLeadingAndTrailingSpaces(from: sourcetext)
+
+            if sourcetext.isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }

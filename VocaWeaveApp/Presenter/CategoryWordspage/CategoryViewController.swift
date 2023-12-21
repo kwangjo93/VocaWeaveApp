@@ -11,8 +11,6 @@ import SnapKit
 final class CategoryViewController: UIViewController {
     // MARK: - Property
     let categoryViewModel: CategoryViewModel
-    let vocaTranslatedViewModel: VocaTranslatedViewModel
-    let vocaListViewModel: VocaListViewModel
 
     private var collectionView: UICollectionView!
     let categoryTittle: [String] = ["나의 단어장 / 사전 단어장",
@@ -29,12 +27,8 @@ final class CategoryViewController: UIViewController {
         setup()
     }
     // MARK: - init
-    init(categoryViewModel: CategoryViewModel,
-         vocaListViewModel: VocaListViewModel,
-         vocaTranslatedViewModel: VocaTranslatedViewModel) {
+    init(categoryViewModel: CategoryViewModel) {
         self.categoryViewModel = categoryViewModel
-        self.vocaListViewModel = vocaListViewModel
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -129,106 +123,82 @@ extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryTittle = categoryTittle[indexPath.row]
         var categoryDetailView: CategoryDetailViewController
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "나의 단어장",
                 secondString: "사전 단어장",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
+                categoryViewModel: categoryViewModel,
                 firstVocaData: categoryViewModel.selectedVoca,
                 secondVocaData: nil,
                 dicData: categoryViewModel.selectedDic,
                 distinguishSavedData: true)
             self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 1 {
+        case 1, 2:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "",
                 secondString: "",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
-                firstVocaData: categoryViewModel.transportationVoca,
+                categoryViewModel: categoryViewModel,
+                firstVocaData: indexPath.row == 1 ? categoryViewModel.transportationVoca
+                                                    : categoryViewModel.accommodationVoca,
                 secondVocaData: nil,
                 dicData: nil,
-                distinguishSavedData: true)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 2 {
-            categoryDetailView = CategoryDetailViewController(
-                firstString: "",
-                secondString: "",
-                navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
-                firstVocaData: categoryViewModel.transportationVoca,
-                secondVocaData: nil,
-                dicData: nil,
-                distinguishSavedData: true)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 3 {
+                distinguishSavedData: false)
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 3:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "여행 관련 활동",
                 secondString: "여행 준비물",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
+                categoryViewModel: categoryViewModel,
                 firstVocaData: categoryViewModel.travelActivitiesVoca,
                 secondVocaData: categoryViewModel.travelEssentials,
                 dicData: nil,
                 distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 4 {
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 4:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "식사",
                 secondString: "지역 문화",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
+                categoryViewModel: categoryViewModel,
                 firstVocaData: categoryViewModel.diningVoca,
                 secondVocaData: categoryViewModel.cultureVoca,
                 dicData: nil,
                 distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 5 {
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 5, 6:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "",
                 secondString: "",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
-                firstVocaData: categoryViewModel.leisureVoca,
+                categoryViewModel: categoryViewModel,
+                firstVocaData: indexPath.row == 5 ? categoryViewModel.leisureVoca
+                                                : categoryViewModel.communicationVoca,
                 secondVocaData: nil,
                 dicData: nil,
                 distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 6 {
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 7:
             categoryDetailView = CategoryDetailViewController(
                 firstString: "",
                 secondString: "",
                 navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
-                firstVocaData: categoryViewModel.communicationVoca,
-                secondVocaData: nil,
-                dicData: nil,
-                distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
-        } else if indexPath.row == 7 {
-            categoryDetailView = CategoryDetailViewController(
-                firstString: "",
-                secondString: "",
-                navigationTitle: categoryTittle,
-                vocaListViewModel: vocaListViewModel,
-                vocaTranslatedViewModel: vocaTranslatedViewModel,
+                categoryViewModel: categoryViewModel,
                 firstVocaData: categoryViewModel.facilitiesVoca,
                 secondVocaData: nil,
                 dicData: nil,
                 distinguishSavedData: false)
-            self.navigationController?.pushViewController(categoryDetailView, animated: true)
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        default:
+            break
         }
     }
 }
 
-/// 네트워킹 시 맨 끝 공백을 할경우 처리하기. 지금은 언어 불가능으로 뜬다.
-/// selec 된 상태에서 북마크 표시 시 즉각적으로 뷰에서 제거가 되도록
+/// selec 된 상태에서 북마크 표시 시 즉각적으로 뷰에서 제거가 되도록 (업데이트 받고 -> 테이블뷰가 있는 곳에서 스냅샷 실행) -> 컴바인
 /// 헤더뷰가 추가된 상태에서는 바로 보이지만, 데이터더미에서는 헤더뷰 안보이는 현상 발생.
+/// 더미데이터에서 북마크를 눌렀을 경우에 나의 단어장에 북마크 표시  -> distinguishSavedData Bool 값 활용
+/// didSelect 로직 줄이기.
