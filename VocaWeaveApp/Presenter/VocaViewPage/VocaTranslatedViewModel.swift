@@ -73,14 +73,6 @@ class VocaTranslatedViewModel {
         return false
     }
 
-    func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
-        let itemsInSection = getVocaList().filter { $0.section == sectionTitle }
-        headerView.isHidden = itemsInSection.isEmpty
-        if let tableView = headerView.superview as? UITableView {
-            tableView.reloadData()
-        }
-    }
-
     private func nextGoPage(currentView: VocaViewController,
                             nextView: UINavigationController) {
         DispatchQueue.main.async {

@@ -86,10 +86,11 @@ class CategoryDetailViewController: UIViewController {
     private func configureUI() {
         view.addSubview(detailView)
         detailView.vocaTableView.register(
-            VocaTableViewCell.self,
-            forCellReuseIdentifier: VocaTableViewCell.identifier)
-        detailView.vocaTableView.register(VocaTableViewHeaderView.self,
-                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+                                        VocaTableViewCell.self,
+                                        forCellReuseIdentifier: VocaTableViewCell.identifier)
+        detailView.vocaTableView.register(
+                                VocaTableViewHeaderView.self,
+                                forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         detailView.vocaSegmentedControl.selectedSegmentIndex = 0
         detailView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
@@ -168,6 +169,7 @@ extension CategoryDetailViewController {
                 cell.configureBookmark()
                 cell.speakerButtonAction()
                 bindCellData(cell: cell)
+//                cell.selectionStyle = .none
                 return cell
             }
         }
@@ -212,6 +214,7 @@ extension CategoryDetailViewController {
             cell.configureBookmark()
             cell.speakerButtonAction()
             bindCellData(cell: cell)
+            cell.selectionStyle = .none
             return cell
         }
     }
@@ -238,19 +241,13 @@ extension CategoryDetailViewController: UITableViewDelegate {
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
-            categoryViewModel.vocaListViewModel.toggleHeaderVisibility(
-                                                sectionTitle: sectionTitle, headerView: headerView)
         } else {
             if distinguishSavedData {
                 let snapshot = vocaTranslatedDataSource.snapshot()
                 sectionTitle = snapshot.sectionIdentifiers[section].title
-                categoryViewModel.vocaTranslatedViewModel.toggleHeaderVisibility(
-                                                        sectionTitle: sectionTitle, headerView: headerView)
             } else {
                 let snapshot = vocaListDataSource.snapshot()
                 sectionTitle = snapshot.sectionIdentifiers[section].title
-                categoryViewModel.vocaListViewModel.toggleHeaderVisibility(
-                                                        sectionTitle: sectionTitle, headerView: headerView)
             }
         }
         headerView.configure(title: sectionTitle)

@@ -198,7 +198,5 @@ extension CategoryViewController: UICollectionViewDelegate {
     }
 }
 
-/// selec 된 상태에서 북마크 표시 시 즉각적으로 뷰에서 제거가 되도록 (업데이트 받고 -> 테이블뷰가 있는 곳에서 스냅샷 실행) -> 컴바인
-/// 헤더뷰가 추가된 상태에서는 바로 보이지만, 데이터더미에서는 헤더뷰 안보이는 현상 발생.
 /// 더미데이터에서 북마크를 눌렀을 경우에 나의 단어장에 북마크 표시  -> distinguishSavedData Bool 값 활용
 /// didSelect 로직 줄이기.

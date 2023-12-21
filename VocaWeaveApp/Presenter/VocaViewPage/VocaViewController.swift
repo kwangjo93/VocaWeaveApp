@@ -308,13 +308,9 @@ extension VocaViewController: UITableViewDelegate {
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
-            vocaListViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
-                                                     headerView: headerView)
         } else {
             let snapshot = vocaTranslatedDataSource.snapshot()
             sectionTitle = snapshot.sectionIdentifiers[section].title
-            vocaTranslatedViewModel.toggleHeaderVisibility(sectionTitle: sectionTitle,
-                                                           headerView: headerView)
         }
         headerView.configure(title: sectionTitle)
         return headerView

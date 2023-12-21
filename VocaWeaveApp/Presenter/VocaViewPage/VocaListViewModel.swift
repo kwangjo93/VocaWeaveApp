@@ -37,14 +37,6 @@ final class VocaListViewModel {
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
     }
-
-    func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
-        let itemsInSection = getVocaList().filter { $0.section == sectionTitle }
-        headerView.isHidden = itemsInSection.isEmpty
-        if let tableView = headerView.superview as? UITableView {
-            tableView.reloadData()
-        }
-    }
 }
 // MARK: - Alert - Add, Update Method
 extension VocaListViewModel {
