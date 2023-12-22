@@ -38,6 +38,12 @@ class CategoryDetailViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let firstVocaData = firstVocaData else { return }
+        vocaListTableViewDatasourceSetup()
+        vocaListTableViewSnapshot(with: firstVocaData)
+    }
     // MARK: - init
     init(firstString: String,
          secondString: String,
@@ -63,8 +69,6 @@ class CategoryDetailViewController: UIViewController {
         configureNav()
         configureUI()
         detailView.vocaTableView.delegate = self
-        vocaListTableViewDatasourceSetup()
-        vocaListTableViewSnapshot(with: firstVocaData)
     }
 
     private func configureNav() {
@@ -115,33 +119,38 @@ class CategoryDetailViewController: UIViewController {
     }
 
     private func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?,
-                                   _ secondVocaDatas: [RealmVocaModel]?) {
-            switch selectedSegmentIndex {
-            case 0:
-                self.firstVocaData = firstVocaDatas
-                guard let firstData = firstVocaData else { return }
-
+                               _ secondVocaDatas: [RealmVocaModel]?) {
+        switch selectedSegmentIndex {
+        case 0:
+            self.firstVocaData = firstVocaDatas
+            guard let firstData = firstVocaData else { return }
+            vocaListTableViewDatasourceSetup()
+            vocaListTableViewSnapshot(with: firstData)
+        case 1:
+            if let secondData = secondVocaDatas {
+                self.secondVocaData = secondData
                 vocaListTableViewDatasourceSetup()
-                vocaListTableViewSnapshot(with: firstData)
-            case 1:
-                if let secondData = secondVocaDatas {
-                    self.secondVocaData = secondData
-                    vocaListTableViewSnapshot(with: secondData)
-                }
-            default:
-                break
+                vocaListTableViewSnapshot(with: secondData)
             }
+        default:
+            break
         }
+    }
 
     func bindVocaData() {
             switch self.indexPath {
             case 0:
-                let selectedVoca = categoryViewModel.selectedVoca.filter { $0.isSelected }
-                self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
-                guard let dicData = dicData else { return }
-                setupVocaData(selectedVoca, nil)
-                vocaTranslatedTableViewDatasourceSetup()
-                vocaTranslatedTableViewSnapshot(with: dicData)
+                switch selectedSegmentIndex {
+                case 0:
+                    setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
+                case 1:
+                    self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
+                    guard let dicData = dicData else { return }
+                    vocaTranslatedTableViewDatasourceSetup()
+                    vocaTranslatedTableViewSnapshot(with: dicData)
+                default:
+                    break
+                }
             case 1...7:
                 switch self.indexPath {
                 case 1: setupVocaData(categoryViewModel.transportationVoca, nil)

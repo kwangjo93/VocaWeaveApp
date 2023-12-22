@@ -50,12 +50,16 @@ final class VocaViewController: UIViewController {
         modelDataBinding()
         setupSearchBar()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
+        vocaListTableViewDatasourceSetup()
+        vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+    }
     // MARK: - Helper
     private func setup() {
         configureNav()
         configureUI()
-        vocaListTableViewDatasourceSetup()
-        vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
         vocaView.vocaTableView.delegate = self
     }
 
@@ -84,7 +88,6 @@ final class VocaViewController: UIViewController {
             forCellReuseIdentifier: VocaTableViewCell.identifier)
         vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
                                         forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
-        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
                                                 for: .valueChanged)
