@@ -132,7 +132,6 @@ extension CategoryViewController: UICollectionViewDelegate {
                 indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
                 distinguishSavedData: true)
-            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: true)
         case 1, 2, 5, 6, 7:
             categoryDetailView = CategoryDetailViewController(
@@ -142,7 +141,6 @@ extension CategoryViewController: UICollectionViewDelegate {
                 indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
                 distinguishSavedData: false)
-            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 3:
             categoryDetailView = CategoryDetailViewController(
@@ -152,7 +150,6 @@ extension CategoryViewController: UICollectionViewDelegate {
                 indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
                 distinguishSavedData: false)
-            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 4:
             categoryDetailView = CategoryDetailViewController(
@@ -162,7 +159,6 @@ extension CategoryViewController: UICollectionViewDelegate {
                 indexPath: indexPath.row,
                 categoryViewModel: categoryViewModel,
                 distinguishSavedData: false)
-            categoryDetailView.bindVocaData(index: indexPath.row)
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         default:
             break

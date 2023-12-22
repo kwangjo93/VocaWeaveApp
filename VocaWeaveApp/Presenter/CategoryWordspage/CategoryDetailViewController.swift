@@ -114,62 +114,58 @@ class CategoryDetailViewController: UIViewController {
             .store(in: &cancellables)
     }
 
-    private func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?, _ secondVocaDatas: [RealmVocaModel]?) {
-        self.firstVocaData = firstVocaDatas
-        guard let firstData = firstVocaData else { return }
+    private func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?,
+                                   _ secondVocaDatas: [RealmVocaModel]?) {
+            switch selectedSegmentIndex {
+            case 0:
+                self.firstVocaData = firstVocaDatas
+                guard let firstData = firstVocaData else { return }
 
-        vocaListTableViewDatasourceSetup()
-        vocaListTableViewSnapshot(with: firstData)
-
-        if let secondData = secondVocaData {
-            self.secondVocaData = secondData
-            vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: secondVocaData)
-        }
-    }
-
-    func bindVocaData(index: Int) {
-        switch index {
-        case 0:
-            let selectedVoca = categoryViewModel.selectedVoca.filter { $0.isSelected }
-            self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
-            guard let dicData = dicData else { return }
-            setupVocaData(selectedVoca, nil)
-            vocaTranslatedTableViewDatasourceSetup()
-            vocaTranslatedTableViewSnapshot(with: dicData)
-        case 1...7:
-            switch index {
-            case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
-            case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
-            case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentials)
-            case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
-            case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
-            case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
-            case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
-            default: return
+                vocaListTableViewDatasourceSetup()
+                vocaListTableViewSnapshot(with: firstData)
+            case 1:
+                if let secondData = secondVocaDatas {
+                    self.secondVocaData = secondData
+                    vocaListTableViewSnapshot(with: secondData)
+                }
+            default:
+                break
             }
-        default:
-            break
         }
-    }
+
+    func bindVocaData() {
+            switch self.indexPath {
+            case 0:
+                let selectedVoca = categoryViewModel.selectedVoca.filter { $0.isSelected }
+                self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
+                guard let dicData = dicData else { return }
+                setupVocaData(selectedVoca, nil)
+                vocaTranslatedTableViewDatasourceSetup()
+                vocaTranslatedTableViewSnapshot(with: dicData)
+            case 1...7:
+                switch self.indexPath {
+                case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
+                case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
+                case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentials)
+                case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
+                case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
+                case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
+                case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
+                default: return
+                }
+            default:
+                break
+            }
+        }
     // MARK: - Action
 
     @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
         case 0:
-            vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: firstVocaData)
+            bindVocaData()
         case 1:
-            if distinguishSavedData {
-                guard let dicData = dicData else { return }
-                vocaTranslatedTableViewDatasourceSetup()
-                vocaTranslatedTableViewSnapshot(with: dicData)
-            } else {
-                guard let secondVocaData = secondVocaData else { return }
-                vocaListTableViewDatasourceSetup()
-                vocaListTableViewSnapshot(with: secondVocaData)
-            }
+            bindVocaData()
         default:
             break
         }
