@@ -137,31 +137,39 @@ class CategoryDetailViewController: UIViewController {
         }
     }
 
+    private func selectedMyvoca() {
+        switch selectedSegmentIndex {
+        case 0:
+            setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
+        case 1:
+            self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
+            guard let dicData = dicData else { return }
+            vocaTranslatedTableViewDatasourceSetup()
+            vocaTranslatedTableViewSnapshot(with: dicData)
+        default:
+            break
+        }
+    }
+
+    private func selectedCategoryVoca() {
+        switch self.indexPath {
+        case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
+        case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
+        case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentialsVoca)
+        case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
+        case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
+        case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
+        case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
+        default: return
+        }
+    }
+
     func bindVocaData() {
             switch self.indexPath {
             case 0:
-                switch selectedSegmentIndex {
-                case 0:
-                    setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
-                case 1:
-                    self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
-                    guard let dicData = dicData else { return }
-                    vocaTranslatedTableViewDatasourceSetup()
-                    vocaTranslatedTableViewSnapshot(with: dicData)
-                default:
-                    break
-                }
+                selectedMyvoca()
             case 1...7:
-                switch self.indexPath {
-                case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
-                case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
-                case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentialsVoca)
-                case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
-                case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
-                case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
-                case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
-                default: return
-                }
+                selectedCategoryVoca()
             default:
                 break
             }
@@ -201,17 +209,15 @@ extension CategoryDetailViewController {
 
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
                 cell.vocaListData = data
+                cell.bindVocaListData()
+                cell.configureBookmark()
+                cell.speakerButtonAction()
                 cell.vocaListViewModel = categoryViewModel.vocaListViewModel
-                cell.sourceLabel.text = data.sourceText
-                cell.translatedLabel.text = data.translatedText
-                cell.isSelect = data.isSelected
                 cell.selectedSegmentIndex = selectedSegmentIndex
                 cell.distinguishSavedData = distinguishSavedData
                 cell.firstVocaData = self.firstVocaData
                 cell.secondVocaData = self.secondVocaData
                 cell.allVocaData = categoryViewModel.selectedVoca
-                cell.configureBookmark()
-                cell.speakerButtonAction()
                 bindCellData(cell: cell)
                 cell.selectionStyle = .none
                 return cell
@@ -249,14 +255,12 @@ extension CategoryDetailViewController {
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
             cell.vocaTanslatedData = data
-            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedViewModel
-            cell.sourceLabel.text = data.sourceText
-            cell.translatedLabel.text = data.translatedText
-            cell.isSelect = data.isSelected
-            cell.selectedSegmentIndex = selectedSegmentIndex
-            cell.distinguishSavedData = distinguishSavedData
+            cell.bindVocaTranslatedData()
             cell.configureBookmark()
             cell.speakerButtonAction()
+            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedViewModel
+            cell.selectedSegmentIndex = selectedSegmentIndex
+            cell.distinguishSavedData = distinguishSavedData
             bindCellData(cell: cell)
             cell.selectionStyle = .none
             return cell
@@ -297,5 +301,4 @@ extension CategoryDetailViewController: UITableViewDelegate {
         headerView.configure(title: sectionTitle)
         return headerView
     }
-
 }

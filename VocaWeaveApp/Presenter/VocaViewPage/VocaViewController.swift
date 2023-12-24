@@ -168,20 +168,6 @@ final class VocaViewController: UIViewController {
         self.searchController.searchBar.searchTextField.resignFirstResponder()
         navigationItem.searchController = nil
     }
-
-    private func setupCell(cell: VocaTableViewCell,
-                           sourceText: String,
-                           translatedText: String,
-                           isSelected: Bool,
-                           selectedSegmentIndex: Int) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.configureBookmark()
-        cell.speakerButtonAction()
-        cell.selectionStyle = .none
-    }
     // MARK: - Action
     @objc private func plustButtonAction() {
         switch selectedSegmentIndex {
@@ -228,9 +214,7 @@ final class VocaViewController: UIViewController {
                 navigationItem.searchController = searchController
             }
     }
-
 }
-
 // MARK: - VocaList TableView Diffable DataSource
 extension VocaViewController {
     private func vocaListTableViewDatasourceSetup() {
@@ -239,8 +223,8 @@ extension VocaViewController {
         ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmVocaModel) -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                      withIdentifier: VocaTableViewCell.identifier,
-                      for: indexPath
+                    withIdentifier: VocaTableViewCell.identifier,
+                    for: indexPath
                   ) as? VocaTableViewCell else {
                 return UITableViewCell()
             }
@@ -248,11 +232,11 @@ extension VocaViewController {
             guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
             cell.vocaListData = data
             cell.vocaListViewModel = self.vocaListViewModel
-            setupCell(cell: cell,
-                      sourceText: data.sourceText,
-                      translatedText: data.translatedText,
-                      isSelected: data.isSelected,
-                      selectedSegmentIndex: self.selectedSegmentIndex)
+            vocaListViewModel.setupCell(cell: cell,
+                                        sourceText: data.sourceText,
+                                        translatedText: data.translatedText,
+                                        isSelected: data.isSelected,
+                                        selectedSegmentIndex: self.selectedSegmentIndex)
             return cell
         }
     }
@@ -269,9 +253,7 @@ extension VocaViewController {
                }
         vocaListDataSource.apply(vocaListSnapshot, animatingDifferences: true)
     }
-
 }
-
 // MARK: - VocaTranslated TableView Diffable DataSource
 extension VocaViewController {
     private func vocaTranslatedTableViewDatasourceSetup() {
@@ -280,21 +262,20 @@ extension VocaViewController {
         ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel) -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                      withIdentifier: VocaTableViewCell.identifier,
-                      for: indexPath
+                    withIdentifier: VocaTableViewCell.identifier,
+                    for: indexPath
                   ) as? VocaTableViewCell else {
                 return UITableViewCell()
             }
-
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
-                                                                                else { return cell}
+            else { return cell}
             cell.vocaTanslatedData = data
             cell.vocaTanslatedViewModel = self.vocaTranslatedViewModel
-            setupCell(cell: cell,
-                      sourceText: data.sourceText,
-                      translatedText: data.translatedText,
-                      isSelected: data.isSelected,
-                      selectedSegmentIndex: self.selectedSegmentIndex)
+            vocaTranslatedViewModel.setupCell(cell: cell,
+                                              sourceText: data.sourceText,
+                                              translatedText: data.translatedText,
+                                              isSelected: data.isSelected,
+                                              selectedSegmentIndex: self.selectedSegmentIndex)
             return cell
         }
     }
@@ -312,12 +293,10 @@ extension VocaViewController {
         vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
     }
 }
-
 // MARK: - TableView Delegate
 extension VocaViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
-
         let sectionTitle: String
         if selectedSegmentIndex == 0 {
             let snapshot = vocaListDataSource.snapshot()
@@ -368,7 +347,6 @@ extension VocaViewController: UITableViewDelegate {
                                                         currentView: self)
         }
     }
-
 }
 // MARK: - UISearchBarDelegate Delegate
 extension VocaViewController: UISearchBarDelegate {
@@ -397,8 +375,6 @@ extension VocaViewController: UISearchBarDelegate {
         }
     }
 }
-
 /// dictionaryView text UI 처리(정렬, 간격 등)
 /// 다크모드 버튼을 눌러서가 아니라 시스템 자체에서 다크 모드일 경우 에도 대응..? 고민해보자
 /// 페이지네이션 구현
-/// 텍스트 인식 (후행 스페이스 포함시키도록)

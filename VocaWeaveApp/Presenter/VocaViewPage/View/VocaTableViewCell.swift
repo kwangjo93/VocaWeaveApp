@@ -26,6 +26,7 @@ class VocaTableViewCell: UITableViewCell {
 
     let vocaListTableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
     let vocaTranslatedTableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
+
     var distinguishSavedData = true
     var isSelect = false
     var selectedSegmentIndex = 0
@@ -74,7 +75,10 @@ class VocaTableViewCell: UITableViewCell {
 
     // MARK: - Helper
     private func configure() {
-        [sourceLabel, translatedLabel, speakerButton, bookmarkButton].forEach { contentView.addSubview($0) }
+        [sourceLabel,
+         translatedLabel,
+         speakerButton,
+         bookmarkButton].forEach { contentView.addSubview($0) }
     }
 
     private func setupLayout() {
@@ -145,19 +149,36 @@ class VocaTableViewCell: UITableViewCell {
         }
     }
 
+    private func updateVocaListData(image: UIImage.SymbolConfiguration) {
+        guard let vocaListViewModel = vocaListViewModel else { return }
+        guard let vocaListData = vocaListData else { return }
+        vocaListViewModel.updateVoca(list: vocaListData,
+                                      sourceText: vocaListData.sourceText,
+                                      translatedText: vocaListData.translatedText,
+                                      isSelected: isSelect)
+        bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
+                                        withConfiguration: image),
+                                        for: .normal)
+    }
+
+    private func updateVocaTranslatedData(image: UIImage.SymbolConfiguration) {
+        guard let vocaTanslatedViewModel = vocaTanslatedViewModel else { return }
+        guard let vocaTanslatedData = vocaTanslatedData else { return }
+        vocaTanslatedViewModel.updateVoca(list: vocaTanslatedData,
+                                           text: vocaTanslatedData.sourceText,
+                                           isSelected: isSelect)
+        let newVocaList: [RealmTranslateModel] = vocaTanslatedViewModel.getVocaList()
+        self.vocaTranslatedTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
+        bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
+                                        withConfiguration: image),
+                                        for: .normal)
+    }
+
     private func bookmarkUpdateData(isSelect: Bool) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         switch selectedSegmentIndex {
         case 0:
-            guard let vocaListViewModel = vocaListViewModel else { return }
-            guard let vocaListData = vocaListData else { return }
-            vocaListViewModel.updateVoca(list: vocaListData,
-                                          sourceText: vocaListData.sourceText,
-                                          translatedText: vocaListData.translatedText,
-                                          isSelected: isSelect)
-            bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
+            updateVocaListData(image: imageConfig)
             if distinguishSavedData {
                 guard let allVocaData = allVocaData else { return }
                 let newVocaList: [RealmVocaModel] = allVocaData.filter {$0.isSelected == true}
@@ -168,31 +189,28 @@ class VocaTableViewCell: UITableViewCell {
             }
         case 1:
             if distinguishSavedData {
-                guard let vocaTanslatedViewModel = vocaTanslatedViewModel else { return }
-                guard let vocaTanslatedData = vocaTanslatedData else { return }
-                vocaTanslatedViewModel.updateVoca(list: vocaTanslatedData,
-                                                   text: vocaTanslatedData.sourceText,
-                                                   isSelected: isSelect)
-                let newVocaList: [RealmTranslateModel] = vocaTanslatedViewModel.getVocaList()
-                self.vocaTranslatedTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
-                bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
-                                                withConfiguration: imageConfig),
-                                                for: .normal)
+                updateVocaTranslatedData(image: imageConfig)
             } else {
-                guard let vocaListViewModel = vocaListViewModel else { return }
-                guard let vocaListData = vocaListData else { return }
+                updateVocaListData(image: imageConfig)
                 guard let secondVocaData = secondVocaData else { return }
-                vocaListViewModel.updateVoca(list: vocaListData,
-                                              sourceText: vocaListData.sourceText,
-                                              translatedText: vocaListData.translatedText,
-                                              isSelected: isSelect)
                 self.vocaListTableViewUpdate.send(secondVocaData)
-                bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
-                                                withConfiguration: imageConfig),
-                                                for: .normal)
             }
         default:
             break
         }
+    }
+
+    func bindVocaListData() {
+        guard let vocaListData = vocaListData else { return }
+        self.sourceLabel.text = vocaListData.sourceText
+        self.translatedLabel.text = vocaListData.translatedText
+        self.isSelect = vocaListData.isSelected
+    }
+
+    func bindVocaTranslatedData() {
+        guard let vocaTanslatedData = vocaTanslatedData else { return }
+        self.sourceLabel.text = vocaTanslatedData.sourceText
+        self.translatedLabel.text = vocaTanslatedData.translatedText
+        self.isSelect = vocaTanslatedData.isSelected
     }
 }

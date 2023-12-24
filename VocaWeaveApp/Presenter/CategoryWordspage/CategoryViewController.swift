@@ -37,6 +37,12 @@ final class CategoryViewController: UIViewController {
     }
 
     // MARK: - Helper
+    private func setup() {
+        configureNav()
+        configureUI()
+        collectionViewLayout()
+    }
+
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -48,12 +54,6 @@ final class CategoryViewController: UIViewController {
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
         navigationController?.configureBasicAppearance()
-    }
-
-    private func setup() {
-        configureNav()
-        configureUI()
-        collectionViewLayout()
     }
 
     private func configureUI() {
@@ -99,9 +99,8 @@ final class CategoryViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(defaultValue)
         }
     }
-    // MARK: - Action
-
 }
+// MARK: - UICollectionViewDataSource
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -118,7 +117,7 @@ extension CategoryViewController: UICollectionViewDataSource {
         return cell
     }
 }
-
+// MARK: - UICollectionViewDelegate
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryTittle = categoryTittle[indexPath.row]
@@ -169,7 +168,3 @@ extension CategoryViewController: UICollectionViewDelegate {
         }
     }
 }
-
-/// 더미데이터에서 북마크를 눌렀을 경우에 나의 단어장에 북마크 표시  -> distinguishSavedData Bool 값 활용
-/// didSelect에서 북마크 해제 시 다시 메인 페이지로 오면 북마크가 업데이트되어 있지 않는 문제 발견.
-///  북마크 해제 시 메인페이지에 가서 북마크가 해제된 것을 체크하지 않으면 데이터가 그대로 남아 있다.

@@ -17,14 +17,21 @@ final class CategoryViewModel {
     lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getAllVocaData()
     lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewManager.getVocaList()
     lazy var transportationVoca: [RealmVocaModel] = vocaListManager
-        .getVocaList(query: "Transportation")
-    lazy var accommodationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "Accommodation")
-    lazy var travelActivitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "TravelActivitiesVoca")
-    lazy var travelEssentialsVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "TravelEssentials")
-    lazy var diningVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "DiningVoca")
-    lazy var leisureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "LeisuretravelVoca")
-    lazy var communicationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CommunicationtravelVoca")
-    lazy var facilitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "FacilitiestravelVoca")
+                                                            .getVocaList(query: "Transportation")
+    lazy var accommodationVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "Accommodation")
+    lazy var travelActivitiesVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "TravelActivitiesVoca")
+    lazy var travelEssentialsVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "TravelEssentials")
+    lazy var diningVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "DiningVoca")
+    lazy var leisureVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "LeisuretravelVoca")
+    lazy var communicationVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "CommunicationtravelVoca")
+    lazy var facilitiesVoca: [RealmVocaModel] = vocaListManager
+                                                            .getVocaList(query: "FacilitiestravelVoca")
     lazy var cultureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CulturetravelVoca")
     // MARK: - init
     init(vocaTranslatedViewManager: VocaTranslatedManager,
@@ -36,7 +43,4 @@ final class CategoryViewModel {
         self.vocaListViewModel = vocaListViewModel
         self.vocaTranslatedViewModel = vocaTranslatedViewModel
     }
-    // MARK: - Helper
-    // MARK: - Action
-
 }

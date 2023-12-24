@@ -181,4 +181,18 @@ extension VocaTranslatedViewModel {
         alert.addAction(okAction)
         whitespacesAlertPublisher.send(alert)
     }
+
+    func setupCell(cell: VocaTableViewCell,
+                   sourceText: String,
+                   translatedText: String,
+                   isSelected: Bool,
+                   selectedSegmentIndex: Int) {
+        cell.sourceLabel.text = sourceText
+        cell.translatedLabel.text = translatedText
+        cell.isSelect = isSelected
+        cell.selectedSegmentIndex = selectedSegmentIndex
+        cell.configureBookmark()
+        cell.speakerButtonAction()
+        cell.selectionStyle = .none
+    }
 }
