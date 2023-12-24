@@ -18,14 +18,27 @@ class VocaListManager: RealmVocaModelType {
         }
     }
 
-    private var list: Results<RealmVocaModel>? {
+    private var vocaList: Results<RealmVocaModel>? {
         return realm?.objects(RealmVocaModel.self)
     }
 
-    func getVocaList() -> [RealmVocaModel] {
-        if let todos = list {
+    private func queryVocaData(query: String) -> Results<RealmVocaModel>? {
+        return realm?.objects(RealmVocaModel.self).filter("realmQeury == %@", query)
+    }
+
+    func getAllVocaData() -> [RealmVocaModel] {
+        if let todos = vocaList {
             return Array(todos)
         } else {
+            return []
+        }
+    }
+
+    func getVocaList(query: String) -> [RealmVocaModel] {
+        if let todos = queryVocaData(query: query) {
+            return Array(todos)
+        } else {
+            print("값 불로오기 실패")
             return []
         }
     }

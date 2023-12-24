@@ -14,17 +14,18 @@ final class CategoryViewModel {
     let vocaListViewModel: VocaListViewModel
     let vocaTranslatedViewModel: VocaTranslatedViewModel
 
-    lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getVocaList()
+    lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getAllVocaData()
     lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewManager.getVocaList()
-    var transportationVoca: [RealmVocaModel] = Transportation().transportationVoca
-    var accommodationVoca: [RealmVocaModel] = Accommodation().accommodationVoca
-    var travelActivitiesVoca: [RealmVocaModel] = TravelActivitiesVoca().travelActivitiesVoca
-    var travelEssentials: [RealmVocaModel] = TravelEssentials().travelEssentialsVoca
-    var diningVoca: [RealmVocaModel] = DiningVoca().diningVoca
-    var leisureVoca: [RealmVocaModel] = LeisuretravelVoca().leisureTravelVoca
-    var communicationVoca: [RealmVocaModel] = CommunicationtravelVoca().communicationVoca
-    var facilitiesVoca: [RealmVocaModel] = FacilitiestravelVoca().facilitiesVoca
-    var cultureVoca: [RealmVocaModel] = CulturetravelVoca().cultureVoca
+    lazy var transportationVoca: [RealmVocaModel] = vocaListManager
+        .getVocaList(query: "Transportation")
+    lazy var accommodationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "Accommodation")
+    lazy var travelActivitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "TravelActivitiesVoca")
+    lazy var travelEssentialsVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "TravelEssentials")
+    lazy var diningVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "DiningVoca")
+    lazy var leisureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "LeisuretravelVoca")
+    lazy var communicationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CommunicationtravelVoca")
+    lazy var facilitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "FacilitiestravelVoca")
+    lazy var cultureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CulturetravelVoca")
     // MARK: - init
     init(vocaTranslatedViewManager: VocaTranslatedManager,
          vocaListManager: VocaListManager,

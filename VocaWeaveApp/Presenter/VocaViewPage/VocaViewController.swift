@@ -52,9 +52,7 @@ final class VocaViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
-        vocaListTableViewDatasourceSetup()
-        vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+        setTableData()
     }
     // MARK: - Helper
     private func setup() {
@@ -88,6 +86,7 @@ final class VocaViewController: UIViewController {
             forCellReuseIdentifier: VocaTableViewCell.identifier)
         vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
                                         forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+        vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(vocaSegmentedControlValueChanged),
                                                 for: .valueChanged)
@@ -107,6 +106,19 @@ final class VocaViewController: UIViewController {
         searchController.searchBar.placeholder = "검색어 입력"
         definesPresentationContext = true
         searchController.isActive = false // 초기에는 검색 바를 숨김
+    }
+
+    private func setTableData() {
+        switch selectedSegmentIndex {
+        case 0:
+            vocaListTableViewDatasourceSetup()
+            vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+        case 1:
+            vocaTranslatedTableViewDatasourceSetup()
+            vocaTranslatedTableViewSnapshot(with: vocaTranslatedViewModel.getVocaList())
+        default:
+            break
+        }
     }
 
     private func modelDataBinding() {

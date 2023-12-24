@@ -17,6 +17,10 @@ class VocaTableViewCell: UITableViewCell {
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
 
+    var firstVocaData: [RealmVocaModel]?
+    var secondVocaData: [RealmVocaModel]?
+    var allVocaData: [RealmVocaModel]?
+
     var vocaListViewModel: VocaListViewModel?
     var vocaTanslatedViewModel: VocaTranslatedViewModel?
 
@@ -151,11 +155,17 @@ class VocaTableViewCell: UITableViewCell {
                                           sourceText: vocaListData.sourceText,
                                           translatedText: vocaListData.translatedText,
                                           isSelected: isSelect)
-            let newVocaList: [RealmVocaModel] = vocaListViewModel.getVocaList()
-            self.vocaListTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
             bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
                                             withConfiguration: imageConfig),
                                             for: .normal)
+            if distinguishSavedData {
+                guard let allVocaData = allVocaData else { return }
+                let newVocaList: [RealmVocaModel] = allVocaData.filter {$0.isSelected == true}
+                self.vocaListTableViewUpdate.send(newVocaList)
+            } else {
+                guard let firstVocaData = firstVocaData else { return }
+                self.vocaListTableViewUpdate.send(firstVocaData)
+            }
         case 1:
             if distinguishSavedData {
                 guard let vocaTanslatedViewModel = vocaTanslatedViewModel else { return }
@@ -171,12 +181,12 @@ class VocaTableViewCell: UITableViewCell {
             } else {
                 guard let vocaListViewModel = vocaListViewModel else { return }
                 guard let vocaListData = vocaListData else { return }
+                guard let secondVocaData = secondVocaData else { return }
                 vocaListViewModel.updateVoca(list: vocaListData,
                                               sourceText: vocaListData.sourceText,
                                               translatedText: vocaListData.translatedText,
                                               isSelected: isSelect)
-                let newVocaList: [RealmVocaModel] = vocaListViewModel.getVocaList()
-                self.vocaListTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
+                self.vocaListTableViewUpdate.send(secondVocaData)
                 bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
                                                 withConfiguration: imageConfig),
                                                 for: .normal)

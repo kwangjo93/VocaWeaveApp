@@ -10,6 +10,7 @@ import Combine
 
 final class VocaListViewModel {
     // MARK: - Property
+    private let realmQuery = "myVoca"
     let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
@@ -20,7 +21,7 @@ final class VocaListViewModel {
     }
     // MARK: - Logic
     func getVocaList() -> [RealmVocaModel] {
-        return datamanager.getVocaList()
+        return datamanager.getVocaList(query: realmQuery)
     }
 
     private func addVoca(_ list: RealmVocaModel) {
@@ -115,7 +116,7 @@ extension VocaListViewModel {
                 self.showEmptyTextFieldAlert()
                 return
             }
-            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext)
+            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
                 let newVocaList: [RealmVocaModel] = self.getVocaList()

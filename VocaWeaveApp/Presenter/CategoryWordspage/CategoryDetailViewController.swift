@@ -155,7 +155,7 @@ class CategoryDetailViewController: UIViewController {
                 switch self.indexPath {
                 case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
                 case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
-                case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentials)
+                case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentialsVoca)
                 case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
                 case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
                 case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
@@ -207,6 +207,9 @@ extension CategoryDetailViewController {
                 cell.isSelect = data.isSelected
                 cell.selectedSegmentIndex = selectedSegmentIndex
                 cell.distinguishSavedData = distinguishSavedData
+                cell.firstVocaData = self.firstVocaData
+                cell.secondVocaData = self.secondVocaData
+                cell.allVocaData = categoryViewModel.selectedVoca
                 cell.configureBookmark()
                 cell.speakerButtonAction()
                 bindCellData(cell: cell)

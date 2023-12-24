@@ -11,6 +11,7 @@ final class TabBarController: UITabBarController {
     // MARK: - Property
     private let vocaListManager: VocaListManager
     private let vocaTranslatedManager: VocaTranslatedManager
+    private let categoryManager: CategoryDataManager
     private lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
     private lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
     private lazy var categoryViewModel = CategoryViewModel(
@@ -19,9 +20,12 @@ final class TabBarController: UITabBarController {
                                                     vocaListViewModel: vocaListViewModel,
                                                     vocaTranslatedViewModel: vocaTranslatedViewModel)
     // MARK: - init
-    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
+    init(vocaListManager: VocaListManager,
+         vocaTranslatedManager: VocaTranslatedManager,
+         categoryManager: CategoryDataManager) {
         self.vocaListManager = vocaListManager
         self.vocaTranslatedManager = vocaTranslatedManager
+        self.categoryManager = categoryManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -31,7 +35,7 @@ final class TabBarController: UITabBarController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        makeListsForRealm(lists: categoryManager.getAllVocaData())
         let vocaViewController = UINavigationController(
             rootViewController: VocaViewController(
                 vocaTranslatedManager: vocaTranslatedViewModel,
@@ -75,5 +79,10 @@ final class TabBarController: UITabBarController {
                            vocaWeaveViewController,
                            dictionaryViewController]
     }
-
+    // MARK: - Helper
+    private func makeListsForRealm(lists: [RealmVocaModel]) {
+        for list in lists {
+            vocaListManager.makeNewList(list)
+        }
+    }
 }
