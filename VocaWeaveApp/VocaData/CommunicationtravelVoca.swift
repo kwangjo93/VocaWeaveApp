@@ -1,0 +1,85 @@
+//
+//  CommunicationtravelVoca.swift
+//  VocaWeaveApp
+//
+//  Created by 천광조 on 12/20/23.
+//
+
+import Foundation
+
+struct CommunicationtravelVoca {
+    let query = "CommunicationtravelVoca"
+    lazy var communicationVoca: [RealmVocaModel] = [
+        RealmVocaModel(sourceText: "Communication", translatedText: "소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Conversation", translatedText: "대화", realmQeury: query),
+        RealmVocaModel(sourceText: "Dialogue", translatedText: "대화", realmQeury: query),
+        RealmVocaModel(sourceText: "Language", translatedText: "언어", realmQeury: query),
+        RealmVocaModel(sourceText: "Speech", translatedText: "말", realmQeury: query),
+        RealmVocaModel(sourceText: "Speaking", translatedText: "말하기", realmQeury: query),
+        RealmVocaModel(sourceText: "Listening", translatedText: "듣기", realmQeury: query),
+        RealmVocaModel(sourceText: "Writing", translatedText: "쓰기", realmQeury: query),
+        RealmVocaModel(sourceText: "Reading", translatedText: "읽기", realmQeury: query),
+        RealmVocaModel(sourceText: "Nonverbal communication", translatedText: "비언어적 소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Body language", translatedText: "신체 언어", realmQeury: query),
+        RealmVocaModel(sourceText: "Gesture", translatedText: "제스처", realmQeury: query),
+        RealmVocaModel(sourceText: "Facial expression", translatedText: "얼굴 표정", realmQeury: query),
+        RealmVocaModel(sourceText: "Eye contact", translatedText: "눈맞춤", realmQeury: query),
+        RealmVocaModel(sourceText: "Tone", translatedText: "억양", realmQeury: query),
+        RealmVocaModel(sourceText: "Pitch", translatedText: "음높이", realmQeury: query),
+        RealmVocaModel(sourceText: "Volume", translatedText: "음량", realmQeury: query),
+        RealmVocaModel(sourceText: "Pause", translatedText: "일시정지", realmQeury: query),
+        RealmVocaModel(sourceText: "Articulation", translatedText: "발음", realmQeury: query),
+        RealmVocaModel(sourceText: "Clarity", translatedText: "명확함", realmQeury: query),
+        RealmVocaModel(sourceText: "Conciseness", translatedText: "간결함", realmQeury: query),
+        RealmVocaModel(sourceText: "Conversational skills", translatedText: "대화 기술", realmQeury: query),
+        RealmVocaModel(sourceText: "Active listening", translatedText: "적극적인 듣기", realmQeury: query),
+        RealmVocaModel(sourceText: "Empathy", translatedText: "공감", realmQeury: query),
+        RealmVocaModel(sourceText: "Feedback", translatedText: "피드백", realmQeury: query),
+        RealmVocaModel(sourceText: "Interpersonal skills", translatedText: "대인 관계 기술", realmQeury: query),
+        RealmVocaModel(sourceText: "Conflict resolution", translatedText: "갈등 해결", realmQeury: query),
+        RealmVocaModel(sourceText: "Negotiation", translatedText: "협상", realmQeury: query),
+        RealmVocaModel(sourceText: "Persuasion", translatedText: "설득", realmQeury: query),
+        RealmVocaModel(sourceText: "Presentation", translatedText: "발표", realmQeury: query),
+        RealmVocaModel(sourceText: "Public speaking", translatedText: "공개 연설", realmQeury: query),
+        RealmVocaModel(sourceText: "Oratory", translatedText: "법정 연설", realmQeury: query),
+        RealmVocaModel(sourceText: "Telecommunications", translatedText: "통신", realmQeury: query),
+        RealmVocaModel(sourceText: "Telephony", translatedText: "전화 통신", realmQeury: query),
+        RealmVocaModel(sourceText: "Mobile communication", translatedText: "모바일 통신", realmQeury: query),
+        RealmVocaModel(sourceText: "Internet communication", translatedText: "인터넷 통신", realmQeury: query),
+        RealmVocaModel(sourceText: "Email", translatedText: "이메일", realmQeury: query),
+        RealmVocaModel(sourceText: "Instant messaging", translatedText: "인스턴트 메시징", realmQeury: query),
+        RealmVocaModel(sourceText: "Chat", translatedText: "채팅", realmQeury: query),
+        RealmVocaModel(sourceText: "Video call", translatedText: "영상 통화", realmQeury: query),
+        RealmVocaModel(sourceText: "Conference call", translatedText: "회의 통화", realmQeury: query),
+        RealmVocaModel(sourceText: "Social media", translatedText: "소셜 미디어", realmQeury: query),
+        RealmVocaModel(sourceText: "Networking", translatedText: "네트워킹", realmQeury: query),
+        RealmVocaModel(sourceText: "Online forums", translatedText: "온라인 포럼", realmQeury: query),
+        RealmVocaModel(sourceText: "Blogging", translatedText: "블로깅", realmQeury: query),
+        RealmVocaModel(sourceText: "Vlogging", translatedText: "블로그 비디오", realmQeury: query),
+        RealmVocaModel(sourceText: "Podcasting", translatedText: "팟캐스팅", realmQeury: query),
+        RealmVocaModel(sourceText: "Social networking sites", translatedText: "소셜 네트워킹 사이트", realmQeury: query),
+        RealmVocaModel(sourceText: "Text message", translatedText: "문자 메시지", realmQeury: query),
+        RealmVocaModel(sourceText: "Emoji", translatedText: "이모지", realmQeury: query),
+        RealmVocaModel(sourceText: "Abbreviation", translatedText: "약어", realmQeury: query),
+        RealmVocaModel(sourceText: "Acronym", translatedText: "머리글자", realmQeury: query),
+        RealmVocaModel(sourceText: "Spelling", translatedText: "철자", realmQeury: query),
+        RealmVocaModel(sourceText: "Grammar", translatedText: "문법", realmQeury: query),
+        RealmVocaModel(sourceText: "Vocabulary", translatedText: "어휘", realmQeury: query),
+        RealmVocaModel(sourceText: "Idiom", translatedText: "관용구", realmQeury: query),
+        RealmVocaModel(sourceText: "Slang", translatedText: "슬랭", realmQeury: query),
+        RealmVocaModel(sourceText: "Proverb", translatedText: "속담", realmQeury: query),
+        RealmVocaModel(sourceText: "Translation", translatedText: "번역", realmQeury: query),
+        RealmVocaModel(sourceText: "Interpreter", translatedText: "통역사", realmQeury: query),
+        RealmVocaModel(sourceText: "Transcription", translatedText: "전사", realmQeury: query),
+        RealmVocaModel(sourceText: "Dictation", translatedText: "디큐먼트", realmQeury: query),
+        RealmVocaModel(sourceText: "Language barrier", translatedText: "언어 장벽", realmQeury: query),
+        RealmVocaModel(sourceText: "Communication barrier", translatedText: "소통 장벽", realmQeury: query),
+        RealmVocaModel(sourceText: "Miscommunication", translatedText: "오해", realmQeury: query),
+        RealmVocaModel(sourceText: "Cross-cultural communication", translatedText: "문화 간 소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Effective communication", translatedText: "효과적인 소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Ineffective communication", translatedText: "비효과적인 소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Verbal communication", translatedText: "언어적 소통", realmQeury: query),
+        RealmVocaModel(sourceText: "Written communication", translatedText: "문서적 소통", realmQeury: query)
+    ]
+
+}

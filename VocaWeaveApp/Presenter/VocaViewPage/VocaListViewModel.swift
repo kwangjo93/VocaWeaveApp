@@ -10,6 +10,7 @@ import Combine
 
 final class VocaListViewModel {
     // MARK: - Property
+    private let realmQuery = "myVoca"
     let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
@@ -20,7 +21,7 @@ final class VocaListViewModel {
     }
     // MARK: - Logic
     func getVocaList() -> [RealmVocaModel] {
-        return datamanager.getVocaList()
+        return datamanager.getVocaList(query: realmQuery)
     }
 
     private func addVoca(_ list: RealmVocaModel) {
@@ -37,16 +38,7 @@ final class VocaListViewModel {
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
     }
-
-    func toggleHeaderVisibility(sectionTitle: String, headerView: VocaTableViewHeaderView) {
-        let itemsInSection = getVocaList().filter { $0.section == sectionTitle }
-        headerView.isHidden = itemsInSection.isEmpty
-        if let tableView = headerView.superview as? UITableView {
-            tableView.reloadData()
-        }
-    }
 }
-
 // MARK: - Alert - Add, Update Method
 extension VocaListViewModel {
     func showAlertWithTextField(newData: RealmVocaModel?) {
@@ -124,7 +116,7 @@ extension VocaListViewModel {
                 self.showEmptyTextFieldAlert()
                 return
             }
-            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext)
+            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
                 let newVocaList: [RealmVocaModel] = self.getVocaList()
@@ -149,4 +141,17 @@ extension VocaListViewModel {
                                         && $0.translatedText == voca.translatedText }
     }
 
+    func setupCell(cell: VocaTableViewCell,
+                   sourceText: String,
+                   translatedText: String,
+                   isSelected: Bool,
+                   selectedSegmentIndex: Int) {
+        cell.sourceLabel.text = sourceText
+        cell.translatedLabel.text = translatedText
+        cell.isSelect = isSelected
+        cell.selectedSegmentIndex = selectedSegmentIndex
+        cell.configureBookmark()
+        cell.speakerButtonAction()
+        cell.selectionStyle = .none
+    }
 }

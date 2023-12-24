@@ -1,0 +1,85 @@
+//
+//  CulturetravelVoca.swift
+//  VocaWeaveApp
+//
+//  Created by 천광조 on 12/20/23.
+//
+
+import Foundation
+
+struct CulturetravelVoca {
+    let query = "CulturetravelVoca"
+    lazy var cultureVoca: [RealmVocaModel] = [
+        RealmVocaModel(sourceText: "Culture", translatedText: "문화", realmQeury: query),
+        RealmVocaModel(sourceText: "Tradition", translatedText: "전통", realmQeury: query),
+        RealmVocaModel(sourceText: "Custom", translatedText: "습관", realmQeury: query),
+        RealmVocaModel(sourceText: "Heritage", translatedText: "유산", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural diversity", translatedText: "다양성", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural exchange", translatedText: "문화 교류", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural assimilation", translatedText: "문화 동화", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural identity", translatedText: "문화 정체성", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural heritage", translatedText: "문화 유산", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural values", translatedText: "문화 가치", realmQeury: query),
+        RealmVocaModel(sourceText: "Ethnicity", translatedText: "민족성", realmQeury: query),
+        RealmVocaModel(sourceText: "Multiculturalism", translatedText: "다문화주의", realmQeury: query),
+        RealmVocaModel(sourceText: "Folklore", translatedText: "민속", realmQeury: query),
+        RealmVocaModel(sourceText: "Art", translatedText: "미술", realmQeury: query),
+        RealmVocaModel(sourceText: "Music", translatedText: "음악", realmQeury: query),
+        RealmVocaModel(sourceText: "Dance", translatedText: "댄스", realmQeury: query),
+        RealmVocaModel(sourceText: "Literature", translatedText: "문학", realmQeury: query),
+        RealmVocaModel(sourceText: "Theater", translatedText: "연극", realmQeury: query),
+        RealmVocaModel(sourceText: "Film", translatedText: "영화", realmQeury: query),
+        RealmVocaModel(sourceText: "Cuisine", translatedText: "요리", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural celebration", translatedText: "문화 축제", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural event", translatedText: "문화 행사", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural performance", translatedText: "문화 공연", realmQeury: query),
+        RealmVocaModel(sourceText: "Artifacts", translatedText: "유물", realmQeury: query),
+        RealmVocaModel(sourceText: "Symbols", translatedText: "상징", realmQeury: query),
+        RealmVocaModel(sourceText: "Ritual", translatedText: "의식", realmQeury: query),
+        RealmVocaModel(sourceText: "Ceremony", translatedText: "의식", realmQeury: query),
+        RealmVocaModel(sourceText: "Language", translatedText: "언어", realmQeury: query),
+        RealmVocaModel(sourceText: "Religion", translatedText: "종교", realmQeury: query),
+        RealmVocaModel(sourceText: "Beliefs", translatedText: "신념", realmQeury: query),
+        RealmVocaModel(sourceText: "Values", translatedText: "가치", realmQeury: query),
+        RealmVocaModel(sourceText: "Norms", translatedText: "표준", realmQeury: query),
+        RealmVocaModel(sourceText: "Mores", translatedText: "풍습", realmQeury: query),
+        RealmVocaModel(sourceText: "Taboos", translatedText: "금기", realmQeury: query),
+        RealmVocaModel(sourceText: "Etiquette", translatedText: "에티켓", realmQeury: query),
+        RealmVocaModel(sourceText: "Behavior", translatedText: "행동", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural adaptation", translatedText: "문화 적응", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural shock", translatedText: "문화 충격", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural norms", translatedText: "문화 표준", realmQeury: query),
+        RealmVocaModel(sourceText: "Festival", translatedText: "축제", realmQeury: query),
+        RealmVocaModel(sourceText: "Celebration", translatedText: "경축", realmQeury: query),
+        RealmVocaModel(sourceText: "Holiday", translatedText: "휴일", realmQeury: query),
+        RealmVocaModel(sourceText: "National day", translatedText: "국경일", realmQeury: query),
+        RealmVocaModel(sourceText: "Ethnic celebration", translatedText: "민족 축제", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural museum", translatedText: "문화 박물관", realmQeury: query),
+        RealmVocaModel(sourceText: "Art gallery", translatedText: "미술관", realmQeury: query),
+        RealmVocaModel(sourceText: "Exhibition", translatedText: "전시회", realmQeury: query),
+        RealmVocaModel(sourceText: "Parade", translatedText: "퍼레이드", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural performance", translatedText: "문화 공연", realmQeury: query),
+        RealmVocaModel(sourceText: "Storytelling", translatedText: "이야기", realmQeury: query),
+        RealmVocaModel(sourceText: "Mythology", translatedText: "신화", realmQeury: query),
+        RealmVocaModel(sourceText: "Legends", translatedText: "전설", realmQeury: query),
+        RealmVocaModel(sourceText: "Superstitions", translatedText: "미신", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural education", translatedText: "문화 교육", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural awareness", translatedText: "문화 인식", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural exploration", translatedText: "문화 탐험", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural immersion", translatedText: "문화 몰입", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural studies", translatedText: "문화 연구", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural exchange program", translatedText: "문화 교류 프로그램", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural heritage site", translatedText: "문화 유산 지역", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural sensitivity", translatedText: "문화 감수성", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural understanding", translatedText: "문화 이해", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural integration", translatedText: "문화 통합", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural discovery", translatedText: "문화 발견", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural differences", translatedText: "문화 차이", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural similarities", translatedText: "문화 유사성", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural influence", translatedText: "문화 영향", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural exchange", translatedText: "문화 교류", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural interaction", translatedText: "문화 상호 작용", realmQeury: query),
+        RealmVocaModel(sourceText: "Cultural appreciation", translatedText: "문화 평가", realmQeury: query)
+    ]
+
+}

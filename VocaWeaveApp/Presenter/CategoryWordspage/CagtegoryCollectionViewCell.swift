@@ -8,12 +8,12 @@
 import UIKit
 import SnapKit
 
-class CagtegoryCollectionViewCell: UICollectionViewCell {
+final class CagtegoryCollectionViewCell: UICollectionViewCell {
     static let identifier = "CagtegoryCollectionViewCell"
 
     let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .boldSystemFont(ofSize: 16)
         label.textColor = UIColor.label
         return label
     }()

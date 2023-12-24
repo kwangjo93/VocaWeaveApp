@@ -16,7 +16,8 @@ protocol RealmTranslateType {
 }
 
 protocol RealmVocaModelType {
-    func getVocaList() -> [RealmVocaModel]
+    func getAllVocaData() -> [RealmVocaModel]
+    func getVocaList(query: String) -> [RealmVocaModel]
     func makeNewList(_ list: RealmVocaModel)
     func updateListInfo(list: RealmVocaModel,
                         sourceText: String,

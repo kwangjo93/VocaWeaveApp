@@ -8,18 +8,41 @@
 import UIKit
 import SnapKit
 
-class CategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController {
     // MARK: - Property
+    let categoryViewModel: CategoryViewModel
+
     private var collectionView: UICollectionView!
-    let dataArray: [String] = ["ddd", "d12dd", "ddd23", "dd234d", "ddsdd", "ddaad", "ddffd", "ddsdd"]
+    let categoryTittle: [String] = ["나의 단어장 / 사전 단어장",
+                                    "교통 수단",
+                                    "숙소",
+                                    "여행 관련 활동 / 여행 준비물",
+                                    "식사 / 지역 문화",
+                                    "휴양 및 활동",
+                                    "언어 및 소통",
+                                    "장소 관련 시설"]
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNav()
         setup()
+    }
+    // MARK: - init
+    init(categoryViewModel: CategoryViewModel) {
+        self.categoryViewModel = categoryViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Helper
+    private func setup() {
+        configureNav()
+        configureUI()
         collectionViewLayout()
     }
-    // MARK: - Helper
+
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -33,13 +56,14 @@ class CategoryViewController: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func setup() {
+    private func configureUI() {
         let layout = createLayout()
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
         collectionView.register(CagtegoryCollectionViewCell.self,
                                 forCellWithReuseIdentifier: CagtegoryCollectionViewCell.identifier)
         collectionView.dataSource = self
+        collectionView.delegate = self
         view.addSubview(collectionView)
     }
 
@@ -58,7 +82,7 @@ class CategoryViewController: UIViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .fractionalHeight(0.95))
         let spacing = CGFloat(20)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: dataArray.count)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: categoryTittle.count)
         group.interItemSpacing = .fixed(spacing)
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
@@ -75,14 +99,12 @@ class CategoryViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(defaultValue)
         }
     }
-    // MARK: - Action
-
 }
-
+// MARK: - UICollectionViewDataSource
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return dataArray.count
+        return categoryTittle.count
     }
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -90,8 +112,59 @@ extension CategoryViewController: UICollectionViewDataSource {
                                 withReuseIdentifier: CagtegoryCollectionViewCell.identifier,
                                 for: indexPath) as? CagtegoryCollectionViewCell
                                 else { return UICollectionViewCell()}
-        let data = dataArray[indexPath.row]
-        cell.categoryLabel.text = data
+        let categoryTittle = categoryTittle[indexPath.row]
+        cell.categoryLabel.text = categoryTittle
         return cell
+    }
+}
+// MARK: - UICollectionViewDelegate
+extension CategoryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let categoryTittle = categoryTittle[indexPath.row]
+        var categoryDetailView: CategoryDetailViewController
+        switch indexPath.row {
+        case 0:
+            categoryDetailView = CategoryDetailViewController(
+                firstString: "나의 단어장",
+                secondString: "사전 단어장",
+                navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
+                categoryViewModel: categoryViewModel,
+                distinguishSavedData: true)
+            categoryDetailView.bindVocaData()
+            self.navigationController?.pushViewController(categoryDetailView, animated: true)
+        case 1, 2, 5, 6, 7:
+            categoryDetailView = CategoryDetailViewController(
+                firstString: "",
+                secondString: "",
+                navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
+                categoryViewModel: categoryViewModel,
+                distinguishSavedData: false)
+            categoryDetailView.bindVocaData()
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 3:
+            categoryDetailView = CategoryDetailViewController(
+                firstString: "여행 관련 활동",
+                secondString: "여행 준비물",
+                navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
+                categoryViewModel: categoryViewModel,
+                distinguishSavedData: false)
+            categoryDetailView.bindVocaData()
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        case 4:
+            categoryDetailView = CategoryDetailViewController(
+                firstString: "식사",
+                secondString: "지역 문화",
+                navigationTitle: categoryTittle,
+                indexPath: indexPath.row,
+                categoryViewModel: categoryViewModel,
+                distinguishSavedData: false)
+            categoryDetailView.bindVocaData()
+            self.navigationController?.pushViewController(categoryDetailView, animated: false)
+        default:
+            break
+        }
     }
 }
