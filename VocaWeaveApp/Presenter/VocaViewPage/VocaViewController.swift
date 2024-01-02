@@ -112,7 +112,7 @@ final class VocaViewController: UIViewController {
         switch selectedSegmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+            vocaListTableViewSnapshot(with: vocaListViewModel.getMyVocaList())
         case 1:
             vocaTranslatedTableViewDatasourceSetup()
             vocaTranslatedTableViewSnapshot(with: vocaTranslatedViewModel.getVocaList())
@@ -184,7 +184,7 @@ final class VocaViewController: UIViewController {
         switch selectedSegmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+            vocaListTableViewSnapshot(with: vocaListViewModel.getMyVocaList())
         case 1:
             vocaTranslatedTableViewDatasourceSetup()
             vocaTranslatedTableViewSnapshot(with: vocaTranslatedViewModel.getVocaList())
@@ -354,10 +354,10 @@ extension VocaViewController: UISearchBarDelegate {
         switch selectedSegmentIndex {
         case 0:
             guard !searchText.isEmpty else {
-                vocaListTableViewSnapshot(with: vocaListViewModel.getVocaList())
+                vocaListTableViewSnapshot(with: vocaListViewModel.getMyVocaList())
                    return
                }
-            let filteredData = vocaListViewModel.getVocaList().filter { model in
+            let filteredData = vocaListViewModel.getMyVocaList().filter { model in
                 return model.sourceText.lowercased().contains(searchText.lowercased())
             }
             vocaListTableViewSnapshot(with: filteredData)

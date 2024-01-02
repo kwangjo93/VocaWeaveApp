@@ -10,23 +10,39 @@ import SnapKit
 
 class VocaWeaveViewController: UIViewController {
     // MARK: - Property
+    let vocaWeaveViewModel: VocaWeaveViewModel
     let vocaWeaveView = VocaWeaveView()
     lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
                        vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
                        vocaWeaveView.sourceTextButton5]
-    lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
+    lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"),
                                      style: .plain,
                                      target: self,
                                      action: #selector(refreshButtonAction))
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setVocaData()
+    }
+    // MARK: - init
+    init(vocaWeaveViewModel: VocaWeaveViewModel) {
+        self.vocaWeaveViewModel = vocaWeaveViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Helper
+    private func setup() {
         configureNav()
         configure()
         setupLayout()
     }
 
-    // MARK: - Helper
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -48,6 +64,10 @@ class VocaWeaveViewController: UIViewController {
     private func configure() {
         view.addSubview(vocaWeaveView)
         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
+
+        buttonArray.forEach { $0.addTarget(self,
+                                           action: #selector(vocaButtonAction),
+                                           for: .touchUpInside) }
     }
 
     private func setupLayout() {
@@ -58,9 +78,46 @@ class VocaWeaveViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
+
+    private func setVocaData() {
+        let vocaData = vocaWeaveViewModel.getVocaList()
+        let randomVocaCount = 5
+        if vocaData.count < 5 {
+            vocaWeaveView.statusValueLabel.text = "저장 된 단어가 5개 미만입니다."
+        } else {
+            vocaWeaveView.statusValueLabel.text = "\(vocaData.count - 5) / \(randomVocaCount)"
+            configureVocaButton()
+        }
+    }
+
+    private func configureVocaButton() {
+        let vocaList = vocaWeaveViewModel.getVocaList().shuffled().prefix(5)
+        let vocaButtons = [
+            vocaWeaveView.sourceTextButton1,
+            vocaWeaveView.sourceTextButton2,
+            vocaWeaveView.sourceTextButton3,
+            vocaWeaveView.sourceTextButton4,
+            vocaWeaveView.sourceTextButton5
+        ]
+        for (index, button) in vocaButtons.enumerated() {
+            if index < vocaList.count {
+                button.setTitle(vocaList[index].sourceText, for: .normal)
+            } else {
+                button.setTitle("", for: .normal)
+            }
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
     // MARK: - Action
     @objc private func refreshButtonAction() {
 
+    }
+
+    @objc private func vocaButtonAction() {
+        
     }
 
     @objc private func nightModeButtonAction() {

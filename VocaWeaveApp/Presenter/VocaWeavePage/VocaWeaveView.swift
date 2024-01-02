@@ -14,30 +14,28 @@ class VocaWeaveView: UIView {
 
     let statusValueLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 30)
+        label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
         label.text = "50 / 5"
         label.textAlignment = .center
+        label.numberOfLines = 1
         return label
     }()
 
     let sourceTextButton1: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton2: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton3: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
@@ -53,14 +51,12 @@ class VocaWeaveView: UIView {
 
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
 
     let sourceTextButton5: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
         return button
     }()
@@ -117,8 +113,8 @@ class VocaWeaveView: UIView {
         return stackView
     }()
 
-    let responseDataLabel: UITextView = {
-        let textView = UITextView()
+    let responseDataLabel: UILabel = {
+        let textView = UILabel()
         textView.font = .systemFont(ofSize: 14)
         textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
@@ -155,7 +151,7 @@ class VocaWeaveView: UIView {
         statusValueLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.width.equalTo(100)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
             $0.height.equalTo(50)
         }
 

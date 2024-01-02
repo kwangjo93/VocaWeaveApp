@@ -19,6 +19,7 @@ final class TabBarController: UITabBarController {
                                                     vocaListManager: vocaListManager,
                                                     vocaListViewModel: vocaListViewModel,
                                                     vocaTranslatedViewModel: vocaTranslatedViewModel)
+    private lazy var vocaWeaveViewModel = VocaWeaveViewModel(vocaListManager: vocaListManager)
     // MARK: - init
     init(vocaListManager: VocaListManager,
          vocaTranslatedManager: VocaTranslatedManager,
@@ -56,7 +57,8 @@ final class TabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "book.fill")
         )
 
-        let vocaWeaveViewController = UINavigationController(rootViewController: VocaWeaveViewController())
+        let vocaWeaveViewController = UINavigationController(
+            rootViewController: VocaWeaveViewController(vocaWeaveViewModel: vocaWeaveViewModel))
         vocaWeaveViewController.tabBarItem = UITabBarItem(
             title: "학습",
             image: UIImage(systemName: "puzzlepiece"),
