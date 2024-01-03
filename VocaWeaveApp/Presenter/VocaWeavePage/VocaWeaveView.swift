@@ -25,18 +25,21 @@ class VocaWeaveView: UIView {
     let sourceTextButton1: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 0
         return button
     }()
 
     let sourceTextButton2: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 1
         return button
     }()
 
     let sourceTextButton3: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 2
         return button
     }()
 
@@ -52,12 +55,14 @@ class VocaWeaveView: UIView {
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 3
         return button
     }()
 
     let sourceTextButton5: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 4
         return button
     }()
 

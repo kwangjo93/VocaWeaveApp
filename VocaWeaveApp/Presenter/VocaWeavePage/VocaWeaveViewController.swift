@@ -116,8 +116,14 @@ class VocaWeaveViewController: UIViewController {
 
     }
 
-    @objc private func vocaButtonAction() {
-        
+    @objc private func vocaButtonAction(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        vocaWeaveViewModel.isSelect = sender.isSelected
+        var changedText: String
+        vocaWeaveViewModel.strikeButtonAction(sender: sender)
+        changedText = vocaWeaveViewModel.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
+                                                       to: sender.titleLabel?.text ?? "")
+        vocaWeaveView.weaveVocaTextField.text = changedText
     }
 
     @objc private func nightModeButtonAction() {
