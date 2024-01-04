@@ -37,12 +37,12 @@ extension UIViewController {
 
 extension String {
     func containsOnlyKorean() -> Bool {
-        let koreanRegex = "^[ㄱ-ㅎㅏ-ㅣ가-힣]*$"
+        let koreanRegex = "^[ㄱ-ㅎㅏ-ㅣ가-힣₩~,.?!\\-_/\\s]*$"
         return range(of: koreanRegex, options: .regularExpression) != nil
     }
 
     func containsOnlyEnglish() -> Bool {
-        let englishRegex = "^[a-zA-Z]*$"
+        let englishRegex = "^[a-zA-Z₩~,.?!\\-_/\\s]*$"
         return range(of: englishRegex, options: .regularExpression) != nil
     }
 

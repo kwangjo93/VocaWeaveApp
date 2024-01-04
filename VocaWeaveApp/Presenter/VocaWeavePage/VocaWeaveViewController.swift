@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class VocaWeaveViewController: UIViewController {
     // MARK: - Property
@@ -15,6 +16,7 @@ class VocaWeaveViewController: UIViewController {
     lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
                        vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
                        vocaWeaveView.sourceTextButton5]
+    var cancellables = Set<AnyCancellable>()
     lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"),
                                      style: .plain,
                                      target: self,
@@ -41,6 +43,7 @@ class VocaWeaveViewController: UIViewController {
         configureNav()
         configure()
         setupLayout()
+        modelDataBinding()
     }
 
     private func configureNav() {
@@ -63,6 +66,8 @@ class VocaWeaveViewController: UIViewController {
 
     private func configure() {
         view.addSubview(vocaWeaveView)
+        vocaWeaveView.weaveVocaTextField.delegate = self
+        vocaWeaveView.responseDataText.isEditable = false
         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
 
         buttonArray.forEach { $0.addTarget(self,
@@ -108,6 +113,15 @@ class VocaWeaveViewController: UIViewController {
         }
     }
 
+    private func modelDataBinding() {
+        vocaWeaveViewModel.errorAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -117,9 +131,9 @@ class VocaWeaveViewController: UIViewController {
     }
 
     @objc private func vocaButtonAction(_ sender: UIButton) {
+        var changedText: String
         sender.isSelected.toggle()
         vocaWeaveViewModel.isSelect = sender.isSelected
-        var changedText: String
         vocaWeaveViewModel.strikeButtonAction(sender: sender)
         changedText = vocaWeaveViewModel.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
                                                        to: sender.titleLabel?.text ?? "")
@@ -132,11 +146,11 @@ class VocaWeaveViewController: UIViewController {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
-                        vocaWeaveView.responseDataLabel.layer.borderColor = UIColor.label.cgColor
+                        vocaWeaveView.responseDataText.layer.borderColor = UIColor.label.cgColor
                         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
                     } else {
                         window.overrideUserInterfaceStyle = .dark
-                        vocaWeaveView.responseDataLabel.layer.borderColor = UIColor.white.cgColor
+                        vocaWeaveView.responseDataText.layer.borderColor = UIColor.white.cgColor
                         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.white.cgColor) }
                     }
                 }
@@ -144,3 +158,24 @@ class VocaWeaveViewController: UIViewController {
         }
     }
 }
+
+extension VocaWeaveViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let sourceText = vocaWeaveView.weaveVocaTextField.text else { return false }
+        Task {
+            do {
+                guard let responseData = try await vocaWeaveViewModel.fetchDataAndHandleResult(
+                                                                        sourceText: sourceText) else { return }
+                vocaWeaveView.responseDataText.text = responseData
+            } catch {
+                print("Task Response error")
+            }
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+// 추후 ai 랑 연결할지 고민
+// 단어 숫자 보이기 하는 것 알고리즘 알아보기 - 리셋 버튼
+// 레이아웃 조정

@@ -118,13 +118,15 @@ class VocaWeaveView: UIView {
         return stackView
     }()
 
-    let responseDataLabel: UILabel = {
-        let textView = UILabel()
+    let responseDataText: UITextView = {
+        let textView = UITextView()
+        textView.contentMode = .topLeft
         textView.font = .systemFont(ofSize: 14)
         textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
         textView.layer.cornerRadius = 8.0
+        textView.textAlignment = .left
         return textView
     }()
     // MARK: - init
@@ -148,7 +150,7 @@ class VocaWeaveView: UIView {
 
         [responseLabel, speakerButton, copyButton].forEach {compsitionStackView.addArrangedSubview($0)}
 
-        [statusValueLabel, weaveVocaTextField, responseDataLabel,
+        [statusValueLabel, weaveVocaTextField, responseDataText,
          buttonstackView1, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
     }
 
@@ -166,10 +168,10 @@ class VocaWeaveView: UIView {
             $0.height.equalTo(45)
         }
 
-        responseDataLabel.snp.makeConstraints {
+        responseDataText.snp.makeConstraints {
             $0.top.equalTo(responseLabel.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-(defaultValue * 10))
+            $0.bottom.equalToSuperview().inset((defaultValue * 10))
         }
     }
 
