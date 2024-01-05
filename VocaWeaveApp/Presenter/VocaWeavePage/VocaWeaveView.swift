@@ -16,9 +16,34 @@ class VocaWeaveView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
-        label.text = "50 / 5"
-        label.textAlignment = .center
         label.numberOfLines = 1
+        return label
+    }()
+
+    let selectedCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 27)
+        label.textColor = UIColor.label
+        label.text = "/ 2"
+        label.numberOfLines = 1
+        return label
+    }()
+
+    lazy var countLabelstackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution  = .fillEqually
+        stackView.alignment = .center
+        stackView.spacing = 0
+        return stackView
+    }()
+
+    let lackOfDataLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = UIColor.systemRed
+        label.numberOfLines = 1
+        label.text = "단어의 개수가 5개 미만입니다."
         return label
     }()
 
@@ -46,7 +71,7 @@ class VocaWeaveView: UIView {
     lazy var buttonstackView1: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillProportionally
+        stackView.distribution  = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 10
         return stackView
@@ -69,7 +94,7 @@ class VocaWeaveView: UIView {
     lazy var buttonstackView2: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillProportionally
+        stackView.distribution  = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 15
         return stackView
@@ -150,16 +175,18 @@ class VocaWeaveView: UIView {
 
         [responseLabel, speakerButton, copyButton].forEach {compsitionStackView.addArrangedSubview($0)}
 
-        [statusValueLabel, weaveVocaTextField, responseDataText,
-         buttonstackView1, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
+        [statusValueLabel, selectedCountLabel].forEach { countLabelstackView.addArrangedSubview($0)}
+
+        [lackOfDataLabel, weaveVocaTextField, responseDataText, buttonstackView1,
+         countLabelstackView, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
     }
 
     private func setupLayout() {
-        statusValueLabel.snp.makeConstraints {
+        lackOfDataLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue)
-            $0.height.equalTo(50)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 2)
+            $0.height.equalTo(60)
         }
 
         weaveVocaTextField.snp.makeConstraints {
@@ -176,8 +203,15 @@ class VocaWeaveView: UIView {
     }
 
     private func stackViewLayou() {
+        countLabelstackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 17)
+            $0.height.equalTo(50)
+        }
+
         buttonstackView1.snp.makeConstraints {
-            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
+            $0.top.equalTo(countLabelstackView.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview().inset(defaultValue)
         }
 

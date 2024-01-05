@@ -13,10 +13,12 @@ class VocaWeaveViewModel {
     private let vocaListManager: VocaListManager
     private let networking = NetworkingManager.shared
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let statusTextPublisher = PassthroughSubject<Int, Never>()
     private let realmQuery = "myVoca"
     var isSelect = false
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
+    lazy var vocaDataCount = getVocaList().count
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
@@ -31,6 +33,15 @@ class VocaWeaveViewModel {
         } else {
             attributedString = NSAttributedString(string: sender.titleLabel?.text ?? "")
             sender.setAttributedTitle(attributedString, for: .normal)
+        }
+    }
+
+    private func resetStrikeButtons(sender: [UIButton]) {
+        for button in sender {
+            if let title = button.titleLabel?.text {
+                let attributedString = NSAttributedString(string: title)
+                button.setAttributedTitle(attributedString, for: .normal)
+            }
         }
     }
 
@@ -67,9 +78,32 @@ class VocaWeaveViewModel {
         }
         return false
     }
+
+    private func configureVocaButton(buttons: [UIButton]) {
+        let vocaList = getVocaList().shuffled().prefix(5)
+        for (index, button) in buttons.enumerated() {
+            if index < vocaList.count {
+                button.setTitle(vocaList[index].sourceText, for: .normal)
+            } else {
+                button.setTitle("", for: .normal)
+            }
+        }
+    }
     // MARK: - Action
     func getVocaList() -> [RealmVocaModel] {
         return vocaListManager.getVocaList(query: realmQuery)
+    }
+
+    func refreshVocaData(buttons: [UIButton]) {
+        if self.vocaDataCount > 5 {
+            vocaDataCount -= 5
+            configureVocaButton(buttons: buttons)
+        } else {
+            vocaDataCount = getVocaList().count
+        }
+        resetStrikeButtons(sender: buttons)
+        buttons.forEach { $0.isSelected = false }
+        statusTextPublisher.send(vocaDataCount)
     }
 
     func fetchDataAndHandleResult(sourceText: String) async throws -> String? {
