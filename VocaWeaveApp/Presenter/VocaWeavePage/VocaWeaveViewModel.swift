@@ -13,12 +13,15 @@ class VocaWeaveViewModel {
     private let vocaListManager: VocaListManager
     private let networking = NetworkingManager.shared
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
-    let statusTextPublisher = PassthroughSubject<Int, Never>()
+    let setupStatusTextPublisher = PassthroughSubject<String, Never>()
+    let setupStatusCountPublisher = PassthroughSubject<Int, Never>()
+    let selectedCountCountPublisher = PassthroughSubject<Int, Never>()
     private let realmQuery = "myVoca"
     var isSelect = false
+    var selectedCount = 0
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
-    lazy var vocaDataCount = getVocaList().count
+    lazy var vocaDataArray = getVocaList()
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
@@ -30,28 +33,35 @@ class VocaWeaveViewModel {
         if isSelect {
             attributedString = sender.titleLabel?.text?.strikethrough()
             sender.setAttributedTitle(attributedString, for: .normal)
+            selectedCount -= 1
+            selectedCountCountPublisher.send(selectedCount)
         } else {
             attributedString = NSAttributedString(string: sender.titleLabel?.text ?? "")
             sender.setAttributedTitle(attributedString, for: .normal)
+            selectedCount += 1
+            selectedCountCountPublisher.send(selectedCount)
         }
     }
 
     private func resetStrikeButtons(sender: [UIButton]) {
         for button in sender {
-            if let title = button.titleLabel?.text {
-                let attributedString = NSAttributedString(string: title)
-                button.setAttributedTitle(attributedString, for: .normal)
-            }
+            button.setAttributedTitle(nil, for: .normal)
+            button.titleLabel?.attributedText = nil
         }
     }
 
     func putButtonText(with textFieldText: String, to buttonText: String) -> String {
+        let space = " "
         if isSelect {
-            return textFieldText + " \(buttonText) "
+            if !buttonText.isEmpty {
+                return textFieldText + space + buttonText + space
+            } else {
+                return buttonText
+            }
         } else {
             var originalText = textFieldText
-            if textFieldText.contains(buttonText) {
-                originalText = originalText.replacingOccurrences(of: buttonText, with: "")
+            if textFieldText.contains(space + buttonText + space) {
+                originalText = originalText.replacingOccurrences(of: space + buttonText + space, with: "")
             }
             return originalText
         }
@@ -79,14 +89,31 @@ class VocaWeaveViewModel {
         return false
     }
 
-    private func configureVocaButton(buttons: [UIButton]) {
-        let vocaList = getVocaList().shuffled().prefix(5)
-        for (index, button) in buttons.enumerated() {
-            if index < vocaList.count {
-                button.setTitle(vocaList[index].sourceText, for: .normal)
-            } else {
-                button.setTitle("", for: .normal)
+    func setRandomVocaData(buttons: [UIButton]) {
+        var buttonTitle: [String] = []
+        if vocaDataArray.count > 4 {
+            let selectedVoca = vocaDataArray.shuffled().prefix(5)
+            selectedCount = 5
+            selectedCountCountPublisher.send(5)
+            for (index, button) in buttons.enumerated() {
+                buttonTitle.append(selectedVoca[index].sourceText)
+                button.setTitle(selectedVoca[index].sourceText, for: .normal)
+                vocaDataArray.removeAll { $0.sourceText == selectedVoca[index].sourceText}
             }
+            setupStatusCountPublisher.send(vocaDataArray.count)
+        } else {
+            for index in 0..<5 {
+                if index < vocaDataArray.count {
+                    buttonTitle.append(vocaDataArray[index].sourceText)
+                    buttons[index].setTitle(vocaDataArray[index].sourceText, for: .normal)
+                } else {
+                    buttons[index].setTitle("", for: .normal)
+                }
+            }
+            selectedCount = vocaDataArray.count
+            selectedCountCountPublisher.send(vocaDataArray.count)
+            setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
+            vocaDataArray = getVocaList()
         }
     }
     // MARK: - Action
@@ -95,15 +122,9 @@ class VocaWeaveViewModel {
     }
 
     func refreshVocaData(buttons: [UIButton]) {
-        if self.vocaDataCount > 5 {
-            vocaDataCount -= 5
-            configureVocaButton(buttons: buttons)
-        } else {
-            vocaDataCount = getVocaList().count
-        }
-        resetStrikeButtons(sender: buttons)
         buttons.forEach { $0.isSelected = false }
-        statusTextPublisher.send(vocaDataCount)
+        resetStrikeButtons(sender: buttons)
+        setRandomVocaData(buttons: buttons)
     }
 
     func fetchDataAndHandleResult(sourceText: String) async throws -> String? {

@@ -25,7 +25,7 @@ class VocaWeaveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        vocaWeaveViewModel.refreshVocaData(buttons: buttonArray)
+        vocaWeaveViewModel.setRandomVocaData(buttons: buttonArray)
     }
     // MARK: - init
     init(vocaWeaveViewModel: VocaWeaveViewModel) {
@@ -81,16 +81,6 @@ class VocaWeaveViewController: UIViewController {
         }
     }
 
-    private func setVocaData() {
-        let vocaData = vocaWeaveViewModel.getVocaList()
-        let randomVocaCount = 5
-        if vocaData.count < 5 {
-            vocaWeaveView.statusValueLabel.text = "저장 된 단어가 5개 미만입니다."
-        } else {
-//            vocaWeaveView.statusValueLabel.text = ""
-        }
-    }
-
     private func modelDataBinding() {
         vocaWeaveViewModel.errorAlertPublisher
             .receive(on: DispatchQueue.main)
@@ -98,19 +88,28 @@ class VocaWeaveViewController: UIViewController {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
-        vocaWeaveViewModel.statusTextPublisher
+
+        vocaWeaveViewModel.selectedCountCountPublisher
             .sink { [weak self] count in
-                if count > 5 {
-                    self?.vocaWeaveView.statusValueLabel.isHidden = false
-                    self?.vocaWeaveView.selectedCountLabel.isHidden = false
-                    self?.vocaWeaveView.lackOfDataLabel.isHidden = true
-                    self?.vocaWeaveView.statusValueLabel.text = String(count)
-                    self?.vocaWeaveView.selectedCountLabel.text = "/   2"
-                } else {
-                    self?.vocaWeaveView.statusValueLabel.isHidden = true
-                    self?.vocaWeaveView.selectedCountLabel.isHidden = true
-                    self?.vocaWeaveView.lackOfDataLabel.isHidden = false
-                }
+                self?.vocaWeaveView.selectedCountLabel.text = "/   \(count)"
+            }
+            .store(in: &cancellables)
+
+        vocaWeaveViewModel.setupStatusCountPublisher
+            .sink { [weak self] count in
+                self?.vocaWeaveView.statusValueLabel.text = String(count)
+                self?.vocaWeaveView.statusValueLabel.isHidden = false
+                self?.vocaWeaveView.selectedCountLabel.isHidden = false
+                self?.vocaWeaveView.lackOfDataLabel.isHidden = true
+            }
+            .store(in: &cancellables)
+
+        vocaWeaveViewModel.setupStatusTextPublisher
+            .sink { [weak self] text in
+                self?.vocaWeaveView.statusValueLabel.isHidden = true
+                self?.vocaWeaveView.selectedCountLabel.isHidden = true
+                self?.vocaWeaveView.lackOfDataLabel.isHidden = false
+                self?.vocaWeaveView.lackOfDataLabel.text = text
             }
             .store(in: &cancellables)
     }
@@ -172,5 +171,3 @@ extension VocaWeaveViewController: UITextFieldDelegate {
 }
 
 // 추후 ai 랑 연결할지 고민
-// 단어 숫자 보이기 하는 것 알고리즘 알아보기 - 리셋 버튼
-// 버튼을 눌린 상태에서 뷰가 표시가 되고, -5를 한 시점에서 해당 count에 대해서 hidden 처리를 한다. 그래서 변경하려면 버튼이 누르기 전에 표시를 하고 해야 할 듯 하다.

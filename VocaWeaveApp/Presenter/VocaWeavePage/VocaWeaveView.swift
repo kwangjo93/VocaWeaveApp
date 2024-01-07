@@ -24,7 +24,6 @@ class VocaWeaveView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 27)
         label.textColor = UIColor.label
-        label.text = "/ 2"
         label.numberOfLines = 1
         return label
     }()
@@ -43,7 +42,6 @@ class VocaWeaveView: UIView {
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = UIColor.systemRed
         label.numberOfLines = 1
-        label.text = "단어의 개수가 5개 미만입니다."
         return label
     }()
 
