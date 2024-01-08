@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import AVFoundation
 import Combine
+import Lottie
 
 class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
@@ -30,6 +31,8 @@ class VocaTableViewCell: UITableViewCell {
     var distinguishSavedData = true
     var isSelect = false
     var selectedSegmentIndex = 0
+
+    var animationView = LottieAnimationView()
 
     let sourceLabel: UILabel = {
         let label = UILabel()
@@ -108,6 +111,15 @@ class VocaTableViewCell: UITableViewCell {
         }
     }
 
+    func setupAnimationView() {
+        bookmarkButton.addSubview(animationView)
+        let animation = LottieAnimation.named("starfill")
+        animationView.animation = animation
+        animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .playOnce
+        animationView.isHidden = true
+        animationView.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
+    }
     // MARK: - Helper
     private func speakerButtonTapped() {
         speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
@@ -141,11 +153,18 @@ class VocaTableViewCell: UITableViewCell {
     }
 
     @objc func vocaBookmarkButtonAction() {
+        setupAnimationView()
         isSelect.toggle()
         if isSelect {
             bookmarkUpdateData(isSelect: true)
+            animationView.currentProgress = 1
         } else {
             bookmarkUpdateData(isSelect: false)
+            animationView.currentProgress = 0
+        }
+        animationView.isHidden = false
+        animationView.play { [weak self] _ in
+            self?.animationView.isHidden = true
         }
     }
 
