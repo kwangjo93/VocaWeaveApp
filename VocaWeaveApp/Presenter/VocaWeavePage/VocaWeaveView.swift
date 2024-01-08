@@ -7,45 +7,71 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class VocaWeaveView: UIView {
     // MARK: - Property
     let defaultValue = 8
+    var animationView = LottieAnimationView()
 
     let statusValueLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 30)
+        label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
-        label.text = "50 / 5"
-        label.textAlignment = .center
+        label.numberOfLines = 1
+        return label
+    }()
+
+    let selectedCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 27)
+        label.textColor = UIColor.label
+        label.numberOfLines = 1
+        return label
+    }()
+
+    lazy var countLabelstackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution  = .fillEqually
+        stackView.alignment = .center
+        stackView.spacing = 0
+        return stackView
+    }()
+
+    let lackOfDataLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = UIColor.systemRed
+        label.numberOfLines = 1
         return label
     }()
 
     let sourceTextButton1: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 0
         return button
     }()
 
     let sourceTextButton2: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 1
         return button
     }()
 
     let sourceTextButton3: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 2
         return button
     }()
 
     lazy var buttonstackView1: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillProportionally
+        stackView.distribution  = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 10
         return stackView
@@ -53,22 +79,22 @@ class VocaWeaveView: UIView {
 
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 3
         return button
     }()
 
     let sourceTextButton5: UIButton = {
         let button = UIButton(type: .custom)
-        button.setTitle("UPDATE", for: .normal)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.tag = 4
         return button
     }()
 
     lazy var buttonstackView2: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution  = .fillProportionally
+        stackView.distribution  = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 15
         return stackView
@@ -117,13 +143,15 @@ class VocaWeaveView: UIView {
         return stackView
     }()
 
-    let responseDataLabel: UITextView = {
+    let responseDataText: UITextView = {
         let textView = UITextView()
+        textView.contentMode = .topLeft
         textView.font = .systemFont(ofSize: 14)
         textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
         textView.layer.cornerRadius = 8.0
+        textView.textAlignment = .left
         return textView
     }()
     // MARK: - init
@@ -147,16 +175,18 @@ class VocaWeaveView: UIView {
 
         [responseLabel, speakerButton, copyButton].forEach {compsitionStackView.addArrangedSubview($0)}
 
-        [statusValueLabel, weaveVocaTextField, responseDataLabel,
-         buttonstackView1, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
+        [statusValueLabel, selectedCountLabel].forEach { countLabelstackView.addArrangedSubview($0)}
+
+        [lackOfDataLabel, weaveVocaTextField, responseDataText, buttonstackView1, animationView,
+         countLabelstackView, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
     }
 
     private func setupLayout() {
-        statusValueLabel.snp.makeConstraints {
+        lackOfDataLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.width.equalTo(100)
-            $0.height.equalTo(50)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 2)
+            $0.height.equalTo(60)
         }
 
         weaveVocaTextField.snp.makeConstraints {
@@ -165,16 +195,23 @@ class VocaWeaveView: UIView {
             $0.height.equalTo(45)
         }
 
-        responseDataLabel.snp.makeConstraints {
+        responseDataText.snp.makeConstraints {
             $0.top.equalTo(responseLabel.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-(defaultValue * 10))
+            $0.bottom.equalToSuperview().inset((defaultValue * 10))
         }
     }
 
     private func stackViewLayou() {
+        countLabelstackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 17)
+            $0.height.equalTo(50)
+        }
+
         buttonstackView1.snp.makeConstraints {
-            $0.top.equalTo(statusValueLabel.snp.bottom).offset(defaultValue * 2)
+            $0.top.equalTo(countLabelstackView.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview().inset(defaultValue)
         }
 

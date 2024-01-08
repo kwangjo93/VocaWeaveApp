@@ -20,7 +20,7 @@ final class VocaListViewModel {
         self.datamanager = datamanager
     }
     // MARK: - Logic
-    func getVocaList() -> [RealmVocaModel] {
+    func getMyVocaList() -> [RealmVocaModel] {
         return datamanager.getVocaList(query: realmQuery)
     }
 
@@ -95,7 +95,7 @@ extension VocaListViewModel {
                        sourceText: sourcetext,
                        translatedText: translatedtext,
                        isSelected: newData.isSelected)
-            let newVocaList: [RealmVocaModel] = self.getVocaList()
+            let newVocaList: [RealmVocaModel] = self.getMyVocaList()
             self.tableViewUpdate.send(newVocaList)
         }
         alert.addAction(saveAction)
@@ -119,7 +119,7 @@ extension VocaListViewModel {
             let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
-                let newVocaList: [RealmVocaModel] = self.getVocaList()
+                let newVocaList: [RealmVocaModel] = self.getMyVocaList()
                 self.tableViewUpdate.send(newVocaList)
             } else {
                 print("이미 존재하는 데이터입니다.")
@@ -136,7 +136,7 @@ extension VocaListViewModel {
     }
 
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
-        let existingVocaList: [RealmVocaModel] = getVocaList()
+        let existingVocaList: [RealmVocaModel] = getMyVocaList()
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
     }
