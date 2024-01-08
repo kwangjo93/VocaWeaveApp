@@ -73,10 +73,10 @@ extension String {
     }
 
     func strikethrough() -> NSAttributedString {
-        let attributeString = NSMutableAttributedString(string: self)
-        attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle,
-                                     value: 2,
-                                     range: NSMakeRange(0, attributeString.length))
-        return attributeString
-    }
+           let attributeString = NSMutableAttributedString(string: self)
+           attributeString.addAttribute(.strikethroughStyle,
+                                        value: 2,
+                                        range: NSRange(location: 0, length: attributeString.length))
+           return attributeString
+       }
 }

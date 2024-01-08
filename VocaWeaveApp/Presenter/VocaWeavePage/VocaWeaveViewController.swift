@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Combine
+import Lottie
 
 class VocaWeaveViewController: UIViewController {
     // MARK: - Property
@@ -25,6 +26,7 @@ class VocaWeaveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        configureAnimation(vocaWeaveView.animationView)
         vocaWeaveViewModel.setRandomVocaData(buttons: buttonArray)
     }
     // MARK: - init
@@ -114,6 +116,33 @@ class VocaWeaveViewController: UIViewController {
             .store(in: &cancellables)
     }
 
+    private func configureAnimation(_ view: LottieAnimationView) {
+        let animation = LottieAnimation.named("disappear")
+        view.animation = animation
+        view.loopMode = .playOnce
+        view.contentMode = .scaleAspectFit
+    }
+
+//    private func updateAnimation(button: UIButton) {
+//        guard let buttonText = button.titleLabel?.text,
+//              let text = vocaWeaveView.weaveVocaTextField.text,
+//              let range = text.range(of: buttonText) else { return }
+//        let nsRange = NSRange(range, in: text)
+//        let beginningOfDocument = vocaWeaveView.weaveVocaTextField.beginningOfDocument
+//        guard let startOffset = vocaWeaveView.weaveVocaTextField.position(from: beginningOfDocument,
+//                                                                          offset: nsRange.location),
+//              let endOffset = vocaWeaveView.weaveVocaTextField.position(from: beginningOfDocument,
+//                                                                        offset: nsRange.upperBound)
+//                                                                        else { return }
+//        guard let textRange = vocaWeaveView.weaveVocaTextField.textRange(from: startOffset,
+//                                                                         to: endOffset)
+//                                                                        else { return }
+//        let rect = vocaWeaveView.weaveVocaTextField.firstRect(for: textRange)
+//        let convertedRect = vocaWeaveView.weaveVocaTextField.convert(rect, to: view)
+//        vocaWeaveView.animationView.frame = convertedRect
+//        view.bringSubviewToFront(vocaWeaveView.animationView)
+//    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -125,6 +154,9 @@ class VocaWeaveViewController: UIViewController {
     }
 
     @objc private func vocaButtonAction(_ sender: UIButton) {
+        vocaWeaveViewModel.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
+                                          text: sender.titleLabel?.text ?? "",
+                                          view: vocaWeaveView.animationView)
         var changedText: String
         sender.isSelected.toggle()
         vocaWeaveViewModel.isSelect = sender.isSelected
@@ -132,6 +164,9 @@ class VocaWeaveViewController: UIViewController {
         changedText = vocaWeaveViewModel.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
                                                        to: sender.titleLabel?.text ?? "")
         vocaWeaveView.weaveVocaTextField.text = changedText
+        vocaWeaveViewModel.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
+                                          text: sender.titleLabel?.text ?? "",
+                                          view: vocaWeaveView.animationView)
     }
 
     @objc private func nightModeButtonAction() {

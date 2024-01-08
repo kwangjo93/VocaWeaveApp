@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Lottie
 
 class VocaWeaveViewModel {
     // MARK: - Property
@@ -50,7 +51,8 @@ class VocaWeaveViewModel {
         }
     }
 
-    func putButtonText(with textFieldText: String, to buttonText: String) -> String {
+    func putButtonText(with textFieldText: String,
+                       to buttonText: String) -> String {
         let space = " "
         if isSelect {
             if !buttonText.isEmpty {
@@ -64,6 +66,25 @@ class VocaWeaveViewModel {
                 originalText = originalText.replacingOccurrences(of: space + buttonText + space, with: "")
             }
             return originalText
+        }
+    }
+
+    private func findWordRange(in text: String, word: String) -> NSRange? {
+        if let range = text.range(of: word) {
+            let nsRange = NSRange(range, in: text)
+            return nsRange
+        }
+        return nil
+    }
+
+    func applyAnimation(textField: UITextField, text: String, view: LottieAnimationView) {
+        if let wordRange = findWordRange(in: textField.text!, word: text) {
+            let textRect = textField.caretRect(for: textField.selectedTextRange!.start)
+            let textFieldOrigin = textField.convert(textRect.origin, to: textField.superview)
+            let yOffset = textFieldOrigin.y + textRect.height
+            view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            view.center = CGPoint(x: CGFloat(wordRange.location) * 10, y: yOffset)
+            view.play()
         }
     }
 

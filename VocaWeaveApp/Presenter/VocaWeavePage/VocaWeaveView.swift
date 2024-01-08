@@ -7,10 +7,12 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class VocaWeaveView: UIView {
     // MARK: - Property
     let defaultValue = 8
+    var animationView = LottieAnimationView()
 
     let statusValueLabel: UILabel = {
         let label = UILabel()
@@ -175,7 +177,7 @@ class VocaWeaveView: UIView {
 
         [statusValueLabel, selectedCountLabel].forEach { countLabelstackView.addArrangedSubview($0)}
 
-        [lackOfDataLabel, weaveVocaTextField, responseDataText, buttonstackView1,
+        [lackOfDataLabel, weaveVocaTextField, responseDataText, buttonstackView1, animationView,
          countLabelstackView, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
     }
 
