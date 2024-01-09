@@ -20,6 +20,8 @@ final class TabBarController: UITabBarController {
                                                     vocaListViewModel: vocaListViewModel,
                                                     vocaTranslatedViewModel: vocaTranslatedViewModel)
     private lazy var vocaWeaveViewModel = VocaWeaveViewModel(vocaListManager: vocaListManager)
+    private lazy var dictionaryViewModel = DictionaryViewModel(
+                                            vocaTranslatedViewModel: vocaTranslatedViewModel)
     // MARK: - init
     init(vocaListManager: VocaListManager,
          vocaTranslatedManager: VocaTranslatedManager,
@@ -69,7 +71,8 @@ final class TabBarController: UITabBarController {
             rootViewController: DictionaryViewController(
                                     vocaTranslatedData: nil,
                                     dictionaryEnum: .new,
-                                    vocaTranslatedViewModel: vocaTranslatedViewModel))
+                                    vocaTranslatedViewModel: nil,
+                                    dictionaryViewModel: dictionaryViewModel))
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),

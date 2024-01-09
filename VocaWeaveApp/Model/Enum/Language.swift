@@ -13,4 +13,13 @@ enum Language: String {
     var languageCode: String {
         self.rawValue
     }
+
+    var avLanguageTitle: String {
+        switch self {
+        case .korean:
+            return "ko-KR"
+        case .english:
+            return "en-US"
+        }
+    }
 }

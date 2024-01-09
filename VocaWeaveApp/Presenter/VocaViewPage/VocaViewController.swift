@@ -162,6 +162,12 @@ final class VocaViewController: UIViewController {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
+        vocaTranslatedViewModel.duplicationAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

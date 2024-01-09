@@ -11,17 +11,22 @@ import SnapKit
 class DictionaryView: UIView {
     // MARK: - Property
     let defaultValue = 8
-
     let sourceTextSpeakerButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.setImage(UIImage(systemName: "speaker.wave.2",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let sourceTextCopyButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.setImage(UIImage(systemName: "doc.on.doc",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
@@ -36,8 +41,11 @@ class DictionaryView: UIView {
     }()
 
     let cancelButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "multiply"), for: .normal)
+        button.setImage(UIImage(systemName: "multiply",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
@@ -55,23 +63,31 @@ class DictionaryView: UIView {
     }()
 
     let translatedTextSpeakerButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.setImage(UIImage(systemName: "speaker.wave.2",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let translatedTextCopyButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.setImage(UIImage(systemName: "doc.on.doc",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
 
     let bookmarkButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.frame.size.height = 40
-        button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.setImage(UIImage(systemName: "star",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         return button
     }()
 
@@ -86,7 +102,7 @@ class DictionaryView: UIView {
 
     let explainView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.borderWidth = 0.3
+        imageView.layer.borderWidth = 1.0
         imageView.layer.borderColor = UIColor.label.cgColor
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 15
@@ -166,7 +182,7 @@ class DictionaryView: UIView {
         explainView.snp.makeConstraints {
             $0.top.equalTo(bookmarkButton.snp.bottom).offset(defaultValue)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(defaultValue * 8)
         }
         translationLabel.snp.makeConstraints {
             $0.top.equalTo(explainView.snp.top).inset(defaultValue)

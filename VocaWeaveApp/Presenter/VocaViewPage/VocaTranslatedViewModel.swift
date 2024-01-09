@@ -16,6 +16,7 @@ class VocaTranslatedViewModel {
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let networking = NetworkingManager.shared
     var sourceLanguage: Language = .korean
     var targetLanguage: Language = .english
@@ -142,7 +143,8 @@ extension VocaTranslatedViewModel {
                     rootViewController: DictionaryViewController(
                                                                 vocaTranslatedData: voca,
                                                                 dictionaryEnum: .response,
-                                                                vocaTranslatedViewModel: self))
+                                                                vocaTranslatedViewModel: self,
+                                                                dictionaryViewModel: nil))
                 self.nextGoPage(currentView: currentView, nextView: dictionaryView)
             } catch {
                 print("Task Response error")
@@ -156,7 +158,11 @@ extension VocaTranslatedViewModel {
             let newVocaList: [RealmTranslateModel] = self.getVocaList()
             self.tableViewUpdate.send(newVocaList)
         } else {
-            print("이미 존재하는 데이터입니다.")
+            let alert = UIAlertController(title: "중복", message: "같은 단어가 이미 있습니다", preferredStyle: .alert)
+               DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                   alert.dismiss(animated: true, completion: nil)
+               }
+            duplicationAlertPublisher.send(alert)
         }
     }
 
