@@ -7,10 +7,14 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class DictionaryView: UIView {
     // MARK: - Property
     let defaultValue = 8
+
+    var animationView = LottieAnimationView()
+
     let sourceTextSpeakerButton: UIButton = {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)

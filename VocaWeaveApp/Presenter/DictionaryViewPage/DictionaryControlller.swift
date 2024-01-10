@@ -138,7 +138,8 @@ class DictionaryViewController: UIViewController {
     // MARK: - Action
     @objc private func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
-        vocaTranslatedViewModel?.saveDictionaryData(vocaTranslatedData)
+        vocaTranslatedViewModel?.saveDictionaryData(vocaTranslatedData,
+                                                    vocaTranslatedViewModel: vocaTranslatedViewModel)
         self.dismiss(animated: true)
     }
 
@@ -182,11 +183,21 @@ class DictionaryViewController: UIViewController {
 
     @objc private func cancelButtonAction() {
         dictionaryView.sourceTextField.text = ""
+        dictionaryView.translationTextLabel.text = ""
+        dictionaryViewModel?.isSelect = false
+        dictionaryViewModel?.setBookmarkStatus(bookmarkButton: dictionaryView.bookmarkButton)
         view.endEditing(true)
     }
+
     @objc private func bookmarkButtonAction() {
-        dictionaryViewModel?.addDictionaryData(sourceText: dictionaryView.sourceTextField.text,
-                                               translatedText: dictionaryView.translationTextLabel.text)
+        guard let sourceText = dictionaryView.sourceTextField.text else { return }
+        dictionaryViewModel?.isSelect.toggle()
+        dictionaryViewModel?.bookmarkButtonAction(vocaData: vocaTranslatedData,
+                                                  text: sourceText,
+                                                  bookmarkButton: dictionaryView.bookmarkButton)
+        dictionaryViewModel?.playAnimation(view: dictionaryView,
+                                           isSelect: dictionaryViewModel!.isSelect,
+                                           text: sourceText)
     }
     @objc private func backBarButtonAction() {
         self.dismiss(animated: true)
@@ -198,9 +209,14 @@ extension DictionaryViewController: UITextFieldDelegate {
         guard let dictionaryViewModel = dictionaryViewModel else { return false }
         Task {
             do {
-                guard let responseData = try await dictionaryViewModel.fetchDataAndHandleResult(
-                                                                        sourceText: sourceText) else { return }
-                dictionaryView.translationTextLabel.text = responseData
+                self.vocaTranslatedData = try await dictionaryViewModel
+                                                        .fetchDataAndHandleResult(sourceText: sourceText)
+                dictionaryViewModel.updateTranslationView(with: vocaTranslatedData,
+                                                          dictionaryViewModel: dictionaryViewModel,
+                                                          view: dictionaryView)
+                dictionaryViewModel.playAnimation(view: dictionaryView,
+                                                  isSelect: vocaTranslatedData?.isSelected ?? false,
+                                                  text: sourceText)
             } catch {
                 print("Task Response error")
             }
@@ -209,6 +225,6 @@ extension DictionaryViewController: UITextFieldDelegate {
         return true
     }
 }
-// 검색을 하고 해당 검색한 데이터를 넘어온 데이터와 비교를 한 후에 추가하기를 했을 경우 중복인지 확인하는 과정 필요
-// 북마크 이미지 변경하기, 애니메이션 적용하기.
+
 // 네이버 백과사전api 적용
+// 단어데이터 문제

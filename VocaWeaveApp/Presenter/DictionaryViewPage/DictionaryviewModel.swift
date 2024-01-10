@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import AVFoundation
+import Lottie
 
 class DictionaryViewModel {
     // MARK: - Property
@@ -17,6 +18,7 @@ class DictionaryViewModel {
     var targetLanguage: Language = .english
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    var isSelect = false
     // MARK: - init
     init(vocaTranslatedViewModel: VocaTranslatedViewModel) {
         self.vocaTranslatedViewModel = vocaTranslatedViewModel
@@ -51,14 +53,80 @@ class DictionaryViewModel {
            }
         copyAlertPublisher.send(alert)
     }
+
+    private func setupAnimationView(button: UIButton, animationView view: LottieAnimationView) {
+        button.addSubview(view)
+        let animation = LottieAnimation.named("starfill")
+        view.animation = animation
+        view.contentMode = .scaleAspectFit
+        view.loopMode = .playOnce
+        view.isHidden = true
+        view.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
+    }
+
+    func playAnimation(view: DictionaryView, isSelect: Bool, text: String) {
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedText.isEmpty else { return }
+        if isSelect {
+            setupAnimationView(button: view.bookmarkButton,
+                            animationView: view.animationView)
+            view.animationView.isHidden = false
+            view.animationView.play { _ in
+                view.animationView.isHidden = true
+            }
+        }
+    }
+
+    func setBookmarkStatus(bookmarkButton: UIButton) {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
+        if self.isSelect {
+            bookmarkButton.setImage(UIImage(systemName: "star.fill",
+                                    withConfiguration: imageConfig),
+                                    for: .normal)
+        } else {
+            bookmarkButton.setImage(UIImage(systemName: "star",
+                                    withConfiguration: imageConfig),
+                                    for: .normal)
+        }
+    }
+    @MainActor
+    private func checkForExistingData(with text: String) -> RealmTranslateModel? {
+        let translatedData = vocaTranslatedViewModel.getVocaList()
+        if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
+            return duplicatedData
+        }
+        return nil
+    }
+
+    @MainActor
+    private func checkDuplicationData(vocaData: RealmTranslateModel, text: String) -> RealmTranslateModel {
+        if vocaData.sourceText == text {
+            if let duplicatedData = checkForExistingData(with: text) {
+                return duplicatedData
+            }
+        }
+        return vocaData
+    }
+
+    @MainActor
+    func updateTranslationView(with vocaData: RealmTranslateModel?,
+                               dictionaryViewModel: DictionaryViewModel?,
+                               view: DictionaryView) {
+        guard let vocaData = vocaData else { return }
+        view.translationTextLabel.text = vocaData.translatedText
+        self.isSelect = vocaData.isSelected
+        self.setBookmarkStatus(bookmarkButton: view.bookmarkButton)
+    }
     // MARK: - Action
-    func fetchDataAndHandleResult(sourceText: String) async throws -> String? {
+    func fetchDataAndHandleResult(sourceText: String) async throws -> RealmTranslateModel? {
         if detectLanguage(text: sourceText) {
             do {
-                let result = try await networking.fetchData(source: sourceLanguage.languageCode,
+                let responseData = try await networking.fetchData(source: sourceLanguage.languageCode,
                                                             target: targetLanguage.languageCode,
                                                             text: sourceText)
-                return result.translatedText
+                let result = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
+                let vocaData = await checkDuplicationData(vocaData: result, text: sourceText)
+                return vocaData
             } catch {
                 print("에러 발생: \(error)")
                 throw error
@@ -85,12 +153,31 @@ class DictionaryViewModel {
         }
     }
 
-    func addDictionaryData(sourceText: String?, translatedText: String?) {
-        guard let sourceText = sourceText else { return }
-        guard let translatedText = translatedText else { return }
-        let vocaData = RealmTranslateModel(sourceText: sourceText,
-                                       translatedText: translatedText,
-                                       isSelected: true)
-        vocaTranslatedViewModel.saveDictionaryData(vocaData)
+    private func changeBookmark(vocaData: RealmTranslateModel) {
+        if self.isSelect {
+            vocaTranslatedViewModel.updateVoca(list: vocaData,
+                                               text: vocaData.translatedText,
+                                               isSelected: true)
+        } else {
+            vocaTranslatedViewModel.updateVoca(list: vocaData,
+                                               text: vocaData.translatedText,
+                                               isSelected: false)
+        }
+    }
+
+    @MainActor
+    func bookmarkButtonAction(vocaData: RealmTranslateModel?, text: String, bookmarkButton: UIButton) {
+        guard let vocaData = vocaData else { return }
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedText.isEmpty else { return }
+        if checkForExistingData(with: text) == nil {
+            vocaTranslatedViewModel.saveDictionaryData(vocaData, vocaTranslatedViewModel: nil)
+            vocaTranslatedViewModel.updateVoca(list: vocaData,
+                                               text: vocaData.translatedText,
+                                               isSelected: true)
+        } else {
+            changeBookmark(vocaData: vocaData)
+        }
+        setBookmarkStatus(bookmarkButton: bookmarkButton)
     }
 }
