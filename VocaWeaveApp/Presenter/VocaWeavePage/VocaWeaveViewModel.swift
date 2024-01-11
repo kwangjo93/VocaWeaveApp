@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import Lottie
+import AVFoundation
 
 class VocaWeaveViewModel {
     // MARK: - Property
@@ -17,6 +18,7 @@ class VocaWeaveViewModel {
     let setupStatusTextPublisher = PassthroughSubject<String, Never>()
     let setupStatusCountPublisher = PassthroughSubject<Int, Never>()
     let selectedCountCountPublisher = PassthroughSubject<Int, Never>()
+    let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
@@ -137,9 +139,33 @@ class VocaWeaveViewModel {
             vocaDataArray = getVocaList()
         }
     }
+
+    private func copyAlertAction() {
+        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+               alert.dismiss(animated: true, completion: nil)
+           }
+        copyAlertPublisher.send(alert)
+    }
     // MARK: - Action
     func getVocaList() -> [RealmVocaModel] {
         return vocaListManager.getVocaList(query: realmQuery)
+    }
+
+    func copyText(text: String?) {
+        guard let textToCopy = text else { return }
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = textToCopy
+        copyAlertAction()
+    }
+
+    func speakerAction(text: String?, language: String) {
+        if let text = text {
+            let speechUtterance = AVSpeechUtterance(string: text)
+            speechUtterance.voice = AVSpeechSynthesisVoice(language: language)
+            let speechSynthesizer = AVSpeechSynthesizer()
+            speechSynthesizer.speak(speechUtterance)
+        }
     }
 
     func refreshVocaData(buttons: [UIButton]) {

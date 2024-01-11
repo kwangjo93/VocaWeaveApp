@@ -42,6 +42,7 @@ class VocaWeaveViewController: UIViewController {
         configureNav()
         configure()
         setupLayout()
+        setButtonAction()
         modelDataBinding()
     }
 
@@ -82,6 +83,14 @@ class VocaWeaveViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
+    private func setButtonAction() {
+        vocaWeaveView.copyButton.addTarget(self,
+                                           action: #selector(copyButtonAction),
+                                           for: .touchUpInside)
+        vocaWeaveView.speakerButton.addTarget(self,
+                                              action: #selector(speakerButtonAction),
+                                              for: .touchUpInside)
+    }
 
     private func modelDataBinding() {
         vocaWeaveViewModel.errorAlertPublisher
@@ -112,6 +121,13 @@ class VocaWeaveViewController: UIViewController {
                 self?.vocaWeaveView.selectedCountLabel.isHidden = true
                 self?.vocaWeaveView.lackOfDataLabel.isHidden = false
                 self?.vocaWeaveView.lackOfDataLabel.text = text
+            }
+            .store(in: &cancellables)
+
+        vocaWeaveViewModel.copyAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
     }
@@ -165,6 +181,15 @@ class VocaWeaveViewController: UIViewController {
                 }
             }
         }
+    }
+
+    @objc private func copyButtonAction() {
+        vocaWeaveViewModel.copyText(text: vocaWeaveView.weaveVocaTextField.text)
+    }
+
+    @objc private func speakerButtonAction() {
+        vocaWeaveViewModel.speakerAction(text: vocaWeaveView.weaveVocaTextField.text,
+                                         language: vocaWeaveViewModel.sourceLanguage.avLanguageTitle)
     }
 }
 
