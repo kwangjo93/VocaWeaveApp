@@ -113,7 +113,7 @@ class DictionaryViewModel {
                                dictionaryViewModel: DictionaryViewModel?,
                                view: DictionaryView) {
         guard let vocaData = vocaData else { return }
-        view.translationTextLabel.text = vocaData.translatedText
+        view.translationText.text = vocaData.translatedText
         self.isSelect = vocaData.isSelected
         self.setBookmarkStatus(bookmarkButton: view.bookmarkButton)
     }

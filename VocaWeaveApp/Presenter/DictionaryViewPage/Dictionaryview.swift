@@ -121,11 +121,11 @@ class DictionaryView: UIView {
         return label
     }()
 
-    let translationTextLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.label
-        return label
+    let translationText: UITextView = {
+        let textView = UITextView()
+        textView.font = .boldSystemFont(ofSize: 18)
+        textView.textColor = UIColor.label
+        return textView
     }()
 
     let explanationLabel: UILabel = {
@@ -136,11 +136,11 @@ class DictionaryView: UIView {
         return label
     }()
 
-    let explanationTextLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.label
-        return label
+    let explanationText: UITextView = {
+        let textView = UITextView()
+        textView.font = .boldSystemFont(ofSize: 18)
+        textView.textColor = UIColor.label
+        return textView
     }()
     // MARK: - init
     override init(frame: CGRect) {
@@ -161,10 +161,11 @@ class DictionaryView: UIView {
 
         [translatedTextSpeakerButton, translatedTextCopyButton].forEach {explainStackView.addArrangedSubview($0)}
 
+        [translationText, translationLabel,
+         explanationText, explanationLabel].forEach {explainView.addSubview($0)}
+
         [sourceStackView, cancelButton, sourceTextField,
-         bookmarkButton, explainStackView, explainView,
-         translationTextLabel, translationLabel, explanationTextLabel,
-         explanationLabel].forEach {self.addSubview($0)}
+         bookmarkButton, explainStackView, explainView].forEach {self.addSubview($0)}
     }
 
     private func setupLayout() {
@@ -194,19 +195,19 @@ class DictionaryView: UIView {
             $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
             $0.height.equalTo(defaultValue * 4)
         }
-        translationTextLabel.snp.makeConstraints {
+        translationText.snp.makeConstraints {
             $0.top.equalTo(translationLabel.snp.bottom)
             $0.leading.equalTo(explainView.snp.leading)
             $0.trailing.equalTo(explainView.snp.trailing)
             $0.height.equalTo(defaultValue * 14)
         }
         explanationLabel.snp.makeConstraints {
-            $0.top.equalTo(translationTextLabel.snp.bottom).inset(defaultValue)
+            $0.top.equalTo(translationText.snp.bottom).inset(defaultValue)
             $0.leading.equalTo(explainView.snp.leading).inset(defaultValue)
             $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
             $0.height.equalTo(defaultValue * 4)
         }
-        explanationTextLabel.snp.makeConstraints {
+        explanationText.snp.makeConstraints {
             $0.top.equalTo(explanationLabel.snp.bottom)
             $0.leading.equalTo(explainView.snp.leading)
             $0.trailing.equalTo(explainView.snp.trailing)

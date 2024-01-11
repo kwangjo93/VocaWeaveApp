@@ -158,7 +158,7 @@ extension VocaTranslatedViewModel {
             let newVocaList: [RealmTranslateModel] = self.getVocaList()
             self.tableViewUpdate.send(newVocaList)
         } else {
-            guard let vocaTranslatedViewModel = vocaTranslatedViewModel else { return }
+            guard vocaTranslatedViewModel != nil else { return }
             let alert = UIAlertController(title: "중복", message: "같은 단어가 이미 있습니다", preferredStyle: .alert)
                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                    alert.dismiss(animated: true, completion: nil)

@@ -80,7 +80,7 @@ class DictionaryViewController: UIViewController {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         if dictionaryEnum == .response {
             dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
-            dictionaryView.translationTextLabel.text = vocaTranslatedData.translatedText
+            dictionaryView.translationText.text = vocaTranslatedData.translatedText
             navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
             navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
         }
@@ -172,18 +172,18 @@ class DictionaryViewController: UIViewController {
 
     @objc private func translatedSpeakerButtonAction() {
         guard let dictionaryViewModel = dictionaryViewModel else { return }
-        dictionaryViewModel.speakerAction(text: dictionaryView.translationTextLabel.text,
+        dictionaryViewModel.speakerAction(text: dictionaryView.translationText.text,
                                           language: dictionaryViewModel.targetLanguage.avLanguageTitle)
     }
 
     @objc private func translatedCopyButtonAction() {
-        dictionaryViewModel?.copyText(text: dictionaryView.translationTextLabel.text)
+        dictionaryViewModel?.copyText(text: dictionaryView.translationText.text)
         view.endEditing(true)
     }
 
     @objc private func cancelButtonAction() {
         dictionaryView.sourceTextField.text = ""
-        dictionaryView.translationTextLabel.text = ""
+        dictionaryView.translationText.text = ""
         dictionaryViewModel?.isSelect = false
         dictionaryViewModel?.setBookmarkStatus(bookmarkButton: dictionaryView.bookmarkButton)
         view.endEditing(true)
