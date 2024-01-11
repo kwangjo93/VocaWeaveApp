@@ -158,14 +158,12 @@ class VocaTableViewCell: UITableViewCell {
         isSelect.toggle()
         if isSelect {
             bookmarkUpdateData(isSelect: true)
-            animationView.currentProgress = 1
+            animationView.isHidden = false
+            animationView.play { [weak self] _ in
+                self?.animationView.isHidden = true
+            }
         } else {
             bookmarkUpdateData(isSelect: false)
-            animationView.currentProgress = 0
-        }
-        animationView.isHidden = false
-        animationView.play { [weak self] _ in
-            self?.animationView.isHidden = true
         }
     }
 
