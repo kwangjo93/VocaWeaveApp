@@ -150,7 +150,7 @@ class VocaWeaveView: UIView {
         textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
-        textView.layer.cornerRadius = 8.0
+        textView.layer.cornerRadius = 15
         textView.textAlignment = .left
         return textView
     }()

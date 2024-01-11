@@ -123,26 +123,6 @@ class VocaWeaveViewController: UIViewController {
         view.contentMode = .scaleAspectFit
     }
 
-//    private func updateAnimation(button: UIButton) {
-//        guard let buttonText = button.titleLabel?.text,
-//              let text = vocaWeaveView.weaveVocaTextField.text,
-//              let range = text.range(of: buttonText) else { return }
-//        let nsRange = NSRange(range, in: text)
-//        let beginningOfDocument = vocaWeaveView.weaveVocaTextField.beginningOfDocument
-//        guard let startOffset = vocaWeaveView.weaveVocaTextField.position(from: beginningOfDocument,
-//                                                                          offset: nsRange.location),
-//              let endOffset = vocaWeaveView.weaveVocaTextField.position(from: beginningOfDocument,
-//                                                                        offset: nsRange.upperBound)
-//                                                                        else { return }
-//        guard let textRange = vocaWeaveView.weaveVocaTextField.textRange(from: startOffset,
-//                                                                         to: endOffset)
-//                                                                        else { return }
-//        let rect = vocaWeaveView.weaveVocaTextField.firstRect(for: textRange)
-//        let convertedRect = vocaWeaveView.weaveVocaTextField.convert(rect, to: view)
-//        vocaWeaveView.animationView.frame = convertedRect
-//        view.bringSubviewToFront(vocaWeaveView.animationView)
-//    }
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }

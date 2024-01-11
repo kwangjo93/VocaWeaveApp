@@ -7,21 +7,30 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 class DictionaryView: UIView {
     // MARK: - Property
     let defaultValue = 8
 
+    var animationView = LottieAnimationView()
+
     let sourceTextSpeakerButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.setImage(UIImage(systemName: "speaker.wave.2",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let sourceTextCopyButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.setImage(UIImage(systemName: "doc.on.doc",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
@@ -36,8 +45,11 @@ class DictionaryView: UIView {
     }()
 
     let cancelButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "multiply"), for: .normal)
+        button.setImage(UIImage(systemName: "multiply",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
@@ -55,23 +67,31 @@ class DictionaryView: UIView {
     }()
 
     let translatedTextSpeakerButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "speaker.wave.2"), for: .normal)
+        button.setImage(UIImage(systemName: "speaker.wave.2",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let translatedTextCopyButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.setImage(UIImage(systemName: "doc.on.doc",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         button.imageView?.contentMode = .scaleToFill
         return button
     }()
 
     let bookmarkButton: UIButton = {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
         let button = UIButton(type: .custom)
-        button.frame.size.height = 40
-        button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.setImage(UIImage(systemName: "star",
+                                withConfiguration: imageConfig),
+                                for: .normal)
         return button
     }()
 
@@ -86,7 +106,7 @@ class DictionaryView: UIView {
 
     let explainView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.borderWidth = 0.3
+        imageView.layer.borderWidth = 1.0
         imageView.layer.borderColor = UIColor.label.cgColor
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 15
@@ -101,11 +121,11 @@ class DictionaryView: UIView {
         return label
     }()
 
-    let translationTextLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.label
-        return label
+    let translationText: UITextView = {
+        let textView = UITextView()
+        textView.font = .boldSystemFont(ofSize: 18)
+        textView.textColor = UIColor.label
+        return textView
     }()
 
     let explanationLabel: UILabel = {
@@ -116,11 +136,11 @@ class DictionaryView: UIView {
         return label
     }()
 
-    let explanationTextLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.label
-        return label
+    let explanationText: UITextView = {
+        let textView = UITextView()
+        textView.font = .boldSystemFont(ofSize: 18)
+        textView.textColor = UIColor.label
+        return textView
     }()
     // MARK: - init
     override init(frame: CGRect) {
@@ -141,10 +161,11 @@ class DictionaryView: UIView {
 
         [translatedTextSpeakerButton, translatedTextCopyButton].forEach {explainStackView.addArrangedSubview($0)}
 
+        [translationText, translationLabel,
+         explanationText, explanationLabel].forEach {explainView.addSubview($0)}
+
         [sourceStackView, cancelButton, sourceTextField,
-         bookmarkButton, explainStackView, explainView,
-         translationTextLabel, translationLabel, explanationTextLabel,
-         explanationLabel].forEach {self.addSubview($0)}
+         bookmarkButton, explainStackView, explainView].forEach {self.addSubview($0)}
     }
 
     private func setupLayout() {
@@ -166,7 +187,7 @@ class DictionaryView: UIView {
         explainView.snp.makeConstraints {
             $0.top.equalTo(bookmarkButton.snp.bottom).offset(defaultValue)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(defaultValue * 8)
         }
         translationLabel.snp.makeConstraints {
             $0.top.equalTo(explainView.snp.top).inset(defaultValue)
@@ -174,19 +195,19 @@ class DictionaryView: UIView {
             $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
             $0.height.equalTo(defaultValue * 4)
         }
-        translationTextLabel.snp.makeConstraints {
+        translationText.snp.makeConstraints {
             $0.top.equalTo(translationLabel.snp.bottom)
             $0.leading.equalTo(explainView.snp.leading)
             $0.trailing.equalTo(explainView.snp.trailing)
             $0.height.equalTo(defaultValue * 14)
         }
         explanationLabel.snp.makeConstraints {
-            $0.top.equalTo(translationTextLabel.snp.bottom).inset(defaultValue)
+            $0.top.equalTo(translationText.snp.bottom).inset(defaultValue)
             $0.leading.equalTo(explainView.snp.leading).inset(defaultValue)
             $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
             $0.height.equalTo(defaultValue * 4)
         }
-        explanationTextLabel.snp.makeConstraints {
+        explanationText.snp.makeConstraints {
             $0.top.equalTo(explanationLabel.snp.bottom)
             $0.leading.equalTo(explainView.snp.leading)
             $0.trailing.equalTo(explainView.snp.trailing)

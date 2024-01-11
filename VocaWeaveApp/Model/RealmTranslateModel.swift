@@ -22,4 +22,12 @@ class RealmTranslateModel: Object {
         self.isSelected = false
         self.section = sourceText.getFirstLetter()
     }
+
+    convenience init(sourceText: String, translatedText: String, isSelected: Bool) {
+        self.init()
+        self.sourceText = sourceText
+        self.translatedText = translatedText
+        self.isSelected = isSelected
+        self.section = sourceText.getFirstLetter()
+    }
 }
