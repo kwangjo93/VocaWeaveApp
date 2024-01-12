@@ -225,6 +225,3 @@ extension DictionaryViewController: UITextFieldDelegate {
         return true
     }
 }
-
-// 네이버 백과사전api 적용
-// 단어데이터 문제
