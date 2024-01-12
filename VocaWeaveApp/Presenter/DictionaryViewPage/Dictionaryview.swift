@@ -127,21 +127,6 @@ class DictionaryView: UIView {
         textView.textColor = UIColor.label
         return textView
     }()
-
-    let explanationLabel: UILabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.label
-        label.text = "설 명"
-        return label
-    }()
-
-    let explanationText: UITextView = {
-        let textView = UITextView()
-        textView.font = .boldSystemFont(ofSize: 18)
-        textView.textColor = UIColor.label
-        return textView
-    }()
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -161,8 +146,7 @@ class DictionaryView: UIView {
 
         [translatedTextSpeakerButton, translatedTextCopyButton].forEach {explainStackView.addArrangedSubview($0)}
 
-        [translationText, translationLabel,
-         explanationText, explanationLabel].forEach {explainView.addSubview($0)}
+        [translationText, translationLabel].forEach {explainView.addSubview($0)}
 
         [sourceStackView, cancelButton, sourceTextField,
          bookmarkButton, explainStackView, explainView].forEach {self.addSubview($0)}
@@ -170,24 +154,23 @@ class DictionaryView: UIView {
 
     private func setupLayout() {
         cancelButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.top.equalToSuperview().inset(defaultValue * 4)
             $0.trailing.equalToSuperview()
         }
         sourceTextField.snp.makeConstraints {
-            $0.top.equalTo(sourceStackView.snp.bottom).offset(defaultValue)
+            $0.top.equalTo(sourceStackView.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(defaultValue * 5)
+            $0.height.equalTo(defaultValue * 6)
         }
 
         bookmarkButton.snp.makeConstraints {
-            $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 2)
+            $0.top.equalTo(explainStackView.snp.top)
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(defaultValue * 4)
         }
         explainView.snp.makeConstraints {
-            $0.top.equalTo(bookmarkButton.snp.bottom).offset(defaultValue)
+            $0.top.equalTo(explainStackView.snp.bottom).offset(defaultValue * 2)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(defaultValue * 8)
+            $0.bottom.equalToSuperview().inset(defaultValue * 20)
         }
         translationLabel.snp.makeConstraints {
             $0.top.equalTo(explainView.snp.top).inset(defaultValue)
@@ -201,29 +184,17 @@ class DictionaryView: UIView {
             $0.trailing.equalTo(explainView.snp.trailing)
             $0.height.equalTo(defaultValue * 14)
         }
-        explanationLabel.snp.makeConstraints {
-            $0.top.equalTo(translationText.snp.bottom).inset(defaultValue)
-            $0.leading.equalTo(explainView.snp.leading).inset(defaultValue)
-            $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
-            $0.height.equalTo(defaultValue * 4)
-        }
-        explanationText.snp.makeConstraints {
-            $0.top.equalTo(explanationLabel.snp.bottom)
-            $0.leading.equalTo(explainView.snp.leading)
-            $0.trailing.equalTo(explainView.snp.trailing)
-            $0.bottom.equalTo(explainView.snp.bottom)
-        }
     }
 
     private func setupStackViewLayout() {
         sourceStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(defaultValue * 2)
+            $0.top.equalToSuperview().inset(defaultValue * 4)
             $0.leading.equalToSuperview()
             $0.height.equalTo(defaultValue * 4)
         }
 
         explainStackView.snp.makeConstraints {
-            $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 2)
+            $0.top.equalTo(sourceTextField.snp.bottom).offset(defaultValue * 6)
             $0.leading.equalToSuperview()
             $0.height.equalTo(defaultValue * 4)
         }
