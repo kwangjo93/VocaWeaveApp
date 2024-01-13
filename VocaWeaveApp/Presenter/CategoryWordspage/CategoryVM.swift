@@ -1,5 +1,5 @@
 //
-//  CategoryViewModel.swift
+//  CategoryVM.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/9/23.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-final class CategoryViewModel {
+final class CategoryVM {
     // MARK: - Property
-    private let vocaTranslatedViewManager: VocaTranslatedManager
+    private let vocaTranslatedManager: VocaTranslatedManager
     private let vocaListManager: VocaListManager
-    let vocaListViewModel: VocaListViewModel
-    let vocaTranslatedViewModel: VocaTranslatedViewModel
+    let vocaListVM: VocaListVM
+    let vocaTranslatedVM: VocaTranslatedVM
 
     lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getAllVocaData()
-    lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedViewManager.getVocaList()
+    lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedManager.getVocaList()
     lazy var transportationVoca: [RealmVocaModel] = vocaListManager
                                                             .getVocaList(query: "Transportation")
     lazy var accommodationVoca: [RealmVocaModel] = vocaListManager
@@ -34,13 +34,13 @@ final class CategoryViewModel {
                                                             .getVocaList(query: "FacilitiestravelVoca")
     lazy var cultureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CulturetravelVoca")
     // MARK: - init
-    init(vocaTranslatedViewManager: VocaTranslatedManager,
+    init(vocaTranslatedManager: VocaTranslatedManager,
          vocaListManager: VocaListManager,
-         vocaListViewModel: VocaListViewModel,
-         vocaTranslatedViewModel: VocaTranslatedViewModel) {
-        self.vocaTranslatedViewManager = vocaTranslatedViewManager
+         vocaListVM: VocaListVM,
+         vocaTranslatedVM: VocaTranslatedVM) {
+        self.vocaTranslatedManager = vocaTranslatedManager
         self.vocaListManager = vocaListManager
-        self.vocaListViewModel = vocaListViewModel
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
+        self.vocaListVM = vocaListVM
+        self.vocaTranslatedVM = vocaTranslatedVM
     }
 }

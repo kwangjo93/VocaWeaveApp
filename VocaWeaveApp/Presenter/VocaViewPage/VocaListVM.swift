@@ -1,5 +1,5 @@
 //
-//  vocaListViewModel.swift
+//  VocaListVM.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/14/23.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class VocaListViewModel {
+final class VocaListVM {
     // MARK: - Property
     private let realmQuery = "myVoca"
     let datamanager: RealmVocaModelType
@@ -19,7 +19,7 @@ final class VocaListViewModel {
     init(datamanager: RealmVocaModelType) {
         self.datamanager = datamanager
     }
-    // MARK: - Logic
+    // MARK: - Action
     func getMyVocaList() -> [RealmVocaModel] {
         return datamanager.getVocaList(query: realmQuery)
     }
@@ -40,7 +40,7 @@ final class VocaListViewModel {
     }
 }
 // MARK: - Alert - Add, Update Method
-extension VocaListViewModel {
+extension VocaListVM {
     func showAlertWithTextField(newData: RealmVocaModel?) {
         let alert = configureAlert(newData: newData)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -52,10 +52,10 @@ extension VocaListViewModel {
         let alert = UIAlertController(title: "단어와 뜻을 입력해 주세요.", message: nil, preferredStyle: .alert)
         if let newData = newData {
             addTextFields(to: alert, sourceText: newData.sourceText, translatedText: newData.translatedText)
-            addAction(to: alert, for: newData)
+            addAlertAction(to: alert, for: newData)
         } else {
             addPlaceholders(to: alert)
-            addAction(for: alert)
+            addAlertAction(for: alert)
         }
         return alert
     }
@@ -76,7 +76,7 @@ extension VocaListViewModel {
             textField.placeholder = "뜻을 입력해 주세요."
         }
     }
-    private func addAction(to alert: UIAlertController, for newData: RealmVocaModel) {
+    private func addAlertAction(to alert: UIAlertController, for newData: RealmVocaModel) {
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
             guard let self = self,
                   let alert = alert,
@@ -101,7 +101,7 @@ extension VocaListViewModel {
         alert.addAction(saveAction)
     }
 
-    private func addAction(for alert: UIAlertController) {
+    private func addAlertAction(for alert: UIAlertController) {
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
             guard let self = self,
                   let alert = alert,

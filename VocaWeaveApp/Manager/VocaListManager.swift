@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class VocaListManager: RealmVocaModelType {
+final class VocaListManager: RealmVocaModelType {
     private var realm: Realm? {
         do {
             return try Realm()

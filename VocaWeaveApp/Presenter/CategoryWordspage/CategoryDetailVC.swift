@@ -1,5 +1,5 @@
 //
-//  CategoryDetailViewController.swift
+//  CategoryDetailVC.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/20/23.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CategoryDetailViewController: UIViewController {
+class CategoryDetailVC: UIViewController {
     // MARK: - Property
     let firstString: String
     let secondString: String
@@ -18,7 +18,7 @@ class CategoryDetailViewController: UIViewController {
     var indexPath: Int
     let distinguishSavedData: Bool
     var cancellables = Set<AnyCancellable>()
-    let categoryViewModel: CategoryViewModel
+    let categoryViewModel: CategoryVM
 
     var firstVocaData: [RealmVocaModel]?
     var secondVocaData: [RealmVocaModel]?
@@ -49,7 +49,7 @@ class CategoryDetailViewController: UIViewController {
          secondString: String,
          navigationTitle: String,
          indexPath: Int,
-         categoryViewModel: CategoryViewModel,
+         categoryViewModel: CategoryVM,
          distinguishSavedData: Bool) {
         self.firstString = firstString
         self.secondString = secondString
@@ -90,11 +90,11 @@ class CategoryDetailViewController: UIViewController {
                                         VocaTableViewCell.self,
                                         forCellReuseIdentifier: VocaTableViewCell.identifier)
         detailView.vocaTableView.register(
-                                VocaTableViewHeaderView.self,
-                                forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+                                        VocaTableViewHeaderView.self,
+                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         detailView.vocaSegmentedControl.selectedSegmentIndex = 0
         detailView.vocaSegmentedControl.addTarget(self,
-                                                action: #selector(vocaSegmentedControlValueChanged),
+                                                action: #selector(valueChangeForSegmentedControl),
                                                 for: .valueChanged)
 
         let defaultValue = 8
@@ -137,7 +137,7 @@ class CategoryDetailViewController: UIViewController {
         }
     }
 
-    private func selectedMyvoca() {
+    private func setupSelectedVoca() {
         switch selectedSegmentIndex {
         case 0:
             setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
@@ -151,7 +151,7 @@ class CategoryDetailViewController: UIViewController {
         }
     }
 
-    private func selectedCategoryVoca() {
+    private func setupSelectedCategoryVoca() {
         switch self.indexPath {
         case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
         case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
@@ -167,16 +167,16 @@ class CategoryDetailViewController: UIViewController {
     func bindVocaData() {
             switch self.indexPath {
             case 0:
-                selectedMyvoca()
+                setupSelectedVoca()
             case 1...7:
-                selectedCategoryVoca()
+                setupSelectedCategoryVoca()
             default:
                 break
             }
         }
     // MARK: - Action
 
-    @objc private func vocaSegmentedControlValueChanged(_ sender: UISegmentedControl) {
+    @objc private func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
         case 0:
@@ -194,7 +194,7 @@ class CategoryDetailViewController: UIViewController {
 }
 
 // MARK: - VocaList TableView Diffable DataSource
-extension CategoryDetailViewController {
+extension CategoryDetailVC {
         private func vocaListTableViewDatasourceSetup() {
             vocaListDataSource = UITableViewDiffableDataSource<Section, RealmVocaModel>(
                 tableView: detailView.vocaTableView
@@ -212,7 +212,7 @@ extension CategoryDetailViewController {
                 cell.bindVocaListData()
                 cell.configureBookmark()
                 cell.speakerButtonAction()
-                cell.vocaListViewModel = categoryViewModel.vocaListViewModel
+                cell.vocaListViewModel = categoryViewModel.vocaListVM
                 cell.selectedSegmentIndex = selectedSegmentIndex
                 cell.distinguishSavedData = distinguishSavedData
                 cell.firstVocaData = self.firstVocaData
@@ -239,7 +239,7 @@ extension CategoryDetailViewController {
         }
 }
 // MARK: - VocaTranslated TableView Diffable DataSource
-extension CategoryDetailViewController {
+extension CategoryDetailVC {
     private func vocaTranslatedTableViewDatasourceSetup() {
         vocaTranslatedDataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
             tableView: detailView.vocaTableView
@@ -258,7 +258,7 @@ extension CategoryDetailViewController {
             cell.bindVocaTranslatedData()
             cell.configureBookmark()
             cell.speakerButtonAction()
-            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedViewModel
+            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedVM
             cell.selectedSegmentIndex = selectedSegmentIndex
             cell.distinguishSavedData = distinguishSavedData
             bindCellData(cell: cell)
@@ -281,7 +281,7 @@ extension CategoryDetailViewController {
     }
 }
 // MARK: - TableView Delegate
-extension CategoryDetailViewController: UITableViewDelegate {
+extension CategoryDetailVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
 

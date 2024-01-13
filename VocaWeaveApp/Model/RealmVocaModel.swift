@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class RealmVocaModel: Object {
+final class RealmVocaModel: Object {
     @Persisted var uuid = UUID()
     @Persisted var sourceText: String
     @Persisted var translatedText: String

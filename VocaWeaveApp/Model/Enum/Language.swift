@@ -10,6 +10,9 @@ enum Language: String {
     case korean = "ko"
     case english = "en"
 
+    static var sourceLanguage: Language = .korean
+    static var targetLanguage: Language = .english
+
     var languageCode: String {
         self.rawValue
     }
@@ -21,5 +24,18 @@ enum Language: String {
         case .english:
             return "en-US"
         }
+    }
+
+    static func detectLanguage(text: String) -> Bool {
+        if text.containsOnlyKorean() {
+            sourceLanguage = .korean
+            targetLanguage = .english
+            return true
+        } else if text.containsOnlyEnglish() {
+            sourceLanguage = .english
+            targetLanguage = .korean
+           return true
+        }
+        return false
     }
 }

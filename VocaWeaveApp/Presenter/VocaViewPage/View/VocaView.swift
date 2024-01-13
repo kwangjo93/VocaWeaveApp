@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class VocaView: UIView {
+final class VocaView: UIView {
     // MARK: - Property
     let firstSegmentTitle: String
     let secondSegmentTitle: String

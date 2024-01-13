@@ -12,15 +12,15 @@ final class TabBarController: UITabBarController {
     private let vocaListManager: VocaListManager
     private let vocaTranslatedManager: VocaTranslatedManager
     private let categoryManager: CategoryDataManager
-    private lazy var vocaListViewModel = VocaListViewModel(datamanager: vocaListManager)
-    private lazy var vocaTranslatedViewModel = VocaTranslatedViewModel(datamanager: vocaTranslatedManager)
-    private lazy var categoryViewModel = CategoryViewModel(
-                                                    vocaTranslatedViewManager: vocaTranslatedManager,
+    private lazy var vocaListViewModel = VocaListVM(datamanager: vocaListManager)
+    private lazy var vocaTranslatedViewModel = VocaTranslatedVM(datamanager: vocaTranslatedManager)
+    private lazy var categoryViewModel = CategoryVM(
+                                                    vocaTranslatedManager: vocaTranslatedManager,
                                                     vocaListManager: vocaListManager,
-                                                    vocaListViewModel: vocaListViewModel,
-                                                    vocaTranslatedViewModel: vocaTranslatedViewModel)
-    private lazy var vocaWeaveViewModel = VocaWeaveViewModel(vocaListManager: vocaListManager)
-    private lazy var dictionaryViewModel = DictionaryViewModel(
+                                                    vocaListVM: vocaListViewModel,
+                                                    vocaTranslatedVM: vocaTranslatedViewModel)
+    private lazy var vocaWeaveViewModel = VocaWeaveVM(vocaListManager: vocaListManager)
+    private lazy var dictionaryViewModel = DictionaryVM(
                                             vocaTranslatedViewModel: vocaTranslatedViewModel)
     // MARK: - init
     init(vocaListManager: VocaListManager,
@@ -40,9 +40,9 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
         makeListsForRealm(lists: categoryManager.getAllVocaData())
         let vocaViewController = UINavigationController(
-            rootViewController: VocaViewController(
-                vocaTranslatedManager: vocaTranslatedViewModel,
-                vocaListManager: vocaListViewModel
+            rootViewController: VocaVC(
+                vocaTranslatedVM: vocaTranslatedViewModel,
+                vocaListVM: vocaListViewModel
             )
         )
         vocaViewController.tabBarItem = UITabBarItem(
@@ -52,7 +52,7 @@ final class TabBarController: UITabBarController {
         )
 
         let categoryWordsViewController = UINavigationController(
-            rootViewController: CategoryViewController(categoryViewModel: categoryViewModel))
+            rootViewController: CategoryVC(categoryViewModel: categoryViewModel))
         categoryWordsViewController.tabBarItem = UITabBarItem(
             title: "암기장",
             image: UIImage(systemName: "book"),
@@ -60,7 +60,7 @@ final class TabBarController: UITabBarController {
         )
 
         let vocaWeaveViewController = UINavigationController(
-            rootViewController: VocaWeaveViewController(vocaWeaveViewModel: vocaWeaveViewModel))
+            rootViewController: VocaWeaveVC(vocaWeaveViewModel: vocaWeaveViewModel))
         vocaWeaveViewController.tabBarItem = UITabBarItem(
             title: "학습",
             image: UIImage(systemName: "puzzlepiece"),
@@ -68,11 +68,11 @@ final class TabBarController: UITabBarController {
         )
 
         let dictionaryViewController = UINavigationController(
-            rootViewController: DictionaryViewController(
+            rootViewController: DictionaryVC(
                                     vocaTranslatedData: nil,
                                     dictionaryEnum: .new,
-                                    vocaTranslatedViewModel: nil,
-                                    dictionaryViewModel: dictionaryViewModel))
+                                    vocaTranslatedVM: nil,
+                                    dictionaryVM: dictionaryViewModel))
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),

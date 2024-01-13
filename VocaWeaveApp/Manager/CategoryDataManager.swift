@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CategoryDataManager {
+final class CategoryDataManager {
     // MARK: - Property
     private var transportation = Transportation()
     private var accommodation = Accommodation()
