@@ -1,5 +1,5 @@
 //
-//  VocaWeaveViewController.swift
+//  VocaWeaveVC.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/10/23.
@@ -10,13 +10,13 @@ import SnapKit
 import Combine
 import Lottie
 
-class VocaWeaveViewController: UIViewController {
+class VocaWeaveVC: UIViewController {
     // MARK: - Property
-    let vocaWeaveViewModel: VocaWeaveViewModel
+    let vocaWeaveVM: VocaWeaveVM
     let vocaWeaveView = VocaWeaveView()
     lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
-                       vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
-                       vocaWeaveView.sourceTextButton5]
+                            vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
+                            vocaWeaveView.sourceTextButton5]
     var cancellables = Set<AnyCancellable>()
     lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"),
                                      style: .plain,
@@ -27,11 +27,11 @@ class VocaWeaveViewController: UIViewController {
         super.viewDidLoad()
         setup()
         configureAnimation(vocaWeaveView.animationView)
-        vocaWeaveViewModel.setRandomVocaData(buttons: buttonArray)
+        vocaWeaveVM.setRandomVocaData(buttons: buttonArray)
     }
     // MARK: - init
-    init(vocaWeaveViewModel: VocaWeaveViewModel) {
-        self.vocaWeaveViewModel = vocaWeaveViewModel
+    init(vocaWeaveViewModel: VocaWeaveVM) {
+        self.vocaWeaveVM = vocaWeaveViewModel
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -93,20 +93,20 @@ class VocaWeaveViewController: UIViewController {
     }
 
     private func modelDataBinding() {
-        vocaWeaveViewModel.errorAlertPublisher
+        vocaWeaveVM.errorAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
 
-        vocaWeaveViewModel.selectedCountCountPublisher
+        vocaWeaveVM.selectedCountCountPublisher
             .sink { [weak self] count in
                 self?.vocaWeaveView.selectedCountLabel.text = "/   \(count)"
             }
             .store(in: &cancellables)
 
-        vocaWeaveViewModel.setupStatusCountPublisher
+        vocaWeaveVM.setupStatusCountPublisher
             .sink { [weak self] count in
                 self?.vocaWeaveView.statusValueLabel.text = String(count)
                 self?.vocaWeaveView.statusValueLabel.isHidden = false
@@ -115,7 +115,7 @@ class VocaWeaveViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        vocaWeaveViewModel.setupStatusTextPublisher
+        vocaWeaveVM.setupStatusTextPublisher
             .sink { [weak self] text in
                 self?.vocaWeaveView.statusValueLabel.isHidden = true
                 self?.vocaWeaveView.selectedCountLabel.isHidden = true
@@ -124,7 +124,7 @@ class VocaWeaveViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        vocaWeaveViewModel.copyAlertPublisher
+        vocaWeaveVM.copyAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
@@ -144,23 +144,23 @@ class VocaWeaveViewController: UIViewController {
     }
     // MARK: - Action
     @objc private func refreshButtonAction() {
-        vocaWeaveViewModel.refreshVocaData(buttons: buttonArray)
-        vocaWeaveViewModel.isSelect = false
+        vocaWeaveVM.refreshVocaData(buttons: buttonArray)
+        vocaWeaveVM.isSelect = false
         vocaWeaveView.weaveVocaTextField.text = ""
     }
 
     @objc private func vocaButtonAction(_ sender: UIButton) {
-        vocaWeaveViewModel.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
+        vocaWeaveVM.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
                                           text: sender.titleLabel?.text ?? "",
                                           view: vocaWeaveView.animationView)
         var changedText: String
         sender.isSelected.toggle()
-        vocaWeaveViewModel.isSelect = sender.isSelected
-        vocaWeaveViewModel.strikeButtonAction(sender: sender)
-        changedText = vocaWeaveViewModel.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
+        vocaWeaveVM.isSelect = sender.isSelected
+        vocaWeaveVM.strikeButtonTapped(sender: sender)
+        changedText = vocaWeaveVM.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
                                                        to: sender.titleLabel?.text ?? "")
         vocaWeaveView.weaveVocaTextField.text = changedText
-        vocaWeaveViewModel.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
+        vocaWeaveVM.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
                                           text: sender.titleLabel?.text ?? "",
                                           view: vocaWeaveView.animationView)
     }
@@ -184,21 +184,21 @@ class VocaWeaveViewController: UIViewController {
     }
 
     @objc private func copyButtonAction() {
-        vocaWeaveViewModel.copyText(text: vocaWeaveView.weaveVocaTextField.text)
+        vocaWeaveVM.copyText(text: vocaWeaveView.weaveVocaTextField.text)
     }
 
     @objc private func speakerButtonAction() {
-        vocaWeaveViewModel.speakerAction(text: vocaWeaveView.weaveVocaTextField.text,
-                                         language: vocaWeaveViewModel.sourceLanguage.avLanguageTitle)
+        vocaWeaveVM.speakerAction(text: vocaWeaveView.weaveVocaTextField.text,
+                                         language: Language.sourceLanguage.avLanguageTitle)
     }
 }
 
-extension VocaWeaveViewController: UITextFieldDelegate {
+extension VocaWeaveVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = vocaWeaveView.weaveVocaTextField.text else { return false }
         Task {
             do {
-                guard let responseData = try await vocaWeaveViewModel.fetchDataAndHandleResult(
+                guard let responseData = try await vocaWeaveVM.fetchDataAndHandleResult(
                                                                         sourceText: sourceText) else { return }
                 vocaWeaveView.responseDataText.text = responseData
             } catch {
@@ -209,5 +209,3 @@ extension VocaWeaveViewController: UITextFieldDelegate {
         return true
     }
 }
-
-// 추후 ai 랑 연결할지 고민

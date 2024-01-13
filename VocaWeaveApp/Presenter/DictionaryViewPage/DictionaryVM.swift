@@ -1,5 +1,5 @@
 //
-//  DictionaryViewModel.swift
+//  DictionaryVM.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/11/23.
@@ -10,18 +10,16 @@ import Combine
 import AVFoundation
 import Lottie
 
-class DictionaryViewModel {
+class DictionaryVM {
     // MARK: - Property
-    private let vocaTranslatedViewModel: VocaTranslatedViewModel
+    private let vocaTranslatedVM: VocaTranslatedVM
     private let networking = NetworkingManager.shared
-    var sourceLanguage: Language = .korean
-    var targetLanguage: Language = .english
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
     // MARK: - init
-    init(vocaTranslatedViewModel: VocaTranslatedViewModel) {
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
+    init(vocaTranslatedVM: VocaTranslatedVM) {
+        self.vocaTranslatedVM = vocaTranslatedVM
     }
     // MARK: - Helper
     private func errorResponseAlert() {
@@ -31,19 +29,6 @@ class DictionaryViewModel {
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
         alert.addAction(cancel)
         errorAlertPublisher.send(alert)
-    }
-
-    private func detectLanguage(text: String) -> Bool {
-        if text.containsOnlyKorean() {
-            sourceLanguage = .korean
-            targetLanguage = .english
-            return true
-        } else if text.containsOnlyEnglish() {
-            sourceLanguage = .english
-            targetLanguage = .korean
-           return true
-        }
-        return false
     }
 
     private func copyAlertAction() {
@@ -89,9 +74,10 @@ class DictionaryViewModel {
                                     for: .normal)
         }
     }
+
     @MainActor
     private func checkForExistingData(with text: String) -> RealmTranslateModel? {
-        let translatedData = vocaTranslatedViewModel.getVocaList()
+        let translatedData = vocaTranslatedVM.getVocaList()
         if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
             return duplicatedData
         }
@@ -110,7 +96,6 @@ class DictionaryViewModel {
 
     @MainActor
     func updateTranslationView(with vocaData: RealmTranslateModel?,
-                               dictionaryViewModel: DictionaryViewModel?,
                                view: DictionaryView) {
         guard let vocaData = vocaData else { return }
         view.translationText.text = vocaData.translatedText
@@ -119,11 +104,11 @@ class DictionaryViewModel {
     }
     // MARK: - Action
     func fetchDataAndHandleResult(sourceText: String) async throws -> RealmTranslateModel? {
-        if detectLanguage(text: sourceText) {
+        if Language.detectLanguage(text: sourceText) {
             do {
-                let responseData = try await networking.fetchData(source: sourceLanguage.languageCode,
-                                                            target: targetLanguage.languageCode,
-                                                            text: sourceText)
+                let responseData = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
+                                                                  target: Language.targetLanguage.languageCode,
+                                                                  text: sourceText)
                 let result = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
                 let vocaData = await checkDuplicationData(vocaData: result, text: sourceText)
                 return vocaData
@@ -155,11 +140,11 @@ class DictionaryViewModel {
 
     private func changeBookmark(vocaData: RealmTranslateModel) {
         if self.isSelect {
-            vocaTranslatedViewModel.updateVoca(list: vocaData,
+            vocaTranslatedVM.updateVoca(list: vocaData,
                                                text: vocaData.translatedText,
                                                isSelected: true)
         } else {
-            vocaTranslatedViewModel.updateVoca(list: vocaData,
+            vocaTranslatedVM.updateVoca(list: vocaData,
                                                text: vocaData.translatedText,
                                                isSelected: false)
         }
@@ -171,10 +156,10 @@ class DictionaryViewModel {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
-            vocaTranslatedViewModel.saveDictionaryData(vocaData, vocaTranslatedViewModel: nil)
-            vocaTranslatedViewModel.updateVoca(list: vocaData,
-                                               text: vocaData.translatedText,
-                                               isSelected: true)
+            vocaTranslatedVM.saveDictionaryData(vocaData, vocaTranslatedViewModel: nil)
+            vocaTranslatedVM.updateVoca(list: vocaData,
+                                        text: vocaData.translatedText,
+                                        isSelected: true)
         } else {
             changeBookmark(vocaData: vocaData)
         }

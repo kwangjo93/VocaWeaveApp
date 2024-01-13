@@ -11,7 +11,7 @@ import AVFoundation
 import Combine
 import Lottie
 
-class VocaTableViewCell: UITableViewCell {
+final class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
     let speaker = AVSpeechSynthesizer()
@@ -22,8 +22,8 @@ class VocaTableViewCell: UITableViewCell {
     var secondVocaData: [RealmVocaModel]?
     var allVocaData: [RealmVocaModel]?
 
-    var vocaListViewModel: VocaListViewModel?
-    var vocaTanslatedViewModel: VocaTranslatedViewModel?
+    var vocaListViewModel: VocaListVM?
+    var vocaTanslatedViewModel: VocaTranslatedVM?
 
     let vocaListTableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
     let vocaTranslatedTableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
@@ -111,7 +111,7 @@ class VocaTableViewCell: UITableViewCell {
         }
     }
 
-    func setupAnimationView() {
+    private func setupAnimationView() {
         bookmarkButton.addSubview(animationView)
         let animation = LottieAnimation.named("starfill")
         animationView.animation = animation
@@ -147,7 +147,7 @@ class VocaTableViewCell: UITableViewCell {
         if let text = sourceLabel.text, text.containsOnlyEnglish() {
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(
-                                                language: vocaTanslatedViewModel?.sourceLanguage.avLanguageTitle)
+                                                language: Language.sourceLanguage.avLanguageTitle)
             let speechSynthesizer = AVSpeechSynthesizer()
             speechSynthesizer.speak(speechUtterance)
         }
@@ -157,13 +157,13 @@ class VocaTableViewCell: UITableViewCell {
         setupAnimationView()
         isSelect.toggle()
         if isSelect {
-            bookmarkUpdateData(isSelect: true)
+            updateBookmarkData(isSelect: true)
             animationView.isHidden = false
             animationView.play { [weak self] _ in
                 self?.animationView.isHidden = true
             }
         } else {
-            bookmarkUpdateData(isSelect: false)
+            updateBookmarkData(isSelect: false)
         }
     }
 
@@ -192,7 +192,7 @@ class VocaTableViewCell: UITableViewCell {
                                         for: .normal)
     }
 
-    private func bookmarkUpdateData(isSelect: Bool) {
+    private func updateBookmarkData(isSelect: Bool) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         switch selectedSegmentIndex {
         case 0:
@@ -217,7 +217,9 @@ class VocaTableViewCell: UITableViewCell {
             break
         }
     }
-
+}
+// MARK: - CategoryView
+extension VocaTableViewCell {
     func bindVocaListData() {
         guard let vocaListData = vocaListData else { return }
         self.sourceLabel.text = vocaListData.sourceText

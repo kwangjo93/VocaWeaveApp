@@ -1,5 +1,5 @@
 //
-//  DictionaryViewController.swift
+//  DictionaryVC.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/11/23.
@@ -9,11 +9,11 @@ import UIKit
 import Combine
 import AVFoundation
 
-class DictionaryViewController: UIViewController {
+class DictionaryVC: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
-    let dictionaryViewModel: DictionaryViewModel?
-    private let vocaTranslatedViewModel: VocaTranslatedViewModel?
+    let dictionaryVM: DictionaryVM?
+    private let vocaTranslatedVM: VocaTranslatedVM?
     private var vocaTranslatedData: RealmTranslateModel?
     var dictionaryEnum: DictionaryEnum = .new
     var cancellables = Set<AnyCancellable>()
@@ -37,12 +37,12 @@ class DictionaryViewController: UIViewController {
     // MARK: - init
     init(vocaTranslatedData: RealmTranslateModel?,
          dictionaryEnum: DictionaryEnum,
-         vocaTranslatedViewModel: VocaTranslatedViewModel?,
-         dictionaryViewModel: DictionaryViewModel?) {
+         vocaTranslatedVM: VocaTranslatedVM?,
+         dictionaryVM: DictionaryVM?) {
         self.vocaTranslatedData = vocaTranslatedData
         self.dictionaryEnum = dictionaryEnum
-        self.vocaTranslatedViewModel = vocaTranslatedViewModel
-        self.dictionaryViewModel = dictionaryViewModel
+        self.vocaTranslatedVM = vocaTranslatedVM
+        self.dictionaryVM = dictionaryVM
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -52,7 +52,7 @@ class DictionaryViewController: UIViewController {
     private func setup() {
         view.addSubview(dictionaryView)
         configureNav()
-        configure()
+        configureResponseData()
         setupLayout()
         setButtonAction()
         dictionaryView.sourceTextField.delegate = self
@@ -76,7 +76,7 @@ class DictionaryViewController: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func configure() {
+    private func configureResponseData() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         if dictionaryEnum == .response {
             dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
@@ -96,7 +96,7 @@ class DictionaryViewController: UIViewController {
     }
 
     private func modelDataBinding() {
-        guard let dictionaryViewModel = dictionaryViewModel else { return }
+        guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.errorAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
@@ -138,8 +138,8 @@ class DictionaryViewController: UIViewController {
     // MARK: - Action
     @objc private func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
-        vocaTranslatedViewModel?.saveDictionaryData(vocaTranslatedData,
-                                                    vocaTranslatedViewModel: vocaTranslatedViewModel)
+        vocaTranslatedVM?.saveDictionaryData(vocaTranslatedData,
+                                            vocaTranslatedViewModel: vocaTranslatedVM)
         self.dismiss(animated: true)
     }
 
@@ -160,63 +160,62 @@ class DictionaryViewController: UIViewController {
     }
 
     @objc private func sourceTextSpeakerButtonAction() {
-        guard let dictionaryViewModel = dictionaryViewModel else { return }
+        guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.sourceTextField.text,
-                                          language: dictionaryViewModel.sourceLanguage.avLanguageTitle)
+                                          language: Language.sourceLanguage.avLanguageTitle)
     }
 
     @objc private func sourceTextCopyButtonAction() {
-        dictionaryViewModel?.copyText(text: dictionaryView.sourceTextField.text)
+        dictionaryVM?.copyText(text: dictionaryView.sourceTextField.text)
         view.endEditing(true)
     }
 
     @objc private func translatedSpeakerButtonAction() {
-        guard let dictionaryViewModel = dictionaryViewModel else { return }
+        guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.translationText.text,
-                                          language: dictionaryViewModel.targetLanguage.avLanguageTitle)
+                                          language: Language.targetLanguage.avLanguageTitle)
     }
 
     @objc private func translatedCopyButtonAction() {
-        dictionaryViewModel?.copyText(text: dictionaryView.translationText.text)
+        dictionaryVM?.copyText(text: dictionaryView.translationText.text)
         view.endEditing(true)
     }
 
     @objc private func cancelButtonAction() {
         dictionaryView.sourceTextField.text = ""
         dictionaryView.translationText.text = ""
-        dictionaryViewModel?.isSelect = false
-        dictionaryViewModel?.setBookmarkStatus(bookmarkButton: dictionaryView.bookmarkButton)
+        dictionaryVM?.isSelect = false
+        dictionaryVM?.setBookmarkStatus(bookmarkButton: dictionaryView.bookmarkButton)
         view.endEditing(true)
     }
 
     @objc private func bookmarkButtonAction() {
         guard let sourceText = dictionaryView.sourceTextField.text else { return }
-        dictionaryViewModel?.isSelect.toggle()
-        dictionaryViewModel?.bookmarkButtonAction(vocaData: vocaTranslatedData,
+        dictionaryVM?.isSelect.toggle()
+        dictionaryVM?.bookmarkButtonAction(vocaData: vocaTranslatedData,
                                                   text: sourceText,
                                                   bookmarkButton: dictionaryView.bookmarkButton)
-        dictionaryViewModel?.playAnimation(view: dictionaryView,
-                                           isSelect: dictionaryViewModel!.isSelect,
+        dictionaryVM?.playAnimation(view: dictionaryView,
+                                           isSelect: dictionaryVM!.isSelect,
                                            text: sourceText)
     }
     @objc private func backBarButtonAction() {
         self.dismiss(animated: true)
     }
 }
-extension DictionaryViewController: UITextFieldDelegate {
+extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }
-        guard let dictionaryViewModel = dictionaryViewModel else { return false }
+        guard let dictionaryVM = dictionaryVM else { return false }
         Task {
             do {
-                self.vocaTranslatedData = try await dictionaryViewModel
+                self.vocaTranslatedData = try await dictionaryVM
                                                         .fetchDataAndHandleResult(sourceText: sourceText)
-                dictionaryViewModel.updateTranslationView(with: vocaTranslatedData,
-                                                          dictionaryViewModel: dictionaryViewModel,
-                                                          view: dictionaryView)
-                dictionaryViewModel.playAnimation(view: dictionaryView,
-                                                  isSelect: vocaTranslatedData?.isSelected ?? false,
-                                                  text: sourceText)
+                dictionaryVM.updateTranslationView(with: vocaTranslatedData,
+                                                   view: dictionaryView)
+                dictionaryVM.playAnimation(view: dictionaryView,
+                                           isSelect: vocaTranslatedData?.isSelected ?? false,
+                                           text: sourceText)
             } catch {
                 print("Task Response error")
             }

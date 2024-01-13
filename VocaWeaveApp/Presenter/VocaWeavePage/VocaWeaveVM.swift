@@ -1,5 +1,5 @@
 //
-//  VocaWeaveViewModel.swift
+//  VocaWeaveVM.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/11/23.
@@ -10,28 +10,27 @@ import Combine
 import Lottie
 import AVFoundation
 
-class VocaWeaveViewModel {
+class VocaWeaveVM {
     // MARK: - Property
     private let vocaListManager: VocaListManager
     private let networking = NetworkingManager.shared
+
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let setupStatusTextPublisher = PassthroughSubject<String, Never>()
     let setupStatusCountPublisher = PassthroughSubject<Int, Never>()
     let selectedCountCountPublisher = PassthroughSubject<Int, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
-    var sourceLanguage: Language = .korean
-    var targetLanguage: Language = .english
     lazy var vocaDataArray = getVocaList()
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
     }
-
     // MARK: - Helper
-    func strikeButtonAction(sender: UIButton) {
+    func strikeButtonTapped(sender: UIButton) {
         let attributedString: NSAttributedString?
         if isSelect {
             attributedString = sender.titleLabel?.text?.strikethrough()
@@ -99,19 +98,6 @@ class VocaWeaveViewModel {
         errorAlertPublisher.send(alert)
     }
 
-    private func detectLanguage(text: String) -> Bool {
-        if text.containsOnlyKorean() {
-            sourceLanguage = .korean
-            targetLanguage = .english
-            return true
-        } else if text.containsOnlyEnglish() {
-            sourceLanguage = .english
-            targetLanguage = .korean
-           return true
-        }
-        return false
-    }
-
     func setRandomVocaData(buttons: [UIButton]) {
         var buttonTitle: [String] = []
         if vocaDataArray.count > 4 {
@@ -141,7 +127,9 @@ class VocaWeaveViewModel {
     }
 
     private func copyAlertAction() {
-        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: nil,
+                                      message: "텍스트가 클립보드에 복사되었습니다.",
+                                      preferredStyle: .alert)
            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                alert.dismiss(animated: true, completion: nil)
            }
@@ -175,10 +163,10 @@ class VocaWeaveViewModel {
     }
 
     func fetchDataAndHandleResult(sourceText: String) async throws -> String? {
-        if detectLanguage(text: sourceText) {
+        if Language.detectLanguage(text: sourceText) {
             do {
-                let result = try await networking.fetchData(source: sourceLanguage.languageCode,
-                                                            target: targetLanguage.languageCode,
+                let result = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
+                                                            target: Language.targetLanguage.languageCode,
                                                             text: sourceText)
                 return result.translatedText
             } catch {

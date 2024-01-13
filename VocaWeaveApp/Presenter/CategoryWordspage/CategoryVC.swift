@@ -1,5 +1,5 @@
 //
-//  CategoryViewController.swift
+//  CategoryVC.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/9/23.
@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-final class CategoryViewController: UIViewController {
+final class CategoryVC: UIViewController {
     // MARK: - Property
-    let categoryViewModel: CategoryViewModel
+    let categoryVM: CategoryVM
 
     private var collectionView: UICollectionView!
     let categoryTittle: [String] = ["나의 단어장 / 사전 단어장",
@@ -27,8 +27,8 @@ final class CategoryViewController: UIViewController {
         setup()
     }
     // MARK: - init
-    init(categoryViewModel: CategoryViewModel) {
-        self.categoryViewModel = categoryViewModel
+    init(categoryViewModel: CategoryVM) {
+        self.categoryVM = categoryViewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -60,8 +60,8 @@ final class CategoryViewController: UIViewController {
         let layout = createLayout()
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
-        collectionView.register(CagtegoryCollectionViewCell.self,
-                                forCellWithReuseIdentifier: CagtegoryCollectionViewCell.identifier)
+        collectionView.register(CagtegoryCell.self,
+                                forCellWithReuseIdentifier: CagtegoryCell.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
@@ -101,7 +101,7 @@ final class CategoryViewController: UIViewController {
     }
 }
 // MARK: - UICollectionViewDataSource
-extension CategoryViewController: UICollectionViewDataSource {
+extension CategoryVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return categoryTittle.count
@@ -109,57 +109,57 @@ extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-                                withReuseIdentifier: CagtegoryCollectionViewCell.identifier,
-                                for: indexPath) as? CagtegoryCollectionViewCell
-                                else { return UICollectionViewCell()}
+                                                withReuseIdentifier: CagtegoryCell.identifier,
+                                                for: indexPath) as? CagtegoryCell
+                                                else { return UICollectionViewCell()}
         let categoryTittle = categoryTittle[indexPath.row]
         cell.categoryLabel.text = categoryTittle
         return cell
     }
 }
 // MARK: - UICollectionViewDelegate
-extension CategoryViewController: UICollectionViewDelegate {
+extension CategoryVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryTittle = categoryTittle[indexPath.row]
-        var categoryDetailView: CategoryDetailViewController
+        var categoryDetailView: CategoryDetailVC
         switch indexPath.row {
         case 0:
-            categoryDetailView = CategoryDetailViewController(
+            categoryDetailView = CategoryDetailVC(
                 firstString: "나의 단어장",
                 secondString: "사전 단어장",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryViewModel,
+                categoryViewModel: categoryVM,
                 distinguishSavedData: true)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: true)
         case 1, 2, 5, 6, 7:
-            categoryDetailView = CategoryDetailViewController(
+            categoryDetailView = CategoryDetailVC(
                 firstString: "",
                 secondString: "",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryViewModel,
+                categoryViewModel: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 3:
-            categoryDetailView = CategoryDetailViewController(
+            categoryDetailView = CategoryDetailVC(
                 firstString: "여행 관련 활동",
                 secondString: "여행 준비물",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryViewModel,
+                categoryViewModel: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
         case 4:
-            categoryDetailView = CategoryDetailViewController(
+            categoryDetailView = CategoryDetailVC(
                 firstString: "식사",
                 secondString: "지역 문화",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryViewModel,
+                categoryViewModel: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)

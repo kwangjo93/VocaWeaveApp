@@ -1,5 +1,5 @@
 //
-//  CagtegoryCollectionViewCell.swift
+//  CagtegoryCell.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/10/23.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CagtegoryCollectionViewCell: UICollectionViewCell {
+final class CagtegoryCell: UICollectionViewCell {
     static let identifier = "CagtegoryCollectionViewCell"
 
     let categoryLabel: UILabel = {

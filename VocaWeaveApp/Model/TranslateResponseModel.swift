@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 // APIData
-class TranslateReponseModel: Decodable {
+final class TranslateReponseModel: Decodable {
     private let message: Message
         struct Message: Decodable {
             let result: Result

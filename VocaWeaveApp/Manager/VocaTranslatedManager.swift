@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class VocaTranslatedManager: RealmTranslateType {
+final class VocaTranslatedManager: RealmTranslateType {
     private var realm: Realm? {
         do {
             return try Realm()
