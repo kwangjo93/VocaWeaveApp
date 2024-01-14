@@ -6,20 +6,26 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class CategoryDataManager {
     // MARK: - Property
-    private var transportation = Transportation()
-    private var accommodation = Accommodation()
-    private var travelActivities = TravelActivitiesVoca()
-    private var travelEssentials = TravelEssentials()
-    private var dining = DiningVoca()
-    private var leisure = LeisuretravelVoca()
-    private var communication = CommunicationtravelVoca()
-    private var facilities = FacilitiestravelVoca()
-    private var culture = CulturetravelVoca()
+    private let vocaListManager: VocaListManager
+    // MARK: - init
+    init(vocaListManager: VocaListManager) {
+        self.vocaListManager = vocaListManager
+    }
     // MARK: - Helper
-    func getAllVocaData() -> [RealmVocaModel] {
+    private func getAllVocaData() -> [RealmVocaModel] {
+        var transportation = Transportation()
+        var accommodation = Accommodation()
+        var travelActivities = TravelActivitiesVoca()
+        var travelEssentials = TravelEssentials()
+        var dining = DiningVoca()
+        var leisure = LeisuretravelVoca()
+        var communication = CommunicationtravelVoca()
+        var facilities = FacilitiestravelVoca()
+        var culture = CulturetravelVoca()
         var categoryVocaData: [RealmVocaModel] = []
         categoryVocaData += transportation.transportationVoca
         categoryVocaData += accommodation.accommodationVoca
@@ -31,5 +37,22 @@ final class CategoryDataManager {
         categoryVocaData += facilities.facilitiesVoca
         categoryVocaData += culture.cultureVoca
         return categoryVocaData
+    }
+
+    func setWithSavedData() -> [RealmVocaModel]? {
+        let vocaData = vocaListManager.getVocaList(query: "Transportation")
+        if checkForDuplicatedData(vocaDatas: vocaData) {
+            return nil
+        } else {
+            return getAllVocaData()
+        }
+    }
+
+    private func checkForDuplicatedData(vocaDatas: [RealmVocaModel]) -> Bool {
+        let existingData = vocaListManager.getAllVocaData()
+        for vocaData in vocaDatas where existingData.contains(where: { $0.uuid == vocaData.uuid }) {
+            return true
+        }
+        return false
     }
 }

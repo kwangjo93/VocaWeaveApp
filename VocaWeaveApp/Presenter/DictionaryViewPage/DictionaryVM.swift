@@ -10,7 +10,7 @@ import Combine
 import AVFoundation
 import Lottie
 
-class DictionaryVM {
+final class DictionaryVM {
     // MARK: - Property
     private let vocaTranslatedVM: VocaTranslatedVM
     private let networking = NetworkingManager.shared

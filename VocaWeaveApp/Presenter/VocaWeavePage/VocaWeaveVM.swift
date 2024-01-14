@@ -10,7 +10,7 @@ import Combine
 import Lottie
 import AVFoundation
 
-class VocaWeaveVM {
+final class VocaWeaveVM {
     // MARK: - Property
     private let vocaListManager: VocaListManager
     private let networking = NetworkingManager.shared

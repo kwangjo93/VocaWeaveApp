@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import AVFoundation
 
-class DictionaryVC: UIViewController {
+final class DictionaryVC: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
     let dictionaryVM: DictionaryVM?

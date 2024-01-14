@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Lottie
 
-class DictionaryView: UIView {
+final class DictionaryView: UIView {
     // MARK: - Property
     let defaultValue = 8
 
