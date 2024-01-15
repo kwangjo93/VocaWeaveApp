@@ -19,6 +19,34 @@ final class VocaListVM {
     init(datamanager: RealmVocaModelType) {
         self.datamanager = datamanager
     }
+    // MARK: - Helper
+    func processDocument(at url: URL, completion: @escaping ([[String]]) -> Void) {
+           do {
+               let data = try Data(contentsOf: url)
+               if let csvString = String(data: data, encoding: .utf8) {
+                   let rows = csvString.components(separatedBy: "\n")
+                       .map { $0.components(separatedBy: ",") }
+                   completion(rows)
+               }
+           } catch {
+               print("Error processing document: \(error)")
+               completion([])
+           }
+       }
+
+    func processAndSaveData(_ rows: [[String]]) {
+        for row in rows where row.count == 2 {
+            let sourceText = row[0]
+            let translatedText = row[1]
+            let realmQuery = realmQuery
+            let vocaModel = RealmVocaModel(sourceText: sourceText,
+                                           translatedText: translatedText,
+                                           realmQeury: realmQuery)
+            addVoca(vocaModel)
+            let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+            self.tableViewUpdate.send(newVocaList)
+        }
+    }
     // MARK: - Action
     func getMyVocaList() -> [RealmVocaModel] {
         return datamanager.getVocaList(query: realmQuery)
@@ -37,6 +65,41 @@ final class VocaListVM {
 
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
+    }
+
+    func nightModeButtonAction() {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                    }
+                }
+            }
+        }
+    }
+
+    func searchButtonAction(view: UIViewController, searchController: UISearchController) {
+        if view.navigationItem.searchController != nil {
+            view.navigationItem.searchController = nil
+            } else {
+                view.navigationItem.searchController = searchController
+            }
+    }
+
+    func presentActionMenu(loadAction: @escaping () -> Void) {
+        let alert = UIAlertController(title: "추가하기", message: nil, preferredStyle: .actionSheet)
+        let addData = UIAlertAction(title: "단어 추가하기",
+                                    style: .default) { _ in self.showAlertWithTextField(newData: nil) }
+        let loadData = UIAlertAction(title: "단어 불러오기",
+                                     style: .default) { _ in loadAction() }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(addData)
+        alert.addAction(loadData)
+        alert.addAction(cancelAction)
+        alertPublisher.send(alert)
     }
 }
 // MARK: - Alert - Add, Update Method
