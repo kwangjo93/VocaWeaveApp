@@ -9,7 +9,7 @@ import Combine
 import RealmSwift
 import UIKit
 
-class VocaTranslatedVM {
+final class VocaTranslatedVM {
     // MARK: - Property
     let datamanager: RealmTranslateType
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()

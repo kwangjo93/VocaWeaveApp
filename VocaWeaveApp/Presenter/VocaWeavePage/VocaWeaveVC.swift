@@ -10,7 +10,7 @@ import SnapKit
 import Combine
 import Lottie
 
-class VocaWeaveVC: UIViewController {
+final class VocaWeaveVC: UIViewController {
     // MARK: - Property
     let vocaWeaveVM: VocaWeaveVM
     let vocaWeaveView = VocaWeaveView()

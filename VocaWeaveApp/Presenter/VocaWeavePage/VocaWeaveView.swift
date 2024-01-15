@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Lottie
 
-class VocaWeaveView: UIView {
+final class VocaWeaveView: UIView {
     // MARK: - Property
     let defaultValue = 8
     var animationView = LottieAnimationView()

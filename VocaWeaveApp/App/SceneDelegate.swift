@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     let vocaListManager = VocaListManager()
     let vocaTranslatedManager = VocaTranslatedManager()
-    let categoryManager = CategoryDataManager()
+    lazy var categoryManager = CategoryDataManager(vocaListManager: vocaListManager)
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,

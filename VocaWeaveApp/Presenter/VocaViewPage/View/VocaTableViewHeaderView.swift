@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class VocaTableViewHeaderView: UITableViewHeaderFooterView {
+final class VocaTableViewHeaderView: UITableViewHeaderFooterView {
     static let identifier = "VocaTableViewHeaderView"
     let titleLabel: UILabel = {
         let label = UILabel()

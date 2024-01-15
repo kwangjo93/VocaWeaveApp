@@ -38,7 +38,7 @@ final class TabBarController: UITabBarController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeListsForRealm(lists: categoryManager.getAllVocaData())
+        makeListsForRealm(lists: categoryManager.setWithSavedData())
         let vocaViewController = UINavigationController(
             rootViewController: VocaVC(
                 vocaTranslatedVM: vocaTranslatedViewModel,
@@ -85,9 +85,12 @@ final class TabBarController: UITabBarController {
                            dictionaryViewController]
     }
     // MARK: - Helper
-    private func makeListsForRealm(lists: [RealmVocaModel]) {
-        for list in lists {
-            vocaListManager.makeNewList(list)
+    private func makeListsForRealm(lists: [RealmVocaModel]?) {
+        if lists != nil {
+            guard let lists = lists else { return }
+            for list in lists {
+                vocaListManager.makeNewList(list)
+            }
         }
     }
 }

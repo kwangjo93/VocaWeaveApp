@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CategoryDetailVC: UIViewController {
+final class CategoryDetailVC: UIViewController {
     // MARK: - Property
     let firstString: String
     let secondString: String
