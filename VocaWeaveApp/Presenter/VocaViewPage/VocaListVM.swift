@@ -36,16 +36,23 @@ final class VocaListVM {
 
     func processAndSaveData(_ rows: [[String]]) {
         for row in rows where row.count == 2 {
-            let sourceText = row[0]
-            let translatedText = row[1]
-            let realmQuery = realmQuery
+            let sourceText = trimWhitespace(row[0])
+            let translatedText = trimWhitespace(row[1])
+            guard !sourceText.isEmpty && !translatedText.isEmpty else { continue }
             let vocaModel = RealmVocaModel(sourceText: sourceText,
                                            translatedText: translatedText,
                                            realmQeury: realmQuery)
-            addVoca(vocaModel)
-            let newVocaList: [RealmVocaModel] = self.getMyVocaList()
-            self.tableViewUpdate.send(newVocaList)
+            if !self.isVocaAlreadyExists(vocaModel) {
+                addVoca(vocaModel)
+                let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+                self.tableViewUpdate.send(newVocaList)
+            }
         }
+    }
+
+    private func trimWhitespace(_ text: String) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed
     }
     // MARK: - Action
     func getMyVocaList() -> [RealmVocaModel] {
@@ -90,7 +97,7 @@ final class VocaListVM {
     }
 
     func presentActionMenu(loadAction: @escaping () -> Void) {
-        let alert = UIAlertController(title: "추가하기", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "추가하기", message: "선택해주세요.", preferredStyle: .actionSheet)
         let addData = UIAlertAction(title: "단어 추가하기",
                                     style: .default) { _ in self.showAlertWithTextField(newData: nil) }
         let loadData = UIAlertAction(title: "단어 불러오기",
@@ -185,7 +192,7 @@ extension VocaListVM {
                 let newVocaList: [RealmVocaModel] = self.getMyVocaList()
                 self.tableViewUpdate.send(newVocaList)
             } else {
-                print("이미 존재하는 데이터입니다.")
+                presentAlertOfDuplication()
             }
         }
         alert.addAction(saveAction)
@@ -217,4 +224,16 @@ extension VocaListVM {
         cell.speakerButtonAction()
         cell.selectionStyle = .none
     }
+
+    private func presentAlertOfDuplication() {
+        let alert = UIAlertController(title: "중복",
+                                      message: "같은 단어가 이미 있습니다",
+                                      preferredStyle: .alert)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alertPublisher.send(alert)
+    }
 }
+// trimmingCharacters(in: .whitespacesAndNewlines)
+// isVocaAlreadyExists

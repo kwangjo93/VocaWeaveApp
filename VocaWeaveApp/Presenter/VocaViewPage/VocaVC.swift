@@ -38,7 +38,6 @@ final class VocaVC: UIViewController {
         self.vocaListVM = vocaListVM
         super.init(nibName: nil, bundle: nil)
     }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -70,7 +69,6 @@ final class VocaVC: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-
         let nightModeButton = nightModeBarButtonItem(
                                                         target: self,
                                                         action: #selector(nightModeButtonAction))
@@ -382,4 +380,3 @@ extension VocaVC: UIDocumentPickerDelegate {
          }
      }
 }
-/// 외부에서 파일 넣는 것
