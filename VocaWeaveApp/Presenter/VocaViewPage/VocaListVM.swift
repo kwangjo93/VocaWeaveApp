@@ -96,17 +96,27 @@ final class VocaListVM {
             }
     }
 
-    func presentActionMenu(loadAction: @escaping () -> Void) {
+    func presentActionMenu(view: UIViewController, loadAction: @escaping () -> Void) {
         let alert = UIAlertController(title: "추가하기", message: "선택해주세요.", preferredStyle: .actionSheet)
         let addData = UIAlertAction(title: "단어 추가하기",
                                     style: .default) { _ in self.showAlertWithTextField(newData: nil) }
-        let loadData = UIAlertAction(title: "단어 불러오기",
+        let loadData = UIAlertAction(title: "단어 불러오기(.CSV)",
                                      style: .default) { _ in loadAction() }
+        let noticeData = UIAlertAction(title: ".CSV 파일 불러오는 방법",
+                                       style: .default) { _ in self.presentOnboadingView(view: view) }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(addData)
         alert.addAction(loadData)
+        alert.addAction(noticeData)
         alert.addAction(cancelAction)
         alertPublisher.send(alert)
+    }
+
+    private func presentOnboadingView(view: UIViewController) {
+        let onBoardingView = OnboardingVC()
+        onBoardingView.modalPresentationStyle = .popover
+        onBoardingView.modalTransitionStyle = .crossDissolve
+        view.present(onBoardingView, animated: true)
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -235,5 +245,3 @@ extension VocaListVM {
         alertPublisher.send(alert)
     }
 }
-// trimmingCharacters(in: .whitespacesAndNewlines)
-// isVocaAlreadyExists

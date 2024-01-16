@@ -173,7 +173,7 @@ final class VocaVC: UIViewController {
     @objc private func plustButtonAction() {
         switch segmentIndex {
         case 0:
-            vocaListVM.presentActionMenu(loadAction: showDocumentPicker)
+            vocaListVM.presentActionMenu(view: self, loadAction: showDocumentPicker)
         case 1:
             vocaTranslatedVM.showAlertWithTextField(currentView: self)
         default:
