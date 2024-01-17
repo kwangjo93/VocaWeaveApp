@@ -8,24 +8,23 @@
 import UIKit
 import SnapKit
 
-class OnboardingVC: UIViewController {
+class OnboardingVC: UIPageViewController {
     // MARK: - Property
-    let onBoardingVM = OnboardingVM()
-    let pageControl = UIPageControl()
+    private var currentImageIndex: Int = 0
+    var images:[UIImage] = [UIImage(systemName: "person")!, UIImage(systemName: "star")!, UIImage(systemName: "person")!, UIImage(systemName: "star.fill")!]
 
-    let backgroundView: UIView = {
+    private let backgroundView: UIView = {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .lightGray
         return backgroundView
     }()
 
-    let mainImageView: UIImageView = {
+    private let mainImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .red
         return imageView
     }()
 
-    let closeButton: UIButton = {
+    private let closeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("닫기", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -36,7 +35,6 @@ class OnboardingVC: UIViewController {
         button.layer.masksToBounds = true
         return button
     }()
-    // MARK: - init
     // MARK: - LifrCycle
     override func viewDidLoad() {
         setup()
@@ -46,6 +44,7 @@ class OnboardingVC: UIViewController {
         configure()
         setupLayout()
         buttonAction()
+        setImageView()
     }
 
     private func configure() {
@@ -74,6 +73,17 @@ class OnboardingVC: UIViewController {
         }
     }
 
+    private func setImageView() {
+        mainImageView.image = images[currentImageIndex]
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeft.direction = .left
+        view.addGestureRecognizer(swipeLeft)
+
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+    }
+
     private func buttonAction() {
         closeButton.addTarget(self,
                               action: #selector(closeButtonAction),
@@ -83,4 +93,22 @@ class OnboardingVC: UIViewController {
     @objc private func closeButtonAction() {
         self.dismiss(animated: true)
     }
+
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+         if gesture.direction == .left {
+             showNextImage()
+         } else if gesture.direction == .right {
+             showPreviousImage()
+         }
+     }
+
+     func showNextImage() {
+         currentImageIndex = (currentImageIndex + 1) % images.count
+         mainImageView.image = images[currentImageIndex]
+     }
+
+     func showPreviousImage() {
+         currentImageIndex = (currentImageIndex - 1 + images.count) % images.count
+         mainImageView.image = images[currentImageIndex]
+     }
 }

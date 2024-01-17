@@ -62,7 +62,6 @@
 		F9E68CB62B4AD875002F34F8 /* starfill.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB42B4AD875002F34F8 /* starfill.json */; };
 		F9E68CB72B4AD875002F34F8 /* disappear.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB52B4AD875002F34F8 /* disappear.json */; };
 		F9F04A322B56622D00A0F923 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F04A312B56622D00A0F923 /* OnboardingVC.swift */; };
-		F9F04A342B56623900A0F923 /* OnboardingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F04A332B56623900A0F923 /* OnboardingVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -131,7 +130,6 @@
 		F9E68CB42B4AD875002F34F8 /* starfill.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = starfill.json; sourceTree = "<group>"; };
 		F9E68CB52B4AD875002F34F8 /* disappear.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = disappear.json; sourceTree = "<group>"; };
 		F9F04A312B56622D00A0F923 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
-		F9F04A332B56623900A0F923 /* OnboardingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,7 +344,6 @@
 		F9F04A352B56624700A0F923 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				F9F04A332B56623900A0F923 /* OnboardingVM.swift */,
 				F9F04A312B56622D00A0F923 /* OnboardingVC.swift */,
 			);
 			path = Onboarding;
@@ -470,7 +467,6 @@
 				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
 				F9331A0F2B328A69007D69F6 /* FacilitiestravelVoca.swift in Sources */,
 				F99141952B29539F00770379 /* VocaTranslatedManager.swift in Sources */,
-				F9F04A342B56623900A0F923 /* OnboardingVM.swift in Sources */,
 				F9331A132B32BE39007D69F6 /* CategoryDetailVC.swift in Sources */,
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F99141922B29505900770379 /* RealmTranslateModel.swift in Sources */,
