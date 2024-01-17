@@ -19,6 +19,41 @@ final class VocaListVM {
     init(datamanager: RealmVocaModelType) {
         self.datamanager = datamanager
     }
+    // MARK: - Helper
+    func processDocument(at url: URL, completion: @escaping ([[String]]) -> Void) {
+           do {
+               let data = try Data(contentsOf: url)
+               if let csvString = String(data: data, encoding: .utf8) {
+                   let rows = csvString.components(separatedBy: "\n")
+                       .map { $0.components(separatedBy: ",") }
+                   completion(rows)
+               }
+           } catch {
+               print("Error processing document: \(error)")
+               completion([])
+           }
+       }
+
+    func processAndSaveData(_ rows: [[String]]) {
+        for row in rows where row.count == 2 {
+            let sourceText = trimWhitespace(row[0])
+            let translatedText = trimWhitespace(row[1])
+            guard !sourceText.isEmpty && !translatedText.isEmpty else { continue }
+            let vocaModel = RealmVocaModel(sourceText: sourceText,
+                                           translatedText: translatedText,
+                                           realmQeury: realmQuery)
+            if !self.isVocaAlreadyExists(vocaModel) {
+                addVoca(vocaModel)
+                let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+                self.tableViewUpdate.send(newVocaList)
+            }
+        }
+    }
+
+    private func trimWhitespace(_ text: String) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed
+    }
     // MARK: - Action
     func getMyVocaList() -> [RealmVocaModel] {
         return datamanager.getVocaList(query: realmQuery)
@@ -37,6 +72,51 @@ final class VocaListVM {
 
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
+    }
+
+    func nightModeButtonAction() {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                    }
+                }
+            }
+        }
+    }
+
+    func searchButtonAction(view: UIViewController, searchController: UISearchController) {
+        if view.navigationItem.searchController != nil {
+            view.navigationItem.searchController = nil
+            } else {
+                view.navigationItem.searchController = searchController
+            }
+    }
+
+    func presentActionMenu(view: UIViewController, loadAction: @escaping () -> Void) {
+        let alert = UIAlertController(title: "추가하기", message: "선택해주세요.", preferredStyle: .actionSheet)
+        let addData = UIAlertAction(title: "단어 추가하기",
+                                    style: .default) { _ in self.showAlertWithTextField(newData: nil) }
+        let loadData = UIAlertAction(title: "단어 불러오기(.CSV)",
+                                     style: .default) { _ in loadAction() }
+        let noticeData = UIAlertAction(title: ".CSV 파일 불러오는 방법",
+                                       style: .default) { _ in self.presentOnboadingView(view: view) }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(addData)
+        alert.addAction(loadData)
+        alert.addAction(noticeData)
+        alert.addAction(cancelAction)
+        alertPublisher.send(alert)
+    }
+
+    private func presentOnboadingView(view: UIViewController) {
+        let onBoardingView = OnboardingVC()
+        onBoardingView.modalPresentationStyle = .popover
+        onBoardingView.modalTransitionStyle = .crossDissolve
+        view.present(onBoardingView, animated: true)
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -122,7 +202,7 @@ extension VocaListVM {
                 let newVocaList: [RealmVocaModel] = self.getMyVocaList()
                 self.tableViewUpdate.send(newVocaList)
             } else {
-                print("이미 존재하는 데이터입니다.")
+                presentAlertOfDuplication()
             }
         }
         alert.addAction(saveAction)
@@ -153,5 +233,15 @@ extension VocaListVM {
         cell.configureBookmark()
         cell.speakerButtonAction()
         cell.selectionStyle = .none
+    }
+
+    private func presentAlertOfDuplication() {
+        let alert = UIAlertController(title: "중복",
+                                      message: "같은 단어가 이미 있습니다",
+                                      preferredStyle: .alert)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alertPublisher.send(alert)
     }
 }

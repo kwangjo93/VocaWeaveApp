@@ -61,6 +61,7 @@
 		F9E68CAF2B4AD803002F34F8 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = F9E68CAE2B4AD803002F34F8 /* Lottie */; };
 		F9E68CB62B4AD875002F34F8 /* starfill.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB42B4AD875002F34F8 /* starfill.json */; };
 		F9E68CB72B4AD875002F34F8 /* disappear.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB52B4AD875002F34F8 /* disappear.json */; };
+		F9F04A322B56622D00A0F923 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F04A312B56622D00A0F923 /* OnboardingVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -128,6 +129,7 @@
 		F9E5D6292B270236000A4377 /* VocaWeaveVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveVM.swift; sourceTree = "<group>"; };
 		F9E68CB42B4AD875002F34F8 /* starfill.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = starfill.json; sourceTree = "<group>"; };
 		F9E68CB52B4AD875002F34F8 /* disappear.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = disappear.json; sourceTree = "<group>"; };
+		F9F04A312B56622D00A0F923 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +271,7 @@
 		F9739EFD2B230EF500FA1F8E /* VocaViewPage */ = {
 			isa = PBXGroup;
 			children = (
+				F9F04A352B56624700A0F923 /* Onboarding */,
 				F99141A42B2C3B0D00770379 /* View */,
 				F9739F0D2B23157800FA1F8E /* VocaVC.swift */,
 				F99141A02B2ABF7300770379 /* VocaListVM.swift */,
@@ -336,6 +339,14 @@
 				F991419C2B2A94A400770379 /* RealmVocaModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		F9F04A352B56624700A0F923 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				F9F04A312B56622D00A0F923 /* OnboardingVC.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -484,6 +495,7 @@
 				F98B1BC32B511CAC00C71281 /* String.swift in Sources */,
 				F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */,
 				F99141972B2953D700770379 /* DependencyInjectable.swift in Sources */,
+				F9F04A322B56622D00A0F923 /* OnboardingVC.swift in Sources */,
 				F991419D2B2A94A400770379 /* RealmVocaModel.swift in Sources */,
 				F99141A32B2C3B0000770379 /* VocaTableViewHeaderView.swift in Sources */,
 				F9331A072B328A00007D69F6 /* TravelEssentials.swift in Sources */,

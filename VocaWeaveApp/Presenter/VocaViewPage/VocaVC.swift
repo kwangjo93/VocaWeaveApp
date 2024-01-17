@@ -38,7 +38,6 @@ final class VocaVC: UIViewController {
         self.vocaListVM = vocaListVM
         super.init(nibName: nil, bundle: nil)
     }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -70,10 +69,9 @@ final class VocaVC: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-
         let nightModeButton = nightModeBarButtonItem(
-            target: self,
-            action: #selector(nightModeButtonAction))
+                                                        target: self,
+                                                        action: #selector(nightModeButtonAction))
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -89,7 +87,6 @@ final class VocaVC: UIViewController {
         vocaView.vocaSegmentedControl.addTarget(self,
                                                 action: #selector(valueChangeForSegmentedControl),
                                                 for: .valueChanged)
-
         let defaultValue = 8
         vocaView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(defaultValue * 2)
@@ -176,7 +173,7 @@ final class VocaVC: UIViewController {
     @objc private func plustButtonAction() {
         switch segmentIndex {
         case 0:
-            vocaListVM.showAlertWithTextField(newData: nil)
+            vocaListVM.presentActionMenu(view: self, loadAction: showDocumentPicker)
         case 1:
             vocaTranslatedVM.showAlertWithTextField(currentView: self)
         default:
@@ -199,25 +196,11 @@ final class VocaVC: UIViewController {
     }
 
     @objc private func nightModeButtonAction() {
-        if #available(iOS 13.0, *) {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                if let window = windowScene.windows.first {
-                    if window.overrideUserInterfaceStyle == .dark {
-                        window.overrideUserInterfaceStyle = .light
-                    } else {
-                        window.overrideUserInterfaceStyle = .dark
-                    }
-                }
-            }
-        }
+        vocaListVM.nightModeButtonAction()
     }
 
     @objc private func searchButtonAction() {
-        if navigationItem.searchController != nil {
-                navigationItem.searchController = nil
-            } else {
-                navigationItem.searchController = searchController
-            }
+        vocaListVM.searchButtonAction(view: self, searchController: searchController)
     }
 }
 // MARK: - VocaList TableView Diffable DataSource
@@ -380,5 +363,20 @@ extension VocaVC: UISearchBarDelegate {
         }
     }
 }
+extension VocaVC: UIDocumentPickerDelegate {
+    private func showDocumentPicker() {
+        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText])
+        documentPicker.delegate = self
+        present(documentPicker, animated: true, completion: nil)
+    }
 
-/// 외부에서 파일 넣는 것
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+         guard let selectedURL = urls.first else {
+             return
+         }
+         vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
+             guard let self = self else { return }
+             vocaListVM.processAndSaveData(rows)
+         }
+     }
+}
