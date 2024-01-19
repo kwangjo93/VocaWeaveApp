@@ -36,7 +36,7 @@ final class VocaTableViewCell: UITableViewCell {
 
     let sourceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18)
+        label.font = UIFont(name: "Sejong hospital Light", size: 18)
         label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
@@ -44,7 +44,7 @@ final class VocaTableViewCell: UITableViewCell {
 
     let translatedLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18)
+        label.font = UIFont(name: "Sejong hospital Light", size: 18)
         label.textColor = UIColor.label
         label.numberOfLines = 0
         return label
@@ -56,11 +56,13 @@ final class VocaTableViewCell: UITableViewCell {
         button.frame.size.height = 40
         button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
                         for: .normal)
+        button.tintColor = UIColor.subTinkColor
         return button
     }()
 
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.tintColor = UIColor.subTinkColor
         return button
     }()
     // MARK: - init

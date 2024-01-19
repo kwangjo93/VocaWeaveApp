@@ -15,14 +15,21 @@ final class CagtegoryCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
         label.textColor = UIColor.label
+        label.numberOfLines = 2
+        label.textAlignment = .center
         return label
     }()
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.backgroundColor = .systemCyan
-        contentView.layer.cornerRadius = 15
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setup() {
         contentView.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
