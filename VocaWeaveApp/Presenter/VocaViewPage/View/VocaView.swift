@@ -33,6 +33,9 @@ final class VocaView: UIView {
     // MARK: - Helper
 
     private func configure() {
+        let attributes = [NSAttributedString.Key.font: UIFont(name: "GapyeongHanseokbongL", size: 16.0)
+                          ?? UIFont.systemFont(ofSize: 16.0)]
+        vocaSegmentedControl.setTitleTextAttributes(attributes, for: .normal)
         if firstSegmentTitle == "", secondSegmentTitle == "" {
             self.addSubview(vocaTableView)
         } else {

@@ -13,7 +13,7 @@ final class CagtegoryCell: UICollectionViewCell {
 
     let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 16)
+        label.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         label.textColor = UIColor.label
         return label
     }()

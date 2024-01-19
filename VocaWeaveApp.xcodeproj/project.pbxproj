@@ -62,6 +62,8 @@
 		F9E68CB62B4AD875002F34F8 /* starfill.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB42B4AD875002F34F8 /* starfill.json */; };
 		F9E68CB72B4AD875002F34F8 /* disappear.json in Resources */ = {isa = PBXBuildFile; fileRef = F9E68CB52B4AD875002F34F8 /* disappear.json */; };
 		F9F04A322B56622D00A0F923 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F04A312B56622D00A0F923 /* OnboardingVC.swift */; };
+		F9F04A442B5A4B2D00A0F923 /* Sejong hospital Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = F9F04A432B5A4B2C00A0F923 /* Sejong hospital Light.otf */; };
+		F9F04A462B5A4B3600A0F923 /* GapyeongHanseokbongL.otf in Resources */ = {isa = PBXBuildFile; fileRef = F9F04A452B5A4B3600A0F923 /* GapyeongHanseokbongL.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -130,6 +132,8 @@
 		F9E68CB42B4AD875002F34F8 /* starfill.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = starfill.json; sourceTree = "<group>"; };
 		F9E68CB52B4AD875002F34F8 /* disappear.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = disappear.json; sourceTree = "<group>"; };
 		F9F04A312B56622D00A0F923 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
+		F9F04A432B5A4B2C00A0F923 /* Sejong hospital Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sejong hospital Light.otf"; sourceTree = "<group>"; };
+		F9F04A452B5A4B3600A0F923 /* GapyeongHanseokbongL.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GapyeongHanseokbongL.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +244,7 @@
 		F9739EFA2B230E8A00FA1F8E /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				F9F04A402B5A4ACA00A0F923 /* Font */,
 				F991418F2B2847FD00770379 /* APIInfo.plist */,
 				F9739EE92B23084900FA1F8E /* Assets.xcassets */,
 				F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */,
@@ -349,6 +354,16 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		F9F04A402B5A4ACA00A0F923 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				F9F04A452B5A4B3600A0F923 /* GapyeongHanseokbongL.otf */,
+				F9F04A432B5A4B2C00A0F923 /* Sejong hospital Light.otf */,
+			);
+			name = Font;
+			path = ..;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -424,8 +439,10 @@
 				F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */,
 				F99141902B2847FD00770379 /* APIInfo.plist in Resources */,
 				F9739EED2B23084900FA1F8E /* LaunchScreen.storyboard in Resources */,
+				F9F04A462B5A4B3600A0F923 /* GapyeongHanseokbongL.otf in Resources */,
 				F9739EEA2B23084900FA1F8E /* Assets.xcassets in Resources */,
 				F9E68CB72B4AD875002F34F8 /* disappear.json in Resources */,
+				F9F04A442B5A4B2D00A0F923 /* Sejong hospital Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

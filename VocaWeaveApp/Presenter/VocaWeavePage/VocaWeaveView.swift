@@ -41,14 +41,15 @@ final class VocaWeaveView: UIView {
 
     let lackOfDataLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.systemRed
+        label.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
+        label.textColor = UIColor.errorColor
         label.numberOfLines = 1
         return label
     }()
 
     let sourceTextButton1: UIButton = {
         let button = UIButton(type: .custom)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.setTitleColor(UIColor.label, for: .normal)
         button.tag = 0
         return button
@@ -57,6 +58,7 @@ final class VocaWeaveView: UIView {
     let sourceTextButton2: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.tag = 1
         return button
     }()
@@ -64,6 +66,7 @@ final class VocaWeaveView: UIView {
     let sourceTextButton3: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.tag = 2
         return button
     }()
@@ -80,6 +83,7 @@ final class VocaWeaveView: UIView {
     let sourceTextButton4: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.tag = 3
         return button
     }()
@@ -87,6 +91,7 @@ final class VocaWeaveView: UIView {
     let sourceTextButton5: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.tag = 4
         return button
     }()
@@ -146,7 +151,7 @@ final class VocaWeaveView: UIView {
     let responseDataText: UITextView = {
         let textView = UITextView()
         textView.contentMode = .topLeft
-        textView.font = .systemFont(ofSize: 14)
+        textView.font = .systemFont(ofSize: 20)
         textView.textColor = UIColor.label
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
