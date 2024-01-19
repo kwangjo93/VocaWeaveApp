@@ -11,13 +11,12 @@ import SnapKit
 final class CategoryVC: UIViewController {
     // MARK: - Property
     let categoryVM: CategoryVM
-
     private var collectionView: UICollectionView!
-    let categoryTittle: [String] = ["나의 단어장 / 사전 단어장",
+    let categoryTittle: [String] = ["나의 단어장\n/ 사전 단어장",
                                     "교통 수단",
                                     "숙소",
-                                    "여행 관련 활동 / 여행 준비물",
-                                    "식사 / 지역 문화",
+                                    "여행 관련 활동\n/ 여행 준비물",
+                                    "식사\n/ 지역 문화",
                                     "휴양 및 활동",
                                     "언어 및 소통",
                                     "장소 관련 시설"]
@@ -67,6 +66,27 @@ final class CategoryVC: UIViewController {
         view.addSubview(collectionView)
     }
 
+    private func setGradientColor(for cell: CagtegoryCell) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.errorColor.cgColor,
+                                UIColor.mainTintColor.cgColor
+                                , UIColor.subTinkColor.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.frame = cell.bounds
+        gradientLayer.cornerRadius = 15
+        setShadow(view: gradientLayer)
+        cell.layer.insertSublayer(gradientLayer, at: 0)
+    }
+
+    private func setShadow(view: CAGradientLayer) {
+        let mode = traitCollection.userInterfaceStyle
+        view.shadowColor = mode == .dark ? UIColor.label.cgColor : UIColor.black.cgColor
+        view.shadowOffset = CGSize(width: 0, height: 5)
+        view.shadowOpacity = 0.5
+        view.shadowRadius = 8
+    }
+
     private func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [weak self] _, _ -> NSCollectionLayoutSection? in
                     guard let self = self else { return nil }
@@ -75,19 +95,17 @@ final class CategoryVC: UIViewController {
     }
 
     private func createSectionItem() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8),
-                                              heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
+                                              heightDimension: .fractionalHeight(0.7))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalHeight(0.95))
+                                               heightDimension: .fractionalHeight(0.3))
         let spacing = CGFloat(20)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: categoryTittle.count)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.interItemSpacing = .fixed(spacing)
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
-        let inset = (view.bounds.width - itemSize.widthDimension.dimension) / 2.0
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
+        section.orthogonalScrollingBehavior = .none
         return section
     }
 
@@ -114,6 +132,7 @@ extension CategoryVC: UICollectionViewDataSource {
                                                 else { return UICollectionViewCell()}
         let categoryTittle = categoryTittle[indexPath.row]
         cell.categoryLabel.text = categoryTittle
+        setGradientColor(for: cell)
         return cell
     }
 }
