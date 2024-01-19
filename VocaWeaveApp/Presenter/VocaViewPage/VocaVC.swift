@@ -57,6 +57,7 @@ final class VocaVC: UIViewController {
         configureUI()
         setupSearchBar()
         vocaView.vocaTableView.delegate = self
+        vocaView.vocaSegmentedControl.backgroundColor = .mainTintColor
     }
 
     private func configureNav() {
@@ -380,3 +381,6 @@ extension VocaVC: UIDocumentPickerDelegate {
          }
      }
 }
+// 값이 비어 있는 상황에서 추가하라는 뷰 추가, 학습에서 오직 영어단어만 추려서 하기.
+// 폰트, 색상
+// 모듈화 개념 정리

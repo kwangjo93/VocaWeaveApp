@@ -56,11 +56,13 @@ final class VocaTableViewCell: UITableViewCell {
         button.frame.size.height = 40
         button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
                         for: .normal)
+        button.tintColor = UIColor.subTinkColor
         return button
     }()
 
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.tintColor = UIColor.subTinkColor
         return button
     }()
     // MARK: - init

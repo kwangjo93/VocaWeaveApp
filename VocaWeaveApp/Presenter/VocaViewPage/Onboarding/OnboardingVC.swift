@@ -11,8 +11,14 @@ import SnapKit
 class OnboardingVC: UIPageViewController {
     // MARK: - Property
     private var currentImageIndex: Int = 0
-    var images:[UIImage] = [UIImage(named: "step1")!, UIImage(named: "step2")!,
-                            UIImage(named: "step3")!, UIImage(named: "step4")!, UIImage(named: "step5")!]
+
+    var images: [UIImage] = [
+        UIImage(named: "step1")!,
+        UIImage(named: "step2")!,
+        UIImage(named: "step3")!,
+        UIImage(named: "step4")!,
+        UIImage(named: "step5")!
+    ]
 
     private let backgroundView: UIView = {
         let backgroundView = UIView()

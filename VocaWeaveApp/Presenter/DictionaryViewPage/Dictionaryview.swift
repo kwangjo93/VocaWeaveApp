@@ -51,6 +51,7 @@ final class DictionaryView: UIView {
                                 withConfiguration: imageConfig),
                                 for: .normal)
         button.imageView?.contentMode = .scaleToFill
+        button.tintColor = UIColor.label
         return button
     }()
 
@@ -92,6 +93,7 @@ final class DictionaryView: UIView {
         button.setImage(UIImage(systemName: "star",
                                 withConfiguration: imageConfig),
                                 for: .normal)
+        button.tintColor = UIColor.subTinkColor
         return button
     }()
 
