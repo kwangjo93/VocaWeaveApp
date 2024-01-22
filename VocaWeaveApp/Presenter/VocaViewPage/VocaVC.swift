@@ -13,6 +13,7 @@ final class VocaVC: UIViewController {
     let vocaTranslatedVM: VocaTranslatedVM
     let vocaListVM: VocaListVM
     let vocaView = VocaView(firstString: "나의 단어장", secondString: "사진 단어장")
+    let emptyView = EmptyListView()
     let searchController = UISearchController()
     var isSearchBarVisible = false
     var segmentIndex = 0
@@ -50,6 +51,9 @@ final class VocaVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
+        vocaListVM.manageEmptyView(vocaVC: self,
+                                   emptyView: emptyView,
+                                   tableView: vocaView.vocaTableView)
     }
     // MARK: - Helper
     private func setup() {
@@ -59,7 +63,6 @@ final class VocaVC: UIViewController {
         vocaView.vocaTableView.delegate = self
         vocaView.vocaSegmentedControl.backgroundColor = .mainTintColor
     }
-
     private func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -76,7 +79,6 @@ final class VocaVC: UIViewController {
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
-
     private func configureUI() {
         view.addSubview(vocaView)
         vocaView.vocaTableView.register(
@@ -95,7 +97,6 @@ final class VocaVC: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
-
     private func setupSearchBar() {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -104,7 +105,6 @@ final class VocaVC: UIViewController {
         definesPresentationContext = true
         searchController.isActive = false // 초기에는 검색 바를 숨김
     }
-
     private func setTableData() {
         switch segmentIndex {
         case 0:
@@ -117,7 +117,6 @@ final class VocaVC: UIViewController {
             break
         }
     }
-
     private func bindModelData() {
         vocaListVM.alertPublisher
             .sink { [weak self] alert in
@@ -165,7 +164,6 @@ final class VocaVC: UIViewController {
             }
             .store(in: &cancellables)
     }
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.searchController.searchBar.searchTextField.resignFirstResponder()
         navigationItem.searchController = nil
@@ -181,7 +179,6 @@ final class VocaVC: UIViewController {
             break
         }
     }
-
     @objc private func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         segmentIndex = sender.selectedSegmentIndex
         switch segmentIndex {
@@ -195,11 +192,9 @@ final class VocaVC: UIViewController {
             break
         }
     }
-
     @objc private func nightModeButtonAction() {
         vocaListVM.nightModeButtonAction()
     }
-
     @objc private func searchButtonAction() {
         vocaListVM.searchButtonAction(view: self, searchController: searchController)
     }
@@ -229,17 +224,19 @@ extension VocaVC {
             return cell
         }
     }
-
     private func vocaListTableViewSnapshot(with newData: [RealmVocaModel]) {
         vocaListSnapshot = NSDiffableDataSourceSnapshot<Section, RealmVocaModel>()
         let sections = Section.allCases
         for section in sections {
-                   let itemsInSection = newData.filter { $0.section == section.title }
-                   if !itemsInSection.isEmpty {
-                       vocaListSnapshot.appendSections([section])
-                       vocaListSnapshot.appendItems(itemsInSection, toSection: section)
-                   }
-               }
+            let itemsInSection = newData.filter { $0.section == section.title }
+            if !itemsInSection.isEmpty {
+                vocaListSnapshot.appendSections([section])
+                vocaListSnapshot.appendItems(itemsInSection, toSection: section)
+            }
+        }
+        vocaListVM.manageEmptyView(vocaVC: self,
+                                   emptyView: emptyView,
+                                   tableView: vocaView.vocaTableView)
         vocaListDataSource.apply(vocaListSnapshot, animatingDifferences: true)
     }
 }
@@ -268,7 +265,6 @@ extension VocaVC {
             return cell
         }
     }
-
     private func vocaTranslatedTableViewSnapshot(with newData: [RealmTranslateModel]) {
         vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
         let sections = Section.allCases
@@ -279,6 +275,9 @@ extension VocaVC {
                        vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
                    }
                }
+        vocaTranslatedVM.manageEmptyView(vocaVC: self,
+                                   emptyView: emptyView,
+                                   tableView: vocaView.vocaTableView)
         vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
     }
 }
@@ -297,7 +296,6 @@ extension VocaVC: UITableViewDelegate {
         headerView.configure(title: sectionTitle)
         return headerView
     }
-
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
@@ -309,6 +307,9 @@ extension VocaVC: UITableViewDelegate {
                     snapshot.deleteItems([item])
                     self.vocaListDataSource.apply(snapshot, animatingDifferences: true)
                     vocaListVM.deleteVoca(item)
+                    vocaListVM.manageEmptyView(vocaVC: self,
+                                               emptyView: emptyView,
+                                               tableView: vocaView.vocaTableView)
                 }
                 completionHandler(true)
             } else {
@@ -317,13 +318,15 @@ extension VocaVC: UITableViewDelegate {
                     snapshot.deleteItems([item])
                     self.vocaTranslatedDataSource.apply(snapshot, animatingDifferences: true)
                     vocaTranslatedVM.deleteVoca(item)
+                    vocaTranslatedVM.manageEmptyView(vocaVC: self,
+                                               emptyView: emptyView,
+                                               tableView: vocaView.vocaTableView)
                 }
                 completionHandler(true)
                 }
             }
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         if segmentIndex == 0 {
@@ -370,7 +373,6 @@ extension VocaVC: UIDocumentPickerDelegate {
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
-
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
          guard let selectedURL = urls.first else {
              return
@@ -384,3 +386,4 @@ extension VocaVC: UIDocumentPickerDelegate {
 // 값이 비어 있는 상황에서 추가하라는 뷰 추가, 학습에서 오직 영어단어만 추려서 하기.
 // 모듈화 개념 정리
 // 보카위브 뷰 유효성검사 재 검토
+// 설명서에 슬라이드 하라는 표시, 그리고 애니메이션

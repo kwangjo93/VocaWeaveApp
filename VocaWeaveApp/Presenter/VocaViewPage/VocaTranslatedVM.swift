@@ -23,6 +23,22 @@ final class VocaTranslatedVM {
         self.datamanager = datamanager
     }
     // MARK: - Helper
+    func manageEmptyView(vocaVC: UIViewController,
+                         emptyView: EmptyListView,
+                         tableView: UITableView) {
+        if getVocaList().isEmpty {
+            tableView.isHidden = true
+            vocaVC.view.addSubview(emptyView)
+            emptyView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.centerY.equalToSuperview()
+            }
+        } else {
+            emptyView.removeFromSuperview()
+            tableView.isHidden = false
+        }
+    }
+
     private func removeLeadingAndTrailingSpaces(from string: String) -> String {
         var modifiedString = string
         while modifiedString.hasPrefix(" ") {

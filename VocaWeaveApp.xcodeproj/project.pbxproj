@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F907AB8C2B5E3F1D005817F8 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F907AB8B2B5E3F1D005817F8 /* EmptyView.swift */; };
 		F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */; };
 		F93319F72B3184E0007D69F6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F62B3184E0007D69F6 /* Realm */; };
 		F93319F92B3184E0007D69F6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F82B3184E0007D69F6 /* RealmSwift */; };
@@ -80,6 +81,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F907AB8B2B5E3F1D005817F8 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEnum.swift; sourceTree = "<group>"; };
 		F9331A002B328948007D69F6 /* Transportation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transportation.swift; sourceTree = "<group>"; };
 		F9331A022B3289BE007D69F6 /* Accommodation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accommodation.swift; sourceTree = "<group>"; };
@@ -277,7 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				F9F04A352B56624700A0F923 /* Onboarding */,
-				F99141A42B2C3B0D00770379 /* View */,
+				F99141A42B2C3B0D00770379 /* Views */,
 				F9739F0D2B23157800FA1F8E /* VocaVC.swift */,
 				F99141A02B2ABF7300770379 /* VocaListVM.swift */,
 				F9739F112B23159400FA1F8E /* VocaTranslatedVM.swift */,
@@ -307,14 +309,15 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		F99141A42B2C3B0D00770379 /* View */ = {
+		F99141A42B2C3B0D00770379 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				F9739F0F2B23158900FA1F8E /* VocaView.swift */,
 				F9739F132B2315A600FA1F8E /* VocaTableViewCell.swift */,
 				F99141A22B2C3B0000770379 /* VocaTableViewHeaderView.swift */,
+				F907AB8B2B5E3F1D005817F8 /* EmptyView.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		F9C6C8632B2808F300428D55 /* DictionaryViewPage */ = {
@@ -479,6 +482,7 @@
 				F9331A092B328A25007D69F6 /* DiningVoca.swift in Sources */,
 				F9C6C8692B28094300428D55 /* DictionaryVM.swift in Sources */,
 				F9739F142B2315A600FA1F8E /* VocaTableViewCell.swift in Sources */,
+				F907AB8C2B5E3F1D005817F8 /* EmptyView.swift in Sources */,
 				F99141A12B2ABF7300770379 /* VocaListVM.swift in Sources */,
 				F9739F102B23158900FA1F8E /* VocaView.swift in Sources */,
 				F9C6C8672B28093400428D55 /* Dictionaryview.swift in Sources */,
