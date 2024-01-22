@@ -103,19 +103,34 @@ class OnboardingVC: UIPageViewController {
 
     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
          if gesture.direction == .left {
-             showNextImage()
+             showNextImage(withAnimation: true)
          } else if gesture.direction == .right {
-             showPreviousImage()
+             showPreviousImage(withAnimation: true)
          }
      }
 
-     func showNextImage() {
-         currentImageIndex = (currentImageIndex + 1) % images.count
-         mainImageView.image = images[currentImageIndex]
-     }
+    func showNextImage(withAnimation animate: Bool) {
+        let newImageIndex = (currentImageIndex + 1) % images.count
+        updateImageView(with: images[newImageIndex], animated: animate)
+        currentImageIndex = newImageIndex
+    }
 
-     func showPreviousImage() {
-         currentImageIndex = (currentImageIndex - 1 + images.count) % images.count
-         mainImageView.image = images[currentImageIndex]
-     }
+    func showPreviousImage(withAnimation animate: Bool) {
+        let newImageIndex = (currentImageIndex - 1 + images.count) % images.count
+        updateImageView(with: images[newImageIndex], animated: animate)
+        currentImageIndex = newImageIndex
+    }
+
+    func updateImageView(with newImage: UIImage, animated: Bool) {
+        if animated {
+            UIView.transition(with: mainImageView,
+                              duration: 0.5,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.mainImageView.image = newImage
+            }, completion: nil)
+        } else {
+            mainImageView.image = newImage
+        }
+    }
 }

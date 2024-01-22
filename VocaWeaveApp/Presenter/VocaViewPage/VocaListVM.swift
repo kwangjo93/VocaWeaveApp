@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import SnapKit
 
 final class VocaListVM {
     // MARK: - Property
@@ -20,6 +21,22 @@ final class VocaListVM {
         self.datamanager = datamanager
     }
     // MARK: - Helper
+    func manageEmptyView(vocaVC: UIViewController,
+                         emptyView: EmptyListView,
+                         tableView: UITableView) {
+        if getMyVocaList().isEmpty {
+            tableView.isHidden = true
+            vocaVC.view.addSubview(emptyView)
+            emptyView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.centerY.equalToSuperview()
+            }
+        } else {
+            emptyView.removeFromSuperview()
+            tableView.isHidden = false
+        }
+    }
+
     func processDocument(at url: URL, completion: @escaping ([[String]]) -> Void) {
            do {
                let data = try Data(contentsOf: url)
