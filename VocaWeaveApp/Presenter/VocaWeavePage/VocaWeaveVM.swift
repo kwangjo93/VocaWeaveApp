@@ -24,12 +24,17 @@ final class VocaWeaveVM {
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
-    lazy var vocaDataArray = getVocaList()
+    lazy var vocaDataArray = getVocaList().filter { isEnglishAlphabet($0.sourceText) }
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
     }
     // MARK: - Helper
+    private func isEnglishAlphabet(_ str: String) -> Bool {
+        let englishAlphabet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        return str.rangeOfCharacter(from: englishAlphabet.inverted) == nil
+    }
+
     func strikeButtonTapped(sender: UIButton) {
         let attributedString: NSAttributedString?
         if isSelect {
@@ -122,7 +127,7 @@ final class VocaWeaveVM {
             selectedCount = vocaDataArray.count
             selectedCountCountPublisher.send(vocaDataArray.count)
             setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
-            vocaDataArray = getVocaList()
+            vocaDataArray = getVocaList().filter { isEnglishAlphabet($0.sourceText) }
         }
     }
 
