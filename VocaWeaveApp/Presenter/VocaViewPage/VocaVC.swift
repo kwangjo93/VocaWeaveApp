@@ -383,6 +383,4 @@ extension VocaVC: UIDocumentPickerDelegate {
          }
      }
 }
-
-// 보카위브 뷰 유효성검사 재 검토 , 학습에서 오직 영어단어만 추려서 하기.
 // 앱아이콘, 런치스크린
