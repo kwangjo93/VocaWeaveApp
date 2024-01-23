@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F907AB8C2B5E3F1D005817F8 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F907AB8B2B5E3F1D005817F8 /* EmptyView.swift */; };
+		F907AB972B5FAEEC005817F8 /* launchscreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F907AB962B5FAEEC005817F8 /* launchscreen.jpg */; };
 		F93319E12B2F27A8007D69F6 /* DictionaryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */; };
 		F93319F72B3184E0007D69F6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F62B3184E0007D69F6 /* Realm */; };
 		F93319F92B3184E0007D69F6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F93319F82B3184E0007D69F6 /* RealmSwift */; };
@@ -82,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		F907AB8B2B5E3F1D005817F8 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		F907AB962B5FAEEC005817F8 /* launchscreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = launchscreen.jpg; sourceTree = "<group>"; };
 		F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEnum.swift; sourceTree = "<group>"; };
 		F9331A002B328948007D69F6 /* Transportation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transportation.swift; sourceTree = "<group>"; };
 		F9331A022B3289BE007D69F6 /* Accommodation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accommodation.swift; sourceTree = "<group>"; };
@@ -153,6 +155,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F907AB952B5FAEDF005817F8 /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F907AB962B5FAEEC005817F8 /* launchscreen.jpg */,
+				F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
 		F93319E82B312E32007D69F6 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,10 +257,10 @@
 		F9739EFA2B230E8A00FA1F8E /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				F907AB952B5FAEDF005817F8 /* LaunchScreen */,
 				F9F04A402B5A4ACA00A0F923 /* Font */,
 				F991418F2B2847FD00770379 /* APIInfo.plist */,
 				F9739EE92B23084900FA1F8E /* Assets.xcassets */,
-				F9739EEB2B23084900FA1F8E /* LaunchScreen.storyboard */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -440,6 +451,7 @@
 			files = (
 				F9E68CB62B4AD875002F34F8 /* starfill.json in Resources */,
 				F9739F0C2B23111E00FA1F8E /* .swiftlint.yml in Resources */,
+				F907AB972B5FAEEC005817F8 /* launchscreen.jpg in Resources */,
 				F99141902B2847FD00770379 /* APIInfo.plist in Resources */,
 				F9739EED2B23084900FA1F8E /* LaunchScreen.storyboard in Resources */,
 				F9F04A462B5A4B3600A0F923 /* GapyeongHanseokbongL.otf in Resources */,
@@ -593,6 +605,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -650,6 +663,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -673,7 +687,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -707,7 +721,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
