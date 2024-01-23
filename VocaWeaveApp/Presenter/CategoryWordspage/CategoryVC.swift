@@ -68,11 +68,9 @@ final class CategoryVC: UIViewController {
 
     private func setGradientColor(for cell: CagtegoryCell) {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.errorColor.cgColor,
-                                UIColor.mainTintColor.cgColor
-                                , UIColor.subTinkColor.cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.colors = UIColor.gradientColor
+        gradientLayer.startPoint = CGPoint(x: 1, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
         gradientLayer.frame = cell.bounds
         gradientLayer.cornerRadius = 15
         setShadow(view: gradientLayer)
