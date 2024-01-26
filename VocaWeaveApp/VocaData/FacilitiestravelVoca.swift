@@ -1,0 +1,87 @@
+//
+//  FacilitiestravelVoca.swift
+//  VocaWeaveApp
+//
+//  Created by 천광조 on 12/20/23.
+//
+
+import Foundation
+
+struct FacilitiestravelVoca {
+    let query = "FacilitiestravelVoca"
+    lazy var facilitiesVoca: [RealmVocaModel] = [
+        RealmVocaModel(sourceText: "Facilities", translatedText: "시설", realmQeury: query),
+        RealmVocaModel(sourceText: "Amenities", translatedText: "편의 시설", realmQeury: query),
+        RealmVocaModel(sourceText: "Infrastructure", translatedText: "인프라", realmQeury: query),
+        RealmVocaModel(sourceText: "Building", translatedText: "건물", realmQeury: query),
+        RealmVocaModel(sourceText: "Structure", translatedText: "구조물", realmQeury: query),
+        RealmVocaModel(sourceText: "Property", translatedText: "재산", realmQeury: query),
+        RealmVocaModel(sourceText: "Premises", translatedText: "부지", realmQeury: query),
+        RealmVocaModel(sourceText: "Real estate", translatedText: "부동산", realmQeury: query),
+        RealmVocaModel(sourceText: "Venue", translatedText: "장소", realmQeury: query),
+        RealmVocaModel(sourceText: "Location", translatedText: "위치", realmQeury: query),
+        RealmVocaModel(sourceText: "Space", translatedText: "공간", realmQeury: query),
+        RealmVocaModel(sourceText: "Room", translatedText: "방", realmQeury: query),
+        RealmVocaModel(sourceText: "Hall", translatedText: "홀", realmQeury: query),
+        RealmVocaModel(sourceText: "Conference room", translatedText: "회의실", realmQeury: query),
+        RealmVocaModel(sourceText: "Auditorium", translatedText: "강당", realmQeury: query),
+        RealmVocaModel(sourceText: "Stadium", translatedText: "경기장", realmQeury: query),
+        RealmVocaModel(sourceText: "Arena", translatedText: "아레나", realmQeury: query),
+        RealmVocaModel(sourceText: "Facility management", translatedText: "시설 관리", realmQeury: query),
+        RealmVocaModel(sourceText: "Maintenance", translatedText: "유지 보수", realmQeury: query),
+        RealmVocaModel(sourceText: "Repairs", translatedText: "수리", realmQeury: query),
+        RealmVocaModel(sourceText: "Renovation", translatedText: "리모델링", realmQeury: query),
+        RealmVocaModel(sourceText: "Upgrade", translatedText: "업그레이드", realmQeury: query),
+        RealmVocaModel(sourceText: "Improvement", translatedText: "개선", realmQeury: query),
+        RealmVocaModel(sourceText: "Accessibility", translatedText: "접근성", realmQeury: query),
+        RealmVocaModel(sourceText: "Convenience", translatedText: "편의성", realmQeury: query),
+        RealmVocaModel(sourceText: "Functionality", translatedText: "기능성", realmQeury: query),
+        RealmVocaModel(sourceText: "Equipment", translatedText: "장비", realmQeury: query),
+        RealmVocaModel(sourceText: "Appliances", translatedText: "가전제품", realmQeury: query),
+        RealmVocaModel(sourceText: "Furniture", translatedText: "가구", realmQeury: query),
+        RealmVocaModel(sourceText: "Fixtures", translatedText: "고정 장치", realmQeury: query),
+        RealmVocaModel(sourceText: "Utilities", translatedText: "공공 시설", realmQeury: query),
+        RealmVocaModel(sourceText: "Electricity", translatedText: "전기", realmQeury: query),
+        RealmVocaModel(sourceText: "Water supply", translatedText: "수도 공급", realmQeury: query),
+        RealmVocaModel(sourceText: "Heating", translatedText: "난방", realmQeury: query),
+        RealmVocaModel(sourceText: "Ventilation", translatedText: "환기", realmQeury: query),
+        RealmVocaModel(sourceText: "Air conditioning", translatedText: "에어컨", realmQeury: query),
+        RealmVocaModel(sourceText: "Wi-Fi", translatedText: "와이파이", realmQeury: query),
+        RealmVocaModel(sourceText: "Internet access", translatedText: "인터넷 접속", realmQeury: query),
+        RealmVocaModel(sourceText: "Parking", translatedText: "주차장", realmQeury: query),
+        RealmVocaModel(sourceText: "Security", translatedText: "보안", realmQeury: query),
+        RealmVocaModel(sourceText: "Surveillance", translatedText: "감시", realmQeury: query),
+        RealmVocaModel(sourceText: "Safety measures", translatedText: "안전 조치", realmQeury: query),
+        RealmVocaModel(sourceText: "Emergency exits", translatedText: "비상 출구", realmQeury: query),
+        RealmVocaModel(sourceText: "Facility layout", translatedText: "시설 배치", realmQeury: query),
+        RealmVocaModel(sourceText: "Floor plan", translatedText: "바닥 구도", realmQeury: query),
+        RealmVocaModel(sourceText: "Blueprint", translatedText: "설계도", realmQeury: query),
+        RealmVocaModel(sourceText: "Signage", translatedText: "표지판", realmQeury: query),
+        RealmVocaModel(sourceText: "Labeling", translatedText: "라벨링", realmQeury: query),
+        RealmVocaModel(sourceText: "Information desk", translatedText: "안내 데스크", realmQeury: query),
+        RealmVocaModel(sourceText: "Reception", translatedText: "접수", realmQeury: query),
+        RealmVocaModel(sourceText: "Lobby", translatedText: "로비", realmQeury: query),
+        RealmVocaModel(sourceText: "Cafeteria", translatedText: "카페테리아", realmQeury: query),
+        RealmVocaModel(sourceText: "Restaurant", translatedText: "레스토랑", realmQeury: query),
+        RealmVocaModel(sourceText: "Kitchen", translatedText: "주방", realmQeury: query),
+        RealmVocaModel(sourceText: "Restroom", translatedText: "화장실", realmQeury: query),
+        RealmVocaModel(sourceText: "Bathroom", translatedText: "욕실", realmQeury: query),
+        RealmVocaModel(sourceText: "Shower", translatedText: "샤워", realmQeury: query),
+        RealmVocaModel(sourceText: "Locker room", translatedText: "탈의실", realmQeury: query),
+        RealmVocaModel(sourceText: "Laundry room", translatedText: "세탁실", realmQeury: query),
+        RealmVocaModel(sourceText: "Fitness center", translatedText: "피트니스 센터", realmQeury: query),
+        RealmVocaModel(sourceText: "Swimming pool", translatedText: "수영장", realmQeury: query),
+        RealmVocaModel(sourceText: "Gymnasium", translatedText: "체육관", realmQeury: query),
+        RealmVocaModel(sourceText: "Spa", translatedText: "스파", realmQeury: query),
+        RealmVocaModel(sourceText: "Sauna", translatedText: "사우나", realmQeury: query),
+        RealmVocaModel(sourceText: "Jacuzzi", translatedText: "자쿠지", realmQeury: query),
+        RealmVocaModel(sourceText: "Barbecue area", translatedText: "바베큐장", realmQeury: query),
+        RealmVocaModel(sourceText: "Playground", translatedText: "놀이터", realmQeury: query),
+        RealmVocaModel(sourceText: "Garden", translatedText: "정원", realmQeury: query),
+        RealmVocaModel(sourceText: "Patio", translatedText: "파티오", realmQeury: query),
+        RealmVocaModel(sourceText: "Terrace", translatedText: "테라스", realmQeury: query),
+        RealmVocaModel(sourceText: "Balcony", translatedText: "발코니", realmQeury: query),
+        RealmVocaModel(sourceText: "Roof deck", translatedText: "옥상 데크", realmQeury: query)
+    ]
+
+}
