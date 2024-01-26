@@ -24,7 +24,7 @@ final class VocaWeaveVM {
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
-    var vocaList:[RealmVocaModel] {
+    var vocaList: [RealmVocaModel] {
         return vocaListManager.getVocaList(query: realmQuery)
     }
     lazy var vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
