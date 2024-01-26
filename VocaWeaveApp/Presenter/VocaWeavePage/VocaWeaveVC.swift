@@ -26,6 +26,7 @@ final class VocaWeaveVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        modelDataBinding()
         configureAnimation(vocaWeaveView.animationView)
         vocaWeaveVM.setRandomVocaData(buttons: buttonArray)
     }
@@ -43,7 +44,6 @@ final class VocaWeaveVC: UIViewController {
         configure()
         setupLayout()
         setButtonAction()
-        modelDataBinding()
     }
 
     private func configureNav() {
@@ -56,7 +56,6 @@ final class VocaWeaveVC: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-
         let nightModeButton = nightModeBarButtonItem(
                                 target: self,
                                 action: #selector(nightModeButtonAction))
@@ -83,6 +82,7 @@ final class VocaWeaveVC: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
+
     private func setButtonAction() {
         vocaWeaveView.copyButton.addTarget(self,
                                            action: #selector(copyButtonAction),

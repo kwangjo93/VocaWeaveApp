@@ -82,8 +82,8 @@ final class VocaVC: UIViewController {
     private func configureUI() {
         view.addSubview(vocaView)
         vocaView.vocaTableView.register(
-            VocaTableViewCell.self,
-            forCellReuseIdentifier: VocaTableViewCell.identifier)
+                                    VocaTableViewCell.self,
+                                    forCellReuseIdentifier: VocaTableViewCell.identifier)
         vocaView.vocaTableView.register(VocaTableViewHeaderView.self,
                                         forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         vocaView.vocaSegmentedControl.selectedSegmentIndex = 0
@@ -103,16 +103,16 @@ final class VocaVC: UIViewController {
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.placeholder = "검색어 입력"
         definesPresentationContext = true
-        searchController.isActive = false // 초기에는 검색 바를 숨김
+        searchController.isActive = false
     }
     private func setTableData() {
         switch segmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: vocaListVM.getMyVocaList())
+            vocaListTableViewSnapshot(with: vocaListVM.vocaList)
         case 1:
             vocaTranslatedTableViewDatasourceSetup()
-            vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.getVocaList())
+            vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList)
         default:
             break
         }
@@ -184,10 +184,10 @@ final class VocaVC: UIViewController {
         switch segmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
-            vocaListTableViewSnapshot(with: vocaListVM.getMyVocaList())
+            vocaListTableViewSnapshot(with: vocaListVM.vocaList)
         case 1:
             vocaTranslatedTableViewDatasourceSetup()
-            vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.getVocaList())
+            vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList)
         default:
             break
         }
@@ -207,13 +207,11 @@ extension VocaVC {
         ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmVocaModel) -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                    withIdentifier: VocaTableViewCell.identifier,
-                    for: indexPath
-                  ) as? VocaTableViewCell else {
-                return UITableViewCell()
-            }
-
-            guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
+                                            withIdentifier: VocaTableViewCell.identifier,
+                                            for: indexPath) as? VocaTableViewCell
+                                            else { return UITableViewCell() }
+            guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath)
+                                                                    else { return cell}
             cell.vocaListData = data
             cell.vocaListViewModel = self.vocaListVM
             vocaListVM.setupCell(cell: cell,
@@ -248,20 +246,18 @@ extension VocaVC {
         ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel) -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                    withIdentifier: VocaTableViewCell.identifier,
-                    for: indexPath
-                  ) as? VocaTableViewCell else {
-                return UITableViewCell()
-            }
+                                            withIdentifier: VocaTableViewCell.identifier,
+                                            for: indexPath) as? VocaTableViewCell
+                                            else { return UITableViewCell() }
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
-            else { return cell}
+                                            else { return cell}
             cell.vocaTanslatedData = data
             cell.vocaTanslatedViewModel = self.vocaTranslatedVM
             vocaTranslatedVM.setupCell(cell: cell,
-                                              sourceText: data.sourceText,
-                                              translatedText: data.translatedText,
-                                              isSelected: data.isSelected,
-                                              selectedSegmentIndex: self.segmentIndex)
+                                       sourceText: data.sourceText,
+                                       translatedText: data.translatedText,
+                                       isSelected: data.isSelected,
+                                       selectedSegmentIndex: self.segmentIndex)
             return cell
         }
     }
@@ -276,14 +272,15 @@ extension VocaVC {
                    }
                }
         vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                   emptyView: emptyView,
-                                   tableView: vocaView.vocaTableView)
+                                         emptyView: emptyView,
+                                         tableView: vocaView.vocaTableView)
         vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
     }
 }
 // MARK: - TableView Delegate
 extension VocaVC: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView,
+                   viewForHeaderInSection section: Int) -> UIView? {
         let headerView = VocaTableViewHeaderView(reuseIdentifier: VocaTableViewHeaderView.identifier)
         let sectionTitle: String
         if segmentIndex == 0 {
@@ -300,12 +297,13 @@ extension VocaVC: UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: "Delete") { [weak self] (_, _, completionHandler) in
-                   guard let self = self else { return }
+            guard let self = self else { return }
             if segmentIndex == 0 {
                 if let item = self.vocaListDataSource.itemIdentifier(for: indexPath) {
                     var snapshot = self.vocaListDataSource.snapshot()
                     snapshot.deleteItems([item])
-                    self.vocaListDataSource.apply(snapshot, animatingDifferences: true)
+                    self.vocaListDataSource.apply(snapshot,
+                                                  animatingDifferences: true)
                     vocaListVM.deleteVoca(item)
                     vocaListVM.manageEmptyView(vocaVC: self,
                                                emptyView: emptyView,
@@ -316,11 +314,12 @@ extension VocaVC: UITableViewDelegate {
                 if let item = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath) {
                     var snapshot = self.vocaTranslatedDataSource.snapshot()
                     snapshot.deleteItems([item])
-                    self.vocaTranslatedDataSource.apply(snapshot, animatingDifferences: true)
+                    self.vocaTranslatedDataSource.apply(snapshot,
+                                                        animatingDifferences: true)
                     vocaTranslatedVM.deleteVoca(item)
                     vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                               emptyView: emptyView,
-                                               tableView: vocaView.vocaTableView)
+                                                     emptyView: emptyView,
+                                                     tableView: vocaView.vocaTableView)
                 }
                 completionHandler(true)
                 }
@@ -328,15 +327,14 @@ extension VocaVC: UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
         if segmentIndex == 0 {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
             vocaListVM.showAlertWithTextField(newData: vocaData)
         } else {
             guard let sourceText = vocaTranslatedDataSource.itemIdentifier(
-                                                            for: indexPath)?.sourceText else { return}
+                                                for: indexPath)?.sourceText else { return }
             vocaTranslatedVM.fetchDictionaryData(sourceText: sourceText,
-                                                        currentView: self)
+                                                 currentView: self)
         }
     }
 }
@@ -346,20 +344,18 @@ extension VocaVC: UISearchBarDelegate {
         switch segmentIndex {
         case 0:
             guard !searchText.isEmpty else {
-                vocaListTableViewSnapshot(with: vocaListVM.getMyVocaList())
-                   return
-               }
-            let filteredData = vocaListVM.getMyVocaList().filter { model in
-                return model.sourceText.lowercased().contains(searchText.lowercased())
+                vocaListTableViewSnapshot(with: vocaListVM.vocaList)
+                   return }
+            let filteredData = vocaListVM.vocaList.filter { voca in
+                return voca.sourceText.lowercased().contains(searchText.lowercased())
             }
             vocaListTableViewSnapshot(with: filteredData)
         case 1:
             guard !searchText.isEmpty else {
-                vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.getVocaList())
-                   return
-               }
-            let filteredData = vocaTranslatedVM.getVocaList().filter { model in
-                return model.sourceText.lowercased().contains(searchText.lowercased())
+                vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList)
+                   return }
+            let filteredData = vocaTranslatedVM.vocaList.filter { voca in
+                return voca.sourceText.lowercased().contains(searchText.lowercased())
             }
             vocaTranslatedTableViewSnapshot(with: filteredData)
         default:
@@ -373,14 +369,12 @@ extension VocaVC: UIDocumentPickerDelegate {
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-         guard let selectedURL = urls.first else {
-             return
-         }
+    func documentPicker(_ controller: UIDocumentPickerViewController,
+                        didPickDocumentsAt urls: [URL]) {
+         guard let selectedURL = urls.first else { return }
          vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
              guard let self = self else { return }
              vocaListVM.processAndSaveData(rows)
          }
      }
 }
-// 리펙토링, 모듈화

@@ -63,7 +63,6 @@ final class CategoryDetailVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     // MARK: - Helper
     private func setup() {
         configureNav()
@@ -175,13 +174,10 @@ final class CategoryDetailVC: UIViewController {
             }
         }
     // MARK: - Action
-
     @objc private func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
-        case 0:
-            bindVocaData()
-        case 1:
+        case 0, 1:
             bindVocaData()
         default:
             break
@@ -192,21 +188,18 @@ final class CategoryDetailVC: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
 }
-
 // MARK: - VocaList TableView Diffable DataSource
 extension CategoryDetailVC {
         private func vocaListTableViewDatasourceSetup() {
             vocaListDataSource = UITableViewDiffableDataSource<Section, RealmVocaModel>(
                 tableView: detailView.vocaTableView
-            ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmVocaModel) -> UITableViewCell? in
+            ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmVocaModel)
+                -> UITableViewCell? in
                 guard let self = self,
                       let cell = tableView.dequeueReusableCell(
-                          withIdentifier: VocaTableViewCell.identifier,
-                          for: indexPath
-                      ) as? VocaTableViewCell else {
-                    return UITableViewCell()
-                }
-
+                                            withIdentifier: VocaTableViewCell.identifier,
+                                            for: indexPath) as? VocaTableViewCell
+                                            else { return UITableViewCell() }
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
                 cell.vocaListData = data
                 cell.bindVocaListData()
@@ -243,15 +236,13 @@ extension CategoryDetailVC {
     private func vocaTranslatedTableViewDatasourceSetup() {
         vocaTranslatedDataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
             tableView: detailView.vocaTableView
-        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel) -> UITableViewCell? in
+        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel)
+            -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
                       withIdentifier: VocaTableViewCell.identifier,
-                      for: indexPath
-                  ) as? VocaTableViewCell else {
-                return UITableViewCell()
-            }
-
+                      for: indexPath) as? VocaTableViewCell
+                      else { return UITableViewCell() }
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
             cell.vocaTanslatedData = data

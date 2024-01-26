@@ -13,7 +13,8 @@ final class EmptyListView: UIView {
     private let emptyImageView: UIImageView = {
         let imageView = UIImageView()
         if let image = UIImage(systemName: "rectangle.portrait.on.rectangle.portrait.slash.fill") {
-            let systemImage = image.withTintColor(.systemGray3, renderingMode: .alwaysOriginal)
+            let systemImage = image.withTintColor(.systemGray3,
+                                                  renderingMode: .alwaysOriginal)
             imageView.image = systemImage
             imageView.contentMode = .scaleAspectFit
             imageView.snp.makeConstraints {
@@ -57,7 +58,9 @@ final class EmptyListView: UIView {
     }
     // MARK: - Helpers
     private func setupViews() {
-        [emptyImageView, firstLabel, secondLabel].forEach { stackView.addArrangedSubview($0)}
+        [emptyImageView,
+         firstLabel,
+         secondLabel].forEach { stackView.addArrangedSubview($0)}
         addSubview(stackView)
         stackView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()

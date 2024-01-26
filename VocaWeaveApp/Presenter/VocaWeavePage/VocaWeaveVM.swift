@@ -24,7 +24,10 @@ final class VocaWeaveVM {
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
-    lazy var vocaDataArray = getVocaList().filter { isEnglishAlphabet($0.sourceText) }
+    var vocaList:[RealmVocaModel] {
+        return vocaListManager.getVocaList(query: realmQuery)
+    }
+    lazy var vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
@@ -127,7 +130,7 @@ final class VocaWeaveVM {
             selectedCount = vocaDataArray.count
             selectedCountCountPublisher.send(vocaDataArray.count)
             setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
-            vocaDataArray = getVocaList().filter { isEnglishAlphabet($0.sourceText) }
+            vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
         }
     }
 
@@ -141,10 +144,6 @@ final class VocaWeaveVM {
         copyAlertPublisher.send(alert)
     }
     // MARK: - Action
-    func getVocaList() -> [RealmVocaModel] {
-        return vocaListManager.getVocaList(query: realmQuery)
-    }
-
     func copyText(text: String?) {
         guard let textToCopy = text else { return }
         let pasteboard = UIPasteboard.general

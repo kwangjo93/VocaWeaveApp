@@ -33,6 +33,7 @@ final class VocaTableViewHeaderView: UITableViewHeaderFooterView {
             $0.leading.top.trailing.bottom.equalToSuperview()
         }
     }
+
     func configure(title: String) {
         titleLabel.text = title
     }
