@@ -193,11 +193,11 @@ final class DictionaryVC: UIViewController {
         guard let sourceText = dictionaryView.sourceTextField.text else { return }
         dictionaryVM?.isSelect.toggle()
         dictionaryVM?.bookmarkButtonAction(vocaData: vocaTranslatedData,
-                                                  text: sourceText,
-                                                  bookmarkButton: dictionaryView.bookmarkButton)
+                                            text: sourceText,
+                                            bookmarkButton: dictionaryView.bookmarkButton)
         dictionaryVM?.playAnimation(view: dictionaryView,
-                                           isSelect: dictionaryVM!.isSelect,
-                                           text: sourceText)
+                                    isSelect: dictionaryVM!.isSelect,
+                                    text: sourceText)
     }
     @objc private func backBarButtonAction() {
         self.dismiss(animated: true)

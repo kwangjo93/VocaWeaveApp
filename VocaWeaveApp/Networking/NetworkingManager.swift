@@ -11,10 +11,12 @@ final class NetworkingManager {
     static let shared = NetworkingManager()
     private init() {}
 
-    func fetchData(source: String, target: String, text: String) async throws -> TranslateReponseModel {
+    func fetchData(source: String,
+                   target: String,
+                   text: String) async throws -> TranslateReponseModel {
         guard let file = Bundle.main.path(
-            forResource: "APIInfo",
-            ofType: "plist") else { throw NetworkError.invalidFile }
+                                    forResource: "APIInfo",
+                                    ofType: "plist") else { throw NetworkError.invalidFile }
         guard let resource = NSDictionary(contentsOfFile: file),
               let keyId = resource["API_id"] as? String,
               let keyscret = resource["API_scret"] as? String else {
@@ -28,7 +30,8 @@ final class NetworkingManager {
         var request = URLRequest(url: url)
 
         request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/x-www-form-urlencoded",
+                         forHTTPHeaderField: "Content-Type")
         request.setValue(keyId, forHTTPHeaderField: "X-Naver-Client-Id")
         request.setValue(keyscret, forHTTPHeaderField: "X-Naver-Client-Secret")
         let stringWithParameters = "source=\(source)&target=\(target)&text=\(text)"
@@ -40,7 +43,8 @@ final class NetworkingManager {
             if let httpResponse = response as? HTTPURLResponse, (400...499).contains(httpResponse.statusCode) {
                 throw NetworkError.httpError
             }
-            let decodedData = try JSONDecoder().decode(TranslateReponseModel.self, from: data)
+            let decodedData = try JSONDecoder().decode(TranslateReponseModel.self,
+                                                       from: data)
             return decodedData
         } catch {
             throw NetworkError.decodingError

@@ -8,6 +8,7 @@
 import Combine
 import RealmSwift
 import UIKit
+import SnapKit
 
 final class VocaTranslatedVM {
     // MARK: - Property
@@ -18,6 +19,9 @@ final class VocaTranslatedVM {
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let networking = NetworkingManager.shared
+    var vocaList: [RealmTranslateModel] {
+        return datamanager.getVocaList()
+    }
     // MARK: - init
     init(datamanager: RealmTranslateType) {
         self.datamanager = datamanager
@@ -26,7 +30,7 @@ final class VocaTranslatedVM {
     func manageEmptyView(vocaVC: UIViewController,
                          emptyView: EmptyListView,
                          tableView: UITableView) {
-        if getVocaList().isEmpty {
+        if vocaList.isEmpty {
             tableView.isHidden = true
             vocaVC.view.addSubview(emptyView)
             emptyView.snp.makeConstraints {
@@ -51,7 +55,7 @@ final class VocaTranslatedVM {
     }
 
     private func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
-          let existingVocaList: [RealmTranslateModel] = getVocaList()
+          let existingVocaList: [RealmTranslateModel] = vocaList
           return existingVocaList.contains { $0.sourceText == voca.sourceText
                                           && $0.translatedText == voca.translatedText }
       }
@@ -70,10 +74,6 @@ final class VocaTranslatedVM {
         cell.selectionStyle = .none
     }
     // MARK: - Action
-    func getVocaList() -> [RealmTranslateModel] {
-        return datamanager.getVocaList()
-    }
-
     func addVoca(_ list: RealmTranslateModel) {
         datamanager.makeNewList(list)
     }
@@ -120,16 +120,16 @@ extension VocaTranslatedVM {
     }
 
     private func configureAlert(currentView: VocaVC) -> UIAlertController {
-        let alert = UIAlertController(title: "검색할 단어를 입력해 주세요.", message: nil, preferredStyle: .alert)
-            addPlaceholders(to: alert)
+        let alert = UIAlertController(title: "검색할 단어를 입력해 주세요.",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        addPlaceholders(to: alert)
         addAlertAction(for: alert, currentView: currentView)
         return alert
     }
 
     private func addPlaceholders(to alert: UIAlertController) {
-        alert.addTextField { textField in
-            textField.placeholder = "단어를 입력해 주세요."
-        }
+        alert.addTextField { textField in textField.placeholder = "단어를 입력해 주세요." }
     }
 
     private func addAlertAction(for alert: UIAlertController, currentView: VocaVC) {
@@ -142,8 +142,7 @@ extension VocaTranslatedVM {
 
             if sourcetext.isEmpty {
                 self.showEmptyTextFieldAlert()
-                return
-            }
+                return }
             fetchDictionaryData(sourceText: sourcetext, currentView: currentView)
         }
         alert.addAction(searchAction)
@@ -189,7 +188,7 @@ extension VocaTranslatedVM {
     func saveDictionaryData(_ voca: RealmTranslateModel, vocaTranslatedViewModel: VocaTranslatedVM?) {
         if !self.isVocaAlreadyExists(voca) {
             self.addVoca(voca)
-            let newVocaList: [RealmTranslateModel] = self.getVocaList()
+            let newVocaList: [RealmTranslateModel] = self.vocaList
             self.tableViewUpdate.send(newVocaList)
         } else {
             guard vocaTranslatedViewModel != nil else { return }

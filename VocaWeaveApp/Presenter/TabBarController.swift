@@ -13,15 +13,16 @@ final class TabBarController: UITabBarController {
     private let vocaTranslatedManager: VocaTranslatedManager
     private let categoryManager: CategoryDataManager
     private lazy var vocaListViewModel = VocaListVM(datamanager: vocaListManager)
-    private lazy var vocaTranslatedViewModel = VocaTranslatedVM(datamanager: vocaTranslatedManager)
+    private lazy var vocaTranslatedViewModel = VocaTranslatedVM(
+                                                        datamanager: vocaTranslatedManager)
     private lazy var categoryViewModel = CategoryVM(
-                                                    vocaTranslatedManager: vocaTranslatedManager,
-                                                    vocaListManager: vocaListManager,
-                                                    vocaListVM: vocaListViewModel,
-                                                    vocaTranslatedVM: vocaTranslatedViewModel)
+                                        vocaTranslatedManager: vocaTranslatedManager,
+                                        vocaListManager: vocaListManager,
+                                        vocaListVM: vocaListViewModel,
+                                        vocaTranslatedVM: vocaTranslatedViewModel)
     private lazy var vocaWeaveViewModel = VocaWeaveVM(vocaListManager: vocaListManager)
     private lazy var dictionaryViewModel = DictionaryVM(
-                                                    vocaTranslatedVM: vocaTranslatedViewModel)
+                                                vocaTranslatedVM: vocaTranslatedViewModel)
     // MARK: - init
     init(vocaListManager: VocaListManager,
          vocaTranslatedManager: VocaTranslatedManager,
@@ -39,45 +40,43 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeListsForRealm(lists: categoryManager.setWithSavedData())
+
         let vocaViewController = UINavigationController(
-            rootViewController: VocaVC(
-                vocaTranslatedVM: vocaTranslatedViewModel,
-                vocaListVM: vocaListViewModel
-            )
-        )
-        vocaViewController.tabBarItem = UITabBarItem(
-            title: "단어장",
-            image: UIImage(systemName: "pencil.circle"),
-            selectedImage: UIImage(systemName: "pencil.circle.fill")
-        )
+            rootViewController: VocaVC(vocaTranslatedVM: vocaTranslatedViewModel,
+                                        vocaListVM: vocaListViewModel))
 
         let categoryWordsViewController = UINavigationController(
             rootViewController: CategoryVC(categoryViewModel: categoryViewModel))
-        categoryWordsViewController.tabBarItem = UITabBarItem(
-            title: "암기장",
-            image: UIImage(systemName: "book"),
-            selectedImage: UIImage(systemName: "book.fill")
-        )
 
         let vocaWeaveViewController = UINavigationController(
             rootViewController: VocaWeaveVC(vocaWeaveViewModel: vocaWeaveViewModel))
-        vocaWeaveViewController.tabBarItem = UITabBarItem(
-            title: "학습",
-            image: UIImage(systemName: "puzzlepiece"),
-            selectedImage: UIImage(systemName: "puzzlepiece.fill")
-        )
 
         let dictionaryViewController = UINavigationController(
             rootViewController: DictionaryVC(
-                                    vocaTranslatedData: nil,
-                                    dictionaryEnum: .new,
-                                    vocaTranslatedVM: nil,
-                                    dictionaryVM: dictionaryViewModel))
+                                            vocaTranslatedData: nil,
+                                            dictionaryEnum: .new,
+                                            vocaTranslatedVM: nil,
+                                            dictionaryVM: dictionaryViewModel))
+
+        vocaViewController.tabBarItem = UITabBarItem(
+            title: "단어장",
+            image: UIImage(systemName: "pencil.circle"),
+            selectedImage: UIImage(systemName: "pencil.circle.fill"))
+
+        categoryWordsViewController.tabBarItem = UITabBarItem(
+            title: "암기장",
+            image: UIImage(systemName: "book"),
+            selectedImage: UIImage(systemName: "book.fill"))
+
+        vocaWeaveViewController.tabBarItem = UITabBarItem(
+            title: "학습",
+            image: UIImage(systemName: "puzzlepiece"),
+            selectedImage: UIImage(systemName: "puzzlepiece.fill"))
+
         dictionaryViewController.tabBarItem = UITabBarItem(
             title: "사전",
             image: UIImage(systemName: "character.book.closed"),
-            selectedImage: UIImage(systemName: "character.book.closed.fill")
-        )
+            selectedImage: UIImage(systemName: "character.book.closed.fill"))
 
         viewControllers = [vocaViewController,
                            categoryWordsViewController,

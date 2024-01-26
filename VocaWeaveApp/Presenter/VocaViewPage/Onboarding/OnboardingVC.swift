@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-class OnboardingVC: UIPageViewController {
+final class OnboardingVC: UIPageViewController {
     // MARK: - Property
     private var currentImageIndex: Int = 0
 
-    var images: [UIImage] = [
+    private var images: [UIImage] = [
         UIImage(named: "step1")!,
         UIImage(named: "step2")!,
         UIImage(named: "step3")!,
@@ -101,7 +101,7 @@ class OnboardingVC: UIPageViewController {
         self.dismiss(animated: true)
     }
 
-    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
          if gesture.direction == .left {
              showNextImage(withAnimation: true)
          } else if gesture.direction == .right {
@@ -109,19 +109,19 @@ class OnboardingVC: UIPageViewController {
          }
      }
 
-    func showNextImage(withAnimation animate: Bool) {
+    private  func showNextImage(withAnimation animate: Bool) {
         let newImageIndex = (currentImageIndex + 1) % images.count
         updateImageView(with: images[newImageIndex], animated: animate)
         currentImageIndex = newImageIndex
     }
 
-    func showPreviousImage(withAnimation animate: Bool) {
+    private func showPreviousImage(withAnimation animate: Bool) {
         let newImageIndex = (currentImageIndex - 1 + images.count) % images.count
         updateImageView(with: images[newImageIndex], animated: animate)
         currentImageIndex = newImageIndex
     }
 
-    func updateImageView(with newImage: UIImage, animated: Bool) {
+    private func updateImageView(with newImage: UIImage, animated: Bool) {
         if animated {
             UIView.transition(with: mainImageView,
                               duration: 0.5,

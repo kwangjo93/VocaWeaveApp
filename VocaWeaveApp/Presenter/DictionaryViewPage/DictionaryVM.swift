@@ -54,7 +54,7 @@ final class DictionaryVM {
         guard !trimmedText.isEmpty else { return }
         if isSelect {
             setupAnimationView(button: view.bookmarkButton,
-                            animationView: view.animationView)
+                               animationView: view.animationView)
             view.animationView.isHidden = false
             view.animationView.play { _ in
                 view.animationView.isHidden = true
@@ -77,7 +77,7 @@ final class DictionaryVM {
 
     @MainActor
     private func checkForExistingData(with text: String) -> RealmTranslateModel? {
-        let translatedData = vocaTranslatedVM.getVocaList()
+        let translatedData = vocaTranslatedVM.vocaList
         if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
             return duplicatedData
         }
@@ -141,12 +141,12 @@ final class DictionaryVM {
     private func changeBookmark(vocaData: RealmTranslateModel) {
         if self.isSelect {
             vocaTranslatedVM.updateVoca(list: vocaData,
-                                               text: vocaData.translatedText,
-                                               isSelected: true)
+                                        text: vocaData.translatedText,
+                                        isSelected: true)
         } else {
             vocaTranslatedVM.updateVoca(list: vocaData,
-                                               text: vocaData.translatedText,
-                                               isSelected: false)
+                                        text: vocaData.translatedText,
+                                        isSelected: false)
         }
     }
 

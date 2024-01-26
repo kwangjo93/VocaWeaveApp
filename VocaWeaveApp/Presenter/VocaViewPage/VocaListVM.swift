@@ -16,6 +16,9 @@ final class VocaListVM {
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    var vocaList: [RealmVocaModel] {
+        return datamanager.getVocaList(query: realmQuery)
+    }
     // MARK: - init
     init(datamanager: RealmVocaModelType) {
         self.datamanager = datamanager
@@ -24,7 +27,7 @@ final class VocaListVM {
     func manageEmptyView(vocaVC: UIViewController,
                          emptyView: EmptyListView,
                          tableView: UITableView) {
-        if getMyVocaList().isEmpty {
+        if vocaList.isEmpty {
             tableView.isHidden = true
             vocaVC.view.addSubview(emptyView)
             emptyView.snp.makeConstraints {
@@ -61,7 +64,7 @@ final class VocaListVM {
                                            realmQeury: realmQuery)
             if !self.isVocaAlreadyExists(vocaModel) {
                 addVoca(vocaModel)
-                let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+                let newVocaList: [RealmVocaModel] = vocaList
                 self.tableViewUpdate.send(newVocaList)
             }
         }
@@ -72,10 +75,6 @@ final class VocaListVM {
         return trimmed
     }
     // MARK: - Action
-    func getMyVocaList() -> [RealmVocaModel] {
-        return datamanager.getVocaList(query: realmQuery)
-    }
-
     private func addVoca(_ list: RealmVocaModel) {
         datamanager.makeNewList(list)
     }
@@ -192,7 +191,7 @@ extension VocaListVM {
                        sourceText: sourcetext,
                        translatedText: translatedtext,
                        isSelected: newData.isSelected)
-            let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+            let newVocaList: [RealmVocaModel] = vocaList
             self.tableViewUpdate.send(newVocaList)
         }
         alert.addAction(saveAction)
@@ -216,7 +215,7 @@ extension VocaListVM {
             let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
-                let newVocaList: [RealmVocaModel] = self.getMyVocaList()
+                let newVocaList: [RealmVocaModel] = vocaList
                 self.tableViewUpdate.send(newVocaList)
             } else {
                 presentAlertOfDuplication()
@@ -233,7 +232,7 @@ extension VocaListVM {
     }
 
   private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
-        let existingVocaList: [RealmVocaModel] = getMyVocaList()
+        let existingVocaList: [RealmVocaModel] = vocaList
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
     }
