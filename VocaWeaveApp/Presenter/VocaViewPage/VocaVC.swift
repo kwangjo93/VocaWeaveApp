@@ -47,13 +47,13 @@ final class VocaVC: UIViewController {
         super.viewDidLoad()
         setup()
         bindModelData()
+        vocaListVM.manageEmptyView(vocaVC: self,
+                                   emptyView: emptyView,
+                                   tableView: vocaView.vocaTableView)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
-        vocaListVM.manageEmptyView(vocaVC: self,
-                                   emptyView: emptyView,
-                                   tableView: vocaView.vocaTableView)
     }
     // MARK: - Helper
     private func setup() {
