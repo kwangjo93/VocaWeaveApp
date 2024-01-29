@@ -62,9 +62,9 @@ final class DictionaryVM {
         }
     }
 
-    func setBookmarkStatus(bookmarkButton: UIButton) {
+    func setBookmarkStatus(isSelec: Bool, bookmarkButton: UIButton) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
-        if self.isSelect {
+        if isSelec {
             bookmarkButton.setImage(UIImage(systemName: "star.fill",
                                     withConfiguration: imageConfig),
                                     for: .normal)
@@ -100,7 +100,7 @@ final class DictionaryVM {
         guard let vocaData = vocaData else { return }
         view.translationText.text = vocaData.translatedText
         self.isSelect = vocaData.isSelected
-        self.setBookmarkStatus(bookmarkButton: view.bookmarkButton)
+        self.setBookmarkStatus(isSelec: self.isSelect, bookmarkButton: view.bookmarkButton)
     }
     // MARK: - Action
     func fetchDataAndHandleResult(sourceText: String) async throws -> RealmTranslateModel? {
@@ -163,6 +163,6 @@ final class DictionaryVM {
         } else {
             changeBookmark(vocaData: vocaData)
         }
-        setBookmarkStatus(bookmarkButton: bookmarkButton)
+        setBookmarkStatus(isSelec: self.isSelect, bookmarkButton: bookmarkButton)
     }
 }

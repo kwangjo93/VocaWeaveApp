@@ -331,10 +331,8 @@ extension VocaVC: UITableViewDelegate {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
             vocaListVM.showAlertWithTextField(newData: vocaData)
         } else {
-            guard let sourceText = vocaTranslatedDataSource.itemIdentifier(
-                                                for: indexPath)?.sourceText else { return }
-            vocaTranslatedVM.fetchDictionaryData(sourceText: sourceText,
-                                                 currentView: self)
+            guard let vocaData = vocaTranslatedDataSource.itemIdentifier(for: indexPath) else { return }
+            vocaTranslatedVM.editDictionaryData(currentView: self, vocaData: vocaData)
         }
     }
 }
