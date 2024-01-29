@@ -54,7 +54,6 @@ final class VocaVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
-        print(vocaTranslatedVM.vocaList)
     }
     // MARK: - Helper
     private func setup() {

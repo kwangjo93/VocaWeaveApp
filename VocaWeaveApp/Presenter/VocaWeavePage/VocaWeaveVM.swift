@@ -145,7 +145,8 @@ final class VocaWeaveVM {
     }
     // MARK: - Action
     func copyText(text: String?) {
-        guard let textToCopy = text else { return }
+        guard let textToCopy = text,
+              !textToCopy.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         let pasteboard = UIPasteboard.general
         pasteboard.string = textToCopy
         copyAlertAction()
