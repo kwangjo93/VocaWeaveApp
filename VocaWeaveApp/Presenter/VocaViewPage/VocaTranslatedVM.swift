@@ -71,7 +71,6 @@ final class VocaTranslatedVM {
         cell.isSelect = isSelected
         cell.selectedSegmentIndex = selectedSegmentIndex
         cell.configureBookmark()
-        cell.speakerButtonAction()
         cell.selectionStyle = .none
     }
     // MARK: - Action
@@ -91,9 +90,6 @@ final class VocaTranslatedVM {
 
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
-        if vocaList.isEmpty {
-            datamanager.deleteAllData()
-        }
     }
 
     private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {

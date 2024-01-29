@@ -14,7 +14,6 @@ import Lottie
 final class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
-    let speaker = AVSpeechSynthesizer()
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
 
@@ -32,6 +31,7 @@ final class VocaTableViewCell: UITableViewCell {
     var isSelect = false
     var selectedSegmentIndex = 0
 
+    private let speechSynthesizer = AVSpeechSynthesizer()
     var animationView = LottieAnimationView()
 
     let sourceLabel: UILabel = {
@@ -147,10 +147,12 @@ final class VocaTableViewCell: UITableViewCell {
     // MARK: - Action
     @objc func speakerButtonAction() {
         if let text = sourceLabel.text, text.containsOnlyEnglish() {
+            Language.sourceLanguage = .english
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(
                                                 language: Language.sourceLanguage.avLanguageTitle)
-            let speechSynthesizer = AVSpeechSynthesizer()
+            speechUtterance.rate = 0.5
+            speechUtterance.volume = 1
             speechSynthesizer.speak(speechUtterance)
         }
     }

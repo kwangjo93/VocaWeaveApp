@@ -203,7 +203,7 @@ final class DictionaryVC: UIViewController {
     @objc private func translatedSpeakerButtonAction() {
         guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.translationText.text,
-                                          language: Language.targetLanguage.avLanguageTitle)
+                                          language: Language.sourceLanguage.avLanguageTitle)
     }
 
     @objc private func translatedCopyButtonAction() {

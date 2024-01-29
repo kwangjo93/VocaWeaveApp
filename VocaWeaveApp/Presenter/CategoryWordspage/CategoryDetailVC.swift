@@ -204,7 +204,6 @@ extension CategoryDetailVC {
                 cell.vocaListData = data
                 cell.bindVocaListData()
                 cell.configureBookmark()
-                cell.speakerButtonAction()
                 cell.vocaListViewModel = categoryViewModel.vocaListVM
                 cell.selectedSegmentIndex = selectedSegmentIndex
                 cell.distinguishSavedData = distinguishSavedData
@@ -248,7 +247,6 @@ extension CategoryDetailVC {
             cell.vocaTanslatedData = data
             cell.bindVocaTranslatedData()
             cell.configureBookmark()
-            cell.speakerButtonAction()
             cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedVM
             cell.selectedSegmentIndex = selectedSegmentIndex
             cell.distinguishSavedData = distinguishSavedData

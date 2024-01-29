@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 
-final class CagtegoryCell: UICollectionViewCell {
-    static let identifier = "CagtegoryCollectionViewCell"
+final class CategoryCell: UICollectionViewCell {
+    static let identifier = "CategoryCollectionViewCell"
 
     let categoryLabel: UILabel = {
         let label = UILabel()

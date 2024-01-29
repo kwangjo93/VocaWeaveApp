@@ -17,6 +17,7 @@ final class DictionaryVM {
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
+    private let speechSynthesizer = AVSpeechSynthesizer()
     // MARK: - init
     init(vocaTranslatedVM: VocaTranslatedVM) {
         self.vocaTranslatedVM = vocaTranslatedVM
@@ -131,10 +132,13 @@ final class DictionaryVM {
     }
 
     func speakerAction(text: String?, language: String) {
-        if let text = text {
-            let speechUtterance = AVSpeechUtterance(string: text)
-            speechUtterance.voice = AVSpeechSynthesisVoice(language: language)
-            let speechSynthesizer = AVSpeechSynthesizer()
+        if let textData = text, textData.containsOnlyEnglish() {
+            Language.sourceLanguage = .english
+            let speechUtterance = AVSpeechUtterance(string: textData)
+            speechUtterance.voice = AVSpeechSynthesisVoice(
+                                                language: Language.sourceLanguage.avLanguageTitle)
+            speechUtterance.rate = 0.5
+            speechUtterance.volume = 1
             speechSynthesizer.speak(speechUtterance)
         }
     }
