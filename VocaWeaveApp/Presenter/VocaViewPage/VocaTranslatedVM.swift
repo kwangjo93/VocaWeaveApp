@@ -84,6 +84,9 @@ final class VocaTranslatedVM {
 
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
+        if vocaList.isEmpty {
+            datamanager.deleteAllData()
+        }
     }
 
     private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {

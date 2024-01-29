@@ -88,6 +88,9 @@ final class VocaListVM {
 
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
+        if vocaList.isEmpty {
+            datamanager.deleteAllData(query: realmQuery)
+        }
     }
 
     func nightModeButtonAction() {
