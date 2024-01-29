@@ -60,9 +60,9 @@ final class CategoryVC: UIViewController {
         collectionView.backgroundColor = .systemBackground
         collectionView.register(CategoryCell.self,
                                 forCellWithReuseIdentifier: CategoryCell.identifier)
+        view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
-        view.addSubview(collectionView)
     }
 
     private func setGradientColor(for cell: CategoryCell) {

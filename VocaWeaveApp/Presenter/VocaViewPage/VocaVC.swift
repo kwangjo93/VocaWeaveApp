@@ -61,7 +61,6 @@ final class VocaVC: UIViewController {
         configureUI()
         setupSearchBar()
         vocaView.vocaTableView.delegate = self
-        vocaView.vocaSegmentedControl.backgroundColor = .mainTintColor
     }
     private func configureNav() {
         let titleLabel: UILabel = {

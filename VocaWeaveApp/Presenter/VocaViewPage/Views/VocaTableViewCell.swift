@@ -53,7 +53,6 @@ final class VocaTableViewCell: UITableViewCell {
     let speakerButton: UIButton = {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         let button = UIButton(type: .custom)
-        button.frame.size.height = 40
         button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
                         for: .normal)
         button.tintColor = UIColor.subTinkColor
@@ -102,7 +101,6 @@ final class VocaTableViewCell: UITableViewCell {
         }
 
         speakerButton.snp.makeConstraints {
-            $0.leading.equalTo(translatedLabel.snp.trailing).offset(defaultValue)
             $0.top.bottom.equalToSuperview().inset(defaultValue)
         }
 
