@@ -83,6 +83,12 @@ final class VocaTranslatedVM {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
     }
 
+    private func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+        datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
+        let newVocaList: [RealmTranslateModel] = vocaList
+        self.tableViewUpdate.send(newVocaList)
+    }
+
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
         if vocaList.isEmpty {
@@ -247,10 +253,7 @@ extension VocaTranslatedVM {
 
     @MainActor
     func editDictionaryData(currentView: VocaVC, vocaData: RealmTranslateModel) {
-        let voca = RealmTranslateModel(sourceText: vocaData.sourceText,
-                                       translatedText: vocaData.translatedText,
-                                       isSelected: vocaData.isSelected)
-        let dictionaryView =  DictionaryVC(vocaTranslatedData: voca,
+        let dictionaryView =  DictionaryVC(vocaTranslatedData: vocaData,
                                            dictionaryEnum: .edit,
                                            vocaTranslatedVM: self,
                                            dictionaryVM: nil)
@@ -258,13 +261,13 @@ extension VocaTranslatedVM {
                         nextView: dictionaryView)
     }
 
-    func saveDictionaryData(_ voca: RealmTranslateModel, vocaTranslatedViewModel: VocaTranslatedVM?) {
+    func saveDictionaryData(_ voca: RealmTranslateModel, vocaTranslatedVM: VocaTranslatedVM?) {
         if !self.isVocaAlreadyExists(voca) {
             self.addVoca(voca)
             let newVocaList: [RealmTranslateModel] = self.vocaList
             self.tableViewUpdate.send(newVocaList)
         } else {
-            guard vocaTranslatedViewModel != nil else { return }
+            guard vocaTranslatedVM != nil else { return }
             let alert = UIAlertController(title: "중복",
                                           message: "같은 단어가 이미 있습니다",
                                           preferredStyle: .alert)
@@ -305,4 +308,27 @@ extension VocaTranslatedVM {
             }
         }
     }
+
+    @MainActor
+    func bookmarkButtonAction(vocaData: RealmTranslateModel,
+                              text: String,
+                              bookmarkButton: UIButton,
+                              view: DictionaryView) {
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedText.isEmpty else { return }
+        if checkForExistingData(with: text) == nil {
+            saveDictionaryData(vocaData, vocaTranslatedVM: nil)
+            updateVoca(list: vocaData, text: vocaData.translatedText, isSelected: true)
+        } else {
+            switch vocaData.isSelected {
+            case true:
+                dictionaryUpdateVoca(list: vocaData, text: vocaData.translatedText, isSelected: false)
+            case false:
+                dictionaryUpdateVoca(list: vocaData, text: vocaData.translatedText, isSelected: true)
+            }
+        }
+        setBookmarkStatus(isSelec: vocaData.isSelected, bookmarkButton: bookmarkButton)
+        playAnimation(view: view, isSelect: vocaData.isSelected, text: vocaData.sourceText)
+    }
+
 }

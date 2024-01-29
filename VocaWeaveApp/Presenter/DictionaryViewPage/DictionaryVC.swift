@@ -107,7 +107,7 @@ final class DictionaryVC: UIViewController {
     }
 
     private func handleVocaTranslation(sourceText: String) {
-        if let vocaData = vocaTranslatedVM?.vocaList.first(where: { $0.sourceText == sourceText }) {
+        if (vocaTranslatedVM?.vocaList.first(where: { $0.sourceText == sourceText })) != nil {
             if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
                 navigationItem.rightBarButtonItems?.remove(at: index)
             }
@@ -169,7 +169,7 @@ final class DictionaryVC: UIViewController {
     @objc private func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         vocaTranslatedVM?.saveDictionaryData(vocaTranslatedData,
-                                            vocaTranslatedViewModel: vocaTranslatedVM)
+                                            vocaTranslatedVM: vocaTranslatedVM)
         self.dismiss(animated: true)
     }
 
@@ -223,13 +223,24 @@ final class DictionaryVC: UIViewController {
 
     @objc private func bookmarkButtonAction() {
         guard let sourceText = dictionaryView.sourceTextField.text else { return }
-        dictionaryVM?.isSelect.toggle()
-        dictionaryVM?.bookmarkButtonAction(vocaData: vocaTranslatedData,
-                                            text: sourceText,
-                                            bookmarkButton: dictionaryView.bookmarkButton)
-        dictionaryVM?.playAnimation(view: dictionaryView,
-                                    isSelect: dictionaryVM!.isSelect,
-                                    text: sourceText)
+        switch dictionaryEnum {
+        case .new:
+            guard let dictionaryVM = dictionaryVM else { return }
+            dictionaryVM.isSelect.toggle()
+            dictionaryVM.bookmarkButtonAction(vocaData: vocaTranslatedData,
+                                              text: sourceText,
+                                              bookmarkButton: dictionaryView.bookmarkButton)
+            dictionaryVM.playAnimation(view: dictionaryView,
+                                       isSelect: dictionaryVM.isSelect,
+                                       text: sourceText)
+        case .edit, .response:
+            guard let vocaTranslatedVM = vocaTranslatedVM else { return }
+            guard let vocaTranslatedData = vocaTranslatedData else { return }
+            vocaTranslatedVM.bookmarkButtonAction(vocaData: vocaTranslatedData,
+                                                  text: sourceText,
+                                                  bookmarkButton: dictionaryView.bookmarkButton,
+                                                  view: dictionaryView)
+        }
     }
 
     @objc private func backBarButtonAction() {
@@ -265,8 +276,8 @@ extension DictionaryVC: UITextFieldDelegate {
                                                        view: dictionaryView)
                     handleVocaTranslation(sourceText: sourceText)
                     vocaTranslatedVM.playAnimation(view: dictionaryView,
-                                               isSelect: vocaTranslatedData?.isSelected ?? false,
-                                               text: sourceText)
+                                                   isSelect: vocaTranslatedData?.isSelected ?? false,
+                                                   text: sourceText)
                 } catch {
                     print("Task Response error")
                 }
