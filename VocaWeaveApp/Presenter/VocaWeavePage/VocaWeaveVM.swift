@@ -21,6 +21,7 @@ final class VocaWeaveVM {
     let selectedCountCountPublisher = PassthroughSubject<Int, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
 
+    private let speechSynthesizer = AVSpeechSynthesizer()
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
@@ -145,17 +146,21 @@ final class VocaWeaveVM {
     }
     // MARK: - Action
     func copyText(text: String?) {
-        guard let textToCopy = text else { return }
+        guard let textToCopy = text,
+              !textToCopy.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         let pasteboard = UIPasteboard.general
         pasteboard.string = textToCopy
         copyAlertAction()
     }
 
     func speakerAction(text: String?, language: String) {
-        if let text = text {
-            let speechUtterance = AVSpeechUtterance(string: text)
-            speechUtterance.voice = AVSpeechSynthesisVoice(language: language)
-            let speechSynthesizer = AVSpeechSynthesizer()
+        if let textData = text, textData.containsOnlyEnglish() {
+            Language.sourceLanguage = .english
+            let speechUtterance = AVSpeechUtterance(string: textData)
+            speechUtterance.voice = AVSpeechSynthesisVoice(
+                                                language: Language.sourceLanguage.avLanguageTitle)
+            speechUtterance.rate = 0.5
+            speechUtterance.volume = 1
             speechSynthesizer.speak(speechUtterance)
         }
     }

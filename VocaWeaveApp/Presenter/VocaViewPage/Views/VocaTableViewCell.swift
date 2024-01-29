@@ -14,7 +14,6 @@ import Lottie
 final class VocaTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "VocaTableViewCell"
-    let speaker = AVSpeechSynthesizer()
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
 
@@ -32,6 +31,7 @@ final class VocaTableViewCell: UITableViewCell {
     var isSelect = false
     var selectedSegmentIndex = 0
 
+    private let speechSynthesizer = AVSpeechSynthesizer()
     var animationView = LottieAnimationView()
 
     let sourceLabel: UILabel = {
@@ -53,7 +53,6 @@ final class VocaTableViewCell: UITableViewCell {
     let speakerButton: UIButton = {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         let button = UIButton(type: .custom)
-        button.frame.size.height = 40
         button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
                         for: .normal)
         button.tintColor = UIColor.subTinkColor
@@ -102,7 +101,6 @@ final class VocaTableViewCell: UITableViewCell {
         }
 
         speakerButton.snp.makeConstraints {
-            $0.leading.equalTo(translatedLabel.snp.trailing).offset(defaultValue)
             $0.top.bottom.equalToSuperview().inset(defaultValue)
         }
 
@@ -147,10 +145,12 @@ final class VocaTableViewCell: UITableViewCell {
     // MARK: - Action
     @objc func speakerButtonAction() {
         if let text = sourceLabel.text, text.containsOnlyEnglish() {
+            Language.sourceLanguage = .english
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(
                                                 language: Language.sourceLanguage.avLanguageTitle)
-            let speechSynthesizer = AVSpeechSynthesizer()
+            speechUtterance.rate = 0.5
+            speechUtterance.volume = 1
             speechSynthesizer.speak(speechUtterance)
         }
     }

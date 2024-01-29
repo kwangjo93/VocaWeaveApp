@@ -58,14 +58,14 @@ final class CategoryVC: UIViewController {
         let layout = createLayout()
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
-        collectionView.register(CagtegoryCell.self,
-                                forCellWithReuseIdentifier: CagtegoryCell.identifier)
+        collectionView.register(CategoryCell.self,
+                                forCellWithReuseIdentifier: CategoryCell.identifier)
+        view.addSubview(collectionView)
         collectionView.dataSource = self
         collectionView.delegate = self
-        view.addSubview(collectionView)
     }
 
-    private func setGradientColor(for cell: CagtegoryCell) {
+    private func setGradientColor(for cell: CategoryCell) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = UIColor.gradientColor
         gradientLayer.startPoint = CGPoint(x: 1, y: 0)
@@ -102,7 +102,6 @@ final class CategoryVC: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.interItemSpacing = .fixed(spacing)
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
         return section
     }
 
@@ -124,8 +123,8 @@ extension CategoryVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-                                                withReuseIdentifier: CagtegoryCell.identifier,
-                                                for: indexPath) as? CagtegoryCell
+                                                withReuseIdentifier: CategoryCell.identifier,
+                                                for: indexPath) as? CategoryCell
                                                 else { return UICollectionViewCell()}
         let categoryTittle = categoryTittle[indexPath.row]
         cell.categoryLabel.text = categoryTittle

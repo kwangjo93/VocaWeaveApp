@@ -88,9 +88,6 @@ final class VocaListVM {
 
     func deleteVoca(_ list: RealmVocaModel) {
         datamanager.deleteList(list)
-        if vocaList.isEmpty {
-            datamanager.deleteAllData(query: realmQuery)
-        }
     }
 
     func nightModeButtonAction() {
@@ -250,7 +247,6 @@ extension VocaListVM {
         cell.isSelect = isSelected
         cell.selectedSegmentIndex = selectedSegmentIndex
         cell.configureBookmark()
-        cell.speakerButtonAction()
         cell.selectionStyle = .none
     }
 

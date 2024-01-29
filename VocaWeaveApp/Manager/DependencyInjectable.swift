@@ -13,7 +13,6 @@ protocol RealmTranslateType {
     func makeNewList(_ list: RealmTranslateModel)
     func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool)
     func deleteList(_ list: RealmTranslateModel)
-    func deleteAllData()
 }
 
 protocol RealmVocaModelType {
@@ -25,5 +24,4 @@ protocol RealmVocaModelType {
                         translatedText: String,
                         isSelected: Bool)
     func deleteList(_ list: RealmVocaModel)
-    func deleteAllData(query: String)
 }

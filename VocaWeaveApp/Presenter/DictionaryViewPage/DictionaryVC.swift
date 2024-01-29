@@ -52,7 +52,7 @@ final class DictionaryVC: UIViewController {
     private func setup() {
         view.addSubview(dictionaryView)
         configureNav()
-        configureResponseData()
+        configureVocaData()
         setupLayout()
         setButtonAction()
         dictionaryView.sourceTextField.delegate = self
@@ -76,12 +76,42 @@ final class DictionaryVC: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func configureResponseData() {
+    private func configureVocaData() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
-        if dictionaryEnum == .response {
+        guard let vocaTranslatedVM = vocaTranslatedVM else { return }
+        switch dictionaryEnum {
+        case .edit, .response:
             dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
             dictionaryView.translationText.text = vocaTranslatedData.translatedText
+            hideAndPresnetAddButton()
+            vocaTranslatedVM.setBookmarkStatus(isSelec: vocaTranslatedData.isSelected,
+                                               bookmarkButton: dictionaryView.bookmarkButton)
+        case .new:
+            break
+        }
+    }
+
+    private func hideAndPresnetAddButton() {
+        switch dictionaryEnum {
+        case .response:
             navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
+            navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
+        case .edit:
+            navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
+            if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
+                navigationItem.rightBarButtonItems?.remove(at: index)
+            }
+        case .new:
+            break
+        }
+    }
+
+    private func handleVocaTranslation(sourceText: String) {
+        if (vocaTranslatedVM?.vocaList.first(where: { $0.sourceText == sourceText })) != nil {
+            if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
+                navigationItem.rightBarButtonItems?.remove(at: index)
+            }
+        } else {
             navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
         }
     }
@@ -139,7 +169,7 @@ final class DictionaryVC: UIViewController {
     @objc private func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         vocaTranslatedVM?.saveDictionaryData(vocaTranslatedData,
-                                            vocaTranslatedViewModel: vocaTranslatedVM)
+                                            vocaTranslatedVM: vocaTranslatedVM)
         self.dismiss(animated: true)
     }
 
@@ -173,7 +203,7 @@ final class DictionaryVC: UIViewController {
     @objc private func translatedSpeakerButtonAction() {
         guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.translationText.text,
-                                          language: Language.targetLanguage.avLanguageTitle)
+                                          language: Language.sourceLanguage.avLanguageTitle)
     }
 
     @objc private func translatedCopyButtonAction() {
@@ -184,21 +214,40 @@ final class DictionaryVC: UIViewController {
     @objc private func cancelButtonAction() {
         dictionaryView.sourceTextField.text = ""
         dictionaryView.translationText.text = ""
-        dictionaryVM?.isSelect = false
-        dictionaryVM?.setBookmarkStatus(bookmarkButton: dictionaryView.bookmarkButton)
+        if let dictionaryVM = dictionaryVM {
+            dictionaryVM.isSelect = false
+            dictionaryVM.setBookmarkStatus(isSelec: dictionaryVM.isSelect,
+                                           bookmarkButton: dictionaryView.bookmarkButton)
+        } else {
+            guard let vocaData = vocaTranslatedData else { return }
+            vocaTranslatedVM?.setBookmarkStatus(isSelec: vocaData.isSelected,
+                                                bookmarkButton: dictionaryView.bookmarkButton)
+        }
         view.endEditing(true)
     }
 
     @objc private func bookmarkButtonAction() {
         guard let sourceText = dictionaryView.sourceTextField.text else { return }
-        dictionaryVM?.isSelect.toggle()
-        dictionaryVM?.bookmarkButtonAction(vocaData: vocaTranslatedData,
-                                            text: sourceText,
-                                            bookmarkButton: dictionaryView.bookmarkButton)
-        dictionaryVM?.playAnimation(view: dictionaryView,
-                                    isSelect: dictionaryVM!.isSelect,
-                                    text: sourceText)
+        switch dictionaryEnum {
+        case .new:
+            guard let dictionaryVM = dictionaryVM else { return }
+            dictionaryVM.isSelect.toggle()
+            dictionaryVM.bookmarkButtonAction(vocaData: vocaTranslatedData,
+                                              text: sourceText,
+                                              bookmarkButton: dictionaryView.bookmarkButton)
+            dictionaryVM.playAnimation(view: dictionaryView,
+                                       isSelect: dictionaryVM.isSelect,
+                                       text: sourceText)
+        case .edit, .response:
+            guard let vocaTranslatedVM = vocaTranslatedVM else { return }
+            guard let vocaTranslatedData = vocaTranslatedData else { return }
+            vocaTranslatedVM.bookmarkButtonAction(vocaData: vocaTranslatedData,
+                                                  text: sourceText,
+                                                  bookmarkButton: dictionaryView.bookmarkButton,
+                                                  view: dictionaryView)
+        }
     }
+
     @objc private func backBarButtonAction() {
         self.dismiss(animated: true)
     }
@@ -206,18 +255,37 @@ final class DictionaryVC: UIViewController {
 extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }
-        guard let dictionaryVM = dictionaryVM else { return false }
-        Task {
-            do {
-                self.vocaTranslatedData = try await dictionaryVM
-                                                        .fetchDataAndHandleResult(sourceText: sourceText)
-                dictionaryVM.updateTranslationView(with: vocaTranslatedData,
-                                                   view: dictionaryView)
-                dictionaryVM.playAnimation(view: dictionaryView,
-                                           isSelect: vocaTranslatedData?.isSelected ?? false,
-                                           text: sourceText)
-            } catch {
-                print("Task Response error")
+        switch dictionaryEnum {
+        case .new:
+            guard let dictionaryVM = dictionaryVM else { return false }
+            Task {
+                do {
+                    self.vocaTranslatedData = try await dictionaryVM
+                                                            .fetchDataAndHandleResult(sourceText: sourceText)
+                    dictionaryVM.updateTranslationView(with: vocaTranslatedData,
+                                                       view: dictionaryView)
+                    dictionaryVM.playAnimation(view: dictionaryView,
+                                               isSelect: vocaTranslatedData?.isSelected ?? false,
+                                               text: sourceText)
+                } catch {
+                    print("Task Response error")
+                }
+            }
+        case .edit, .response:
+            guard let vocaTranslatedVM = vocaTranslatedVM else { return false }
+            Task {
+                do {
+                    self.vocaTranslatedData = try await vocaTranslatedVM
+                                                            .fetchDicDataResult(sourceText: sourceText)
+                    vocaTranslatedVM.updateTranslationView(with: vocaTranslatedData,
+                                                       view: dictionaryView)
+                    handleVocaTranslation(sourceText: sourceText)
+                    vocaTranslatedVM.playAnimation(view: dictionaryView,
+                                                   isSelect: vocaTranslatedData?.isSelected ?? false,
+                                                   text: sourceText)
+                } catch {
+                    print("Task Response error")
+                }
             }
         }
         textField.resignFirstResponder()
