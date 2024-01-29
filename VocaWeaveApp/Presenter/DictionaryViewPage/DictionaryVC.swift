@@ -212,12 +212,17 @@ final class DictionaryVC: UIViewController {
     }
 
     @objc private func cancelButtonAction() {
-        guard let dictionaryVM = dictionaryVM else { return }
         dictionaryView.sourceTextField.text = ""
         dictionaryView.translationText.text = ""
-        dictionaryVM.isSelect = false
-        dictionaryVM.setBookmarkStatus(isSelec: dictionaryVM.isSelect,
-                                        bookmarkButton: dictionaryView.bookmarkButton)
+        if let dictionaryVM = dictionaryVM {
+            dictionaryVM.isSelect = false
+            dictionaryVM.setBookmarkStatus(isSelec: dictionaryVM.isSelect,
+                                           bookmarkButton: dictionaryView.bookmarkButton)
+        } else {
+            guard let vocaData = vocaTranslatedData else { return }
+            vocaTranslatedVM?.setBookmarkStatus(isSelec: vocaData.isSelected,
+                                                bookmarkButton: dictionaryView.bookmarkButton)
+        }
         view.endEditing(true)
     }
 
