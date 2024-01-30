@@ -179,10 +179,10 @@ final class DictionaryVC: UIViewController {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
-                        dictionaryView.explainView.layer.borderColor = UIColor.label.cgColor
+                        dictionaryView.translationText.layer.borderColor = UIColor.label.cgColor
                     } else {
                         window.overrideUserInterfaceStyle = .dark
-                        dictionaryView.explainView.layer.borderColor = UIColor.white.cgColor
+                        dictionaryView.translationText.layer.borderColor = UIColor.white.cgColor
                     }
                 }
             }
