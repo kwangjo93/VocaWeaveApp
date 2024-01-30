@@ -29,6 +29,13 @@ final class VocaWeaveVM {
         return vocaListManager.getVocaList(query: realmQuery)
     }
     lazy var vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    var resetData = false {
+        didSet {
+            vocaDataArray = vocaListManager.getVocaList(query: realmQuery)
+                                                .filter { isEnglishAlphabet($0.sourceText) }
+            isSelect = false
+        }
+    }
     // MARK: - init
     init(vocaListManager: VocaListManager) {
         self.vocaListManager = vocaListManager
@@ -54,7 +61,7 @@ final class VocaWeaveVM {
         }
     }
 
-    private func resetStrikeButtons(sender: [UIButton]) {
+     func resetStrikeButtons(sender: [UIButton]) {
         for button in sender {
             button.setAttributedTitle(nil, for: .normal)
             button.titleLabel?.attributedText = nil
@@ -108,13 +115,11 @@ final class VocaWeaveVM {
     }
 
     func setRandomVocaData(buttons: [UIButton]) {
-        var buttonTitle: [String] = []
         if vocaDataArray.count > 4 {
             let selectedVoca = vocaDataArray.shuffled().prefix(5)
             selectedCount = 5
             selectedCountCountPublisher.send(5)
             for (index, button) in buttons.enumerated() {
-                buttonTitle.append(selectedVoca[index].sourceText)
                 button.setTitle(selectedVoca[index].sourceText, for: .normal)
                 vocaDataArray.removeAll { $0.sourceText == selectedVoca[index].sourceText}
             }
@@ -122,7 +127,6 @@ final class VocaWeaveVM {
         } else {
             for index in 0..<5 {
                 if index < vocaDataArray.count {
-                    buttonTitle.append(vocaDataArray[index].sourceText)
                     buttons[index].setTitle(vocaDataArray[index].sourceText, for: .normal)
                 } else {
                     buttons[index].setTitle("", for: .normal)
