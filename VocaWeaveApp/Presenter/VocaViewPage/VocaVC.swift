@@ -364,15 +364,22 @@ extension VocaVC: UISearchBarDelegate {
 extension VocaVC: UIDocumentPickerDelegate {
     private func showDocumentPicker() {
         let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText])
+        documentPicker.allowsMultipleSelection = false
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
-    func documentPicker(_ controller: UIDocumentPickerViewController,
-                        didPickDocumentsAt urls: [URL]) {
-         guard let selectedURL = urls.first else { return }
-         vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
-             guard let self = self else { return }
-             vocaListVM.processAndSaveData(rows)
-         }
-     }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let selectedURL = urls.first else { return }
+        if selectedURL.startAccessingSecurityScopedResource() {
+            vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
+                guard let self = self else { return }
+                vocaListVM.processAndSaveData(rows)
+            }
+            selectedURL.stopAccessingSecurityScopedResource()
+        } else {
+            print("Unable to start accessing security scoped resource.")
+        }
+    }
+
 }
