@@ -148,10 +148,16 @@ final class VocaTableViewCell: UITableViewCell {
             Language.sourceLanguage = .english
             let speechUtterance = AVSpeechUtterance(string: text)
             speechUtterance.voice = AVSpeechSynthesisVoice(
-                                                language: Language.sourceLanguage.avLanguageTitle)
+                language: Language.sourceLanguage.avLanguageTitle)
             speechUtterance.rate = 0.5
             speechUtterance.volume = 1
-            speechSynthesizer.speak(speechUtterance)
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                speechSynthesizer.speak(speechUtterance)
+            } catch {
+                print("Error setting up AVAudioSession: \(error)")
+            }
         }
     }
 
