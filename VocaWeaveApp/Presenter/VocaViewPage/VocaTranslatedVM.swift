@@ -204,7 +204,7 @@ extension VocaTranslatedVM {
                 await self.nextGoPage(currentView: currentView,
                                       nextView: dictionaryView)
             } catch {
-                print("Task Response error")
+                print("Task Response : \(error)")
             }
         }
     }

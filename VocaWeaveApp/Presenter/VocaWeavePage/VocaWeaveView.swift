@@ -153,6 +153,7 @@ final class VocaWeaveView: UIView {
         textView.contentMode = .topLeft
         textView.font = .systemFont(ofSize: 20)
         textView.textColor = UIColor.label
+        textView.isScrollEnabled = true
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
         textView.layer.cornerRadius = 15

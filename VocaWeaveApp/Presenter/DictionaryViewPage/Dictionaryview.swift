@@ -106,15 +106,6 @@ final class DictionaryView: UIView {
         return stackView
     }()
 
-    let explainView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.borderWidth = 1.0
-        imageView.layer.borderColor = UIColor.label.cgColor
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 15
-        return imageView
-    }()
-
     let translationLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
@@ -127,6 +118,11 @@ final class DictionaryView: UIView {
         let textView = UITextView()
         textView.font = .boldSystemFont(ofSize: 18)
         textView.textColor = UIColor.label
+        textView.isScrollEnabled = true
+        textView.layer.borderWidth = 1.0
+        textView.layer.borderColor = UIColor.label.cgColor
+        textView.clipsToBounds = true
+        textView.layer.cornerRadius = 15
         return textView
     }()
     // MARK: - init
@@ -148,10 +144,8 @@ final class DictionaryView: UIView {
 
         [translatedTextSpeakerButton, translatedTextCopyButton].forEach {explainStackView.addArrangedSubview($0)}
 
-        [translationText, translationLabel].forEach {explainView.addSubview($0)}
-
-        [sourceStackView, cancelButton, sourceTextField,
-         bookmarkButton, explainStackView, explainView].forEach {self.addSubview($0)}
+        [sourceStackView, cancelButton, sourceTextField, bookmarkButton,
+         explainStackView, translationText, translationLabel].forEach {self.addSubview($0)}
     }
 
     private func setupLayout() {
@@ -169,22 +163,17 @@ final class DictionaryView: UIView {
             $0.top.equalTo(explainStackView.snp.top)
             $0.trailing.equalToSuperview()
         }
-        explainView.snp.makeConstraints {
-            $0.top.equalTo(explainStackView.snp.bottom).offset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(defaultValue * 20)
-        }
+
         translationLabel.snp.makeConstraints {
-            $0.top.equalTo(explainView.snp.top).inset(defaultValue)
-            $0.leading.equalTo(explainView.snp.leading).inset(defaultValue)
-            $0.trailing.equalTo(explainView.snp.trailing).inset(defaultValue)
+            $0.top.equalTo(explainStackView.snp.bottom).offset(defaultValue)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
             $0.height.equalTo(defaultValue * 4)
         }
+
         translationText.snp.makeConstraints {
-            $0.top.equalTo(translationLabel.snp.bottom)
-            $0.leading.equalTo(explainView.snp.leading)
-            $0.trailing.equalTo(explainView.snp.trailing)
-            $0.height.equalTo(defaultValue * 14)
+            $0.top.equalTo(translationLabel.snp.bottom).offset(defaultValue)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue)
+            $0.bottom.equalToSuperview().inset(defaultValue * 2)
         }
     }
 
