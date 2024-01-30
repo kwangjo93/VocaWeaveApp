@@ -690,6 +690,9 @@
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = VocaWeave;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "앱이 사용자의 파일에 접근합니다.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "앱이 사용자의 파일에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -726,6 +729,9 @@
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = VocaWeave;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "앱이 사용자의 파일에 접근합니다.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "앱이 사용자의 파일에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
