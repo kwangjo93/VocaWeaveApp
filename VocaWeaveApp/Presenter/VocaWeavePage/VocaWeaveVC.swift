@@ -22,14 +22,6 @@ final class VocaWeaveVC: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(refreshButtonAction))
-    // MARK: - LifeCycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-        modelDataBinding()
-        configureAnimation(vocaWeaveView.animationView)
-        vocaWeaveVM.setRandomVocaData(buttons: buttonArray)
-    }
     // MARK: - init
     init(vocaWeaveViewModel: VocaWeaveVM) {
         self.vocaWeaveVM = vocaWeaveViewModel
@@ -38,12 +30,24 @@ final class VocaWeaveVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    // MARK: - LifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+        modelDataBinding()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        vocaWeaveVM.resetData = false
+        refreshButtonAction()
+    }
     // MARK: - Helper
     private func setup() {
         configureNav()
         configure()
         setupLayout()
         setButtonAction()
+        configureAnimation(vocaWeaveView.animationView)
     }
 
     private func configureNav() {
@@ -144,9 +148,10 @@ final class VocaWeaveVC: UIViewController {
     }
     // MARK: - Action
     @objc private func refreshButtonAction() {
-        vocaWeaveVM.refreshVocaData(buttons: buttonArray)
         vocaWeaveVM.isSelect = false
         vocaWeaveView.weaveVocaTextField.text = ""
+        vocaWeaveView.responseDataText.text = ""
+        vocaWeaveVM.refreshVocaData(buttons: buttonArray)
     }
 
     @objc private func vocaButtonAction(_ sender: UIButton) {
