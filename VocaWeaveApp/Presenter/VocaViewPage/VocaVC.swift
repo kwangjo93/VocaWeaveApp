@@ -47,13 +47,13 @@ final class VocaVC: UIViewController {
         super.viewDidLoad()
         setup()
         bindModelData()
+        vocaListVM.manageEmptyView(vocaVC: self,
+                                   emptyView: emptyView,
+                                   tableView: vocaView.vocaTableView)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
-        vocaListVM.manageEmptyView(vocaVC: self,
-                                   emptyView: emptyView,
-                                   tableView: vocaView.vocaTableView)
     }
     // MARK: - Helper
     private func setup() {
@@ -61,7 +61,6 @@ final class VocaVC: UIViewController {
         configureUI()
         setupSearchBar()
         vocaView.vocaTableView.delegate = self
-        vocaView.vocaSegmentedControl.backgroundColor = .mainTintColor
     }
     private func configureNav() {
         let titleLabel: UILabel = {
@@ -141,6 +140,7 @@ final class VocaVC: UIViewController {
             }
             .store(in: &cancellables)
         vocaTranslatedVM.tableViewUpdate
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedVocaList in
                 self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
             }
@@ -331,10 +331,8 @@ extension VocaVC: UITableViewDelegate {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
             vocaListVM.showAlertWithTextField(newData: vocaData)
         } else {
-            guard let sourceText = vocaTranslatedDataSource.itemIdentifier(
-                                                for: indexPath)?.sourceText else { return }
-            vocaTranslatedVM.fetchDictionaryData(sourceText: sourceText,
-                                                 currentView: self)
+            guard let vocaData = vocaTranslatedDataSource.itemIdentifier(for: indexPath) else { return }
+            vocaTranslatedVM.editDictionaryData(currentView: self, vocaData: vocaData)
         }
     }
 }
@@ -366,15 +364,22 @@ extension VocaVC: UISearchBarDelegate {
 extension VocaVC: UIDocumentPickerDelegate {
     private func showDocumentPicker() {
         let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText])
+        documentPicker.allowsMultipleSelection = false
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
-    func documentPicker(_ controller: UIDocumentPickerViewController,
-                        didPickDocumentsAt urls: [URL]) {
-         guard let selectedURL = urls.first else { return }
-         vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
-             guard let self = self else { return }
-             vocaListVM.processAndSaveData(rows)
-         }
-     }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let selectedURL = urls.first else { return }
+        if selectedURL.startAccessingSecurityScopedResource() {
+            vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
+                guard let self = self else { return }
+                vocaListVM.processAndSaveData(rows)
+            }
+            selectedURL.stopAccessingSecurityScopedResource()
+        } else {
+            print("Unable to start accessing security scoped resource.")
+        }
+    }
+
 }

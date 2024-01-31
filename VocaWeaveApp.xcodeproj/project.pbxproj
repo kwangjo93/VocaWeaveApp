@@ -36,7 +36,7 @@
 		F9739F162B233A1800FA1F8E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F152B233A1800FA1F8E /* UIColor.swift */; };
 		F9739F1C2B24B03300FA1F8E /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F1B2B24B03300FA1F8E /* CategoryVC.swift */; };
 		F9739F1E2B24B07400FA1F8E /* CategoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F1D2B24B07400FA1F8E /* CategoryVM.swift */; };
-		F9739F222B25AF7A00FA1F8E /* CagtegoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CagtegoryCell.swift */; };
+		F9739F222B25AF7A00FA1F8E /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CategoryCell.swift */; };
 		F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */; };
 		F9739F282B25C25600FA1F8E /* VocaWeaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F272B25C25600FA1F8E /* VocaWeaveVC.swift */; };
 		F98B1BBF2B511C7800C71281 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B1BBE2B511C7800C71281 /* UINavigationController.swift */; };
@@ -109,7 +109,7 @@
 		F9739F152B233A1800FA1F8E /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		F9739F1B2B24B03300FA1F8E /* CategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		F9739F1D2B24B07400FA1F8E /* CategoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVM.swift; sourceTree = "<group>"; };
-		F9739F212B25AF7A00FA1F8E /* CagtegoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CagtegoryCell.swift; sourceTree = "<group>"; };
+		F9739F212B25AF7A00FA1F8E /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveView.swift; sourceTree = "<group>"; };
 		F9739F272B25C25600FA1F8E /* VocaWeaveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveVC.swift; sourceTree = "<group>"; };
 		F98B1BBE2B511C7800C71281 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 			children = (
 				F9739F1B2B24B03300FA1F8E /* CategoryVC.swift */,
 				F9739F1D2B24B07400FA1F8E /* CategoryVM.swift */,
-				F9739F212B25AF7A00FA1F8E /* CagtegoryCell.swift */,
+				F9739F212B25AF7A00FA1F8E /* CategoryCell.swift */,
 				F9331A122B32BE39007D69F6 /* CategoryDetailVC.swift */,
 			);
 			path = CategoryWordspage;
@@ -504,7 +504,7 @@
 				F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */,
 				F99141922B29505900770379 /* RealmTranslateModel.swift in Sources */,
 				F9739F1E2B24B07400FA1F8E /* CategoryVM.swift in Sources */,
-				F9739F222B25AF7A00FA1F8E /* CagtegoryCell.swift in Sources */,
+				F9739F222B25AF7A00FA1F8E /* CategoryCell.swift in Sources */,
 				F9331A112B328A7F007D69F6 /* CulturetravelVoca.swift in Sources */,
 				F991419F2B2A951900770379 /* VocaListManager.swift in Sources */,
 				F9739F282B25C25600FA1F8E /* VocaWeaveVC.swift in Sources */,
@@ -688,10 +688,15 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VocaWeave;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "앱이 사용자의 파일에 접근합니다.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "앱이 사용자의 파일에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -722,10 +727,15 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VocaWeaveApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VocaWeave;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "앱이 사용자의 파일에 접근합니다.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "앱이 사용자의 파일에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

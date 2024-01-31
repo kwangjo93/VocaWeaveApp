@@ -17,6 +17,7 @@ final class DictionaryVM {
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
+    private let speechSynthesizer = AVSpeechSynthesizer()
     // MARK: - init
     init(vocaTranslatedVM: VocaTranslatedVM) {
         self.vocaTranslatedVM = vocaTranslatedVM
@@ -62,9 +63,9 @@ final class DictionaryVM {
         }
     }
 
-    func setBookmarkStatus(bookmarkButton: UIButton) {
+    func setBookmarkStatus(isSelec: Bool, bookmarkButton: UIButton) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
-        if self.isSelect {
+        if isSelec {
             bookmarkButton.setImage(UIImage(systemName: "star.fill",
                                     withConfiguration: imageConfig),
                                     for: .normal)
@@ -100,7 +101,7 @@ final class DictionaryVM {
         guard let vocaData = vocaData else { return }
         view.translationText.text = vocaData.translatedText
         self.isSelect = vocaData.isSelected
-        self.setBookmarkStatus(bookmarkButton: view.bookmarkButton)
+        self.setBookmarkStatus(isSelec: self.isSelect, bookmarkButton: view.bookmarkButton)
     }
     // MARK: - Action
     func fetchDataAndHandleResult(sourceText: String) async throws -> RealmTranslateModel? {
@@ -123,18 +124,28 @@ final class DictionaryVM {
     }
 
     func copyText(text: String?) {
-        guard let textToCopy = text else { return }
+        guard let textToCopy = text,
+              !textToCopy.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         let pasteboard = UIPasteboard.general
         pasteboard.string = textToCopy
         copyAlertAction()
     }
 
     func speakerAction(text: String?, language: String) {
-        if let text = text {
-            let speechUtterance = AVSpeechUtterance(string: text)
-            speechUtterance.voice = AVSpeechSynthesisVoice(language: language)
-            let speechSynthesizer = AVSpeechSynthesizer()
-            speechSynthesizer.speak(speechUtterance)
+        if let textData = text, textData.containsOnlyEnglish() {
+            Language.sourceLanguage = .english
+            let speechUtterance = AVSpeechUtterance(string: textData)
+            speechUtterance.voice = AVSpeechSynthesisVoice(
+                language: Language.sourceLanguage.avLanguageTitle)
+            speechUtterance.rate = 0.5
+            speechUtterance.volume = 1
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                speechSynthesizer.speak(speechUtterance)
+            } catch {
+                print("Error setting up AVAudioSession: \(error)")
+            }
         }
     }
 
@@ -156,13 +167,13 @@ final class DictionaryVM {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
-            vocaTranslatedVM.saveDictionaryData(vocaData, vocaTranslatedViewModel: nil)
+            vocaTranslatedVM.saveDictionaryData(vocaData, vocaTranslatedVM: nil)
             vocaTranslatedVM.updateVoca(list: vocaData,
                                         text: vocaData.translatedText,
                                         isSelected: true)
         } else {
             changeBookmark(vocaData: vocaData)
         }
-        setBookmarkStatus(bookmarkButton: bookmarkButton)
+        setBookmarkStatus(isSelec: self.isSelect, bookmarkButton: bookmarkButton)
     }
 }

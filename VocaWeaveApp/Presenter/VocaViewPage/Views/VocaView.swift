@@ -23,6 +23,7 @@ final class VocaView: UIView {
                                                 [firstSegmentTitle, secondSegmentTitle])
         super.init(frame: .zero)
         backgroundColor = .systemBackground
+        vocaSegmentedControl.backgroundColor = .mainTintColor
         configure()
         setupLayout()
     }

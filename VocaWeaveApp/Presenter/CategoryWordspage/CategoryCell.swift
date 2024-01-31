@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 
-final class CagtegoryCell: UICollectionViewCell {
-    static let identifier = "CagtegoryCollectionViewCell"
+final class CategoryCell: UICollectionViewCell {
+    static let identifier = "CategoryCollectionViewCell"
 
     let categoryLabel: UILabel = {
         let label = UILabel()
@@ -26,7 +26,8 @@ final class CagtegoryCell: UICollectionViewCell {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setup()
     }
 
     private func setup() {
