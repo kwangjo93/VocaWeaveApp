@@ -247,7 +247,6 @@ extension VocaListVM {
         cell.isSelect = isSelected
         cell.selectedSegmentIndex = selectedSegmentIndex
         cell.configureBookmark()
-        cell.speakerButtonAction()
         cell.selectionStyle = .none
     }
 

@@ -10,4 +10,5 @@ import Foundation
 enum DictionaryEnum {
     case new
     case response
+    case edit
 }

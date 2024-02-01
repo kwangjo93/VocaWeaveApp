@@ -14,7 +14,7 @@ extension String {
     }
 
     func containsOnlyEnglish() -> Bool {
-        let englishRegex = "^[a-zA-Z₩~,.?!\\-_/\\s]*$"
+        let englishRegex = "^[a-zA-Z₩~,.?!\\-_/\\s`']*['a-zA-Z₩~,.?!\\-_/\\s]*$"
         return range(of: englishRegex, options: .regularExpression) != nil
     }
 

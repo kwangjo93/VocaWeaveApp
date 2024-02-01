@@ -34,7 +34,7 @@ final class OnboardingVC: UIPageViewController {
     private let closeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("닫기", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.backgroundColor = .systemBackground
         button.layer.borderWidth = 0.5
         button.layer.borderColor = UIColor.black.cgColor
