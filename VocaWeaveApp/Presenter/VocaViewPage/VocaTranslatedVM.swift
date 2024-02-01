@@ -114,9 +114,7 @@ final class VocaTranslatedVM {
                               nextView: DictionaryVC) {
         let navigationController = UINavigationController(rootViewController: nextView)
         navigationController.modalPresentationStyle = .fullScreen
-        currentView.present(navigationController, animated: true) {
-            currentView.tabBarController?.tabBar.isHidden = true
-        }
+        currentView.present(navigationController, animated: false)
     }
 }
 // MARK: - Alert - Add, Update Method
