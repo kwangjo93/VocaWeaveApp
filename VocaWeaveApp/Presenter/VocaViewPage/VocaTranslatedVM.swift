@@ -114,9 +114,7 @@ final class VocaTranslatedVM {
                               nextView: DictionaryVC) {
         let navigationController = UINavigationController(rootViewController: nextView)
         navigationController.modalPresentationStyle = .fullScreen
-        currentView.present(navigationController, animated: true) {
-            currentView.tabBarController?.tabBar.isHidden = true
-        }
+        currentView.present(navigationController, animated: false)
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -262,8 +260,6 @@ extension VocaTranslatedVM {
     func saveDictionaryData(_ voca: RealmTranslateModel, vocaTranslatedVM: VocaTranslatedVM?) {
         if !self.isVocaAlreadyExists(voca) {
             self.addVoca(voca)
-            let newVocaList: [RealmTranslateModel] = self.vocaList
-            self.tableViewUpdate.send(newVocaList)
         } else {
             guard vocaTranslatedVM != nil else { return }
             let alert = UIAlertController(title: "중복",
@@ -312,7 +308,7 @@ extension VocaTranslatedVM {
                               text: String,
                               bookmarkButton: UIButton,
                               view: DictionaryView) {
-        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
             saveDictionaryData(vocaData, vocaTranslatedVM: nil)

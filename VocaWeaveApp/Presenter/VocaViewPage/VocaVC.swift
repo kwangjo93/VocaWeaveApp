@@ -117,11 +117,13 @@ final class VocaVC: UIViewController {
     }
     private func bindModelData() {
         vocaListVM.alertPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
         vocaListVM.tableViewUpdate
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedVocaList in
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
@@ -134,6 +136,7 @@ final class VocaVC: UIViewController {
             .store(in: &cancellables)
 
         vocaTranslatedVM.alertPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
@@ -234,7 +237,7 @@ extension VocaVC {
         vocaListVM.manageEmptyView(vocaVC: self,
                                    emptyView: emptyView,
                                    tableView: vocaView.vocaTableView)
-        vocaListDataSource.apply(vocaListSnapshot, animatingDifferences: true)
+        vocaListDataSource?.apply(vocaListSnapshot, animatingDifferences: true)
     }
 }
 // MARK: - VocaTranslated TableView Diffable DataSource
@@ -264,16 +267,16 @@ extension VocaVC {
         vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
         let sections = Section.allCases
         for section in sections {
-                   let itemsInSection = newData.filter { $0.section == section.title }
-                   if !itemsInSection.isEmpty {
-                       vocaTranslatedSnapshot.appendSections([section])
-                       vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
-                   }
-               }
+            let itemsInSection = newData.filter { $0.section == section.title }
+            if !itemsInSection.isEmpty {
+                vocaTranslatedSnapshot.appendSections([section])
+                vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
+            }
+        }
         vocaTranslatedVM.manageEmptyView(vocaVC: self,
                                          emptyView: emptyView,
                                          tableView: vocaView.vocaTableView)
-        vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
+        vocaTranslatedDataSource?.apply(vocaTranslatedSnapshot, animatingDifferences: true)
     }
 }
 // MARK: - TableView Delegate
@@ -309,7 +312,7 @@ extension VocaVC: UITableViewDelegate {
                                                tableView: vocaView.vocaTableView)
                 }
                 completionHandler(true)
-            } else {
+            } else if segmentIndex == 1 {
                 if let item = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath) {
                     var snapshot = self.vocaTranslatedDataSource.snapshot()
                     snapshot.deleteItems([item])

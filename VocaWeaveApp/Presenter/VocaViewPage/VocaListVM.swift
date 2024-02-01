@@ -71,7 +71,7 @@ final class VocaListVM {
     }
 
     private func trimWhitespace(_ text: String) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
         return trimmed
     }
     // MARK: - Action
@@ -211,20 +211,28 @@ extension VocaListVM {
                   let translatedtext = translatedtextField.text else {
                 return
             }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+
+            let trimmedSourceText = sourcetext.trimmingCharacters(in: .whitespaces)
+            let trimmedTranslatedText = translatedtext.trimmingCharacters(in: .whitespaces)
+
+            if trimmedSourceText.isEmpty || trimmedTranslatedText.isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }
-            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
+
+            let voca = RealmVocaModel(sourceText: trimmedSourceText,
+                                      translatedText: trimmedTranslatedText,
+                                      realmQeury: realmQuery)
+
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
                 let newVocaList: [RealmVocaModel] = vocaList
                 self.tableViewUpdate.send(newVocaList)
             } else {
-                presentAlertOfDuplication()
+                self.presentAlertOfDuplication()
             }
         }
+
         alert.addAction(saveAction)
     }
 
