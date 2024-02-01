@@ -22,6 +22,9 @@ final class VocaWeaveVC: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(refreshButtonAction))
+    lazy var nightModeButton = nightModeBarButtonItem(
+                            target: self,
+                            action: #selector(nightModeButtonAction))
     // MARK: - init
     init(vocaWeaveViewModel: VocaWeaveVM) {
         self.vocaWeaveVM = vocaWeaveViewModel
@@ -60,9 +63,6 @@ final class VocaWeaveVC: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-        let nightModeButton = nightModeBarButtonItem(
-                                target: self,
-                                action: #selector(nightModeButtonAction))
         navigationItem.rightBarButtonItems = [refreshButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -176,10 +176,14 @@ final class VocaWeaveVC: UIViewController {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
+                        nightModeButton.image = UIImage(systemName: "moon")
+                        nightModeButton.tintColor = .black
                         vocaWeaveView.responseDataText.layer.borderColor = UIColor.label.cgColor
                         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
                     } else {
                         window.overrideUserInterfaceStyle = .dark
+                        nightModeButton.image = UIImage(systemName: "moon.fill")
+                        nightModeButton.tintColor = .subTinkColor
                         vocaWeaveView.responseDataText.layer.borderColor = UIColor.white.cgColor
                         buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.white.cgColor) }
                     }

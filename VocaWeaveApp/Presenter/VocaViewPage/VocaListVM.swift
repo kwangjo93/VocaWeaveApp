@@ -71,7 +71,7 @@ final class VocaListVM {
     }
 
     private func trimWhitespace(_ text: String) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
         return trimmed
     }
     // MARK: - Action
@@ -90,14 +90,18 @@ final class VocaListVM {
         datamanager.deleteList(list)
     }
 
-    func nightModeButtonAction() {
+    func nightModeButtonAction(button: UIBarButtonItem) {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
+                        button.image = UIImage(systemName: "moon")
+                        button.tintColor = .black
                     } else {
                         window.overrideUserInterfaceStyle = .dark
+                        button.image = UIImage(systemName: "moon.fill")
+                        button.tintColor = .subTinkColor
                     }
                 }
             }
@@ -207,20 +211,28 @@ extension VocaListVM {
                   let translatedtext = translatedtextField.text else {
                 return
             }
-            if sourcetext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-                translatedtext.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+
+            let trimmedSourceText = sourcetext.trimmingCharacters(in: .whitespaces)
+            let trimmedTranslatedText = translatedtext.trimmingCharacters(in: .whitespaces)
+
+            if trimmedSourceText.isEmpty || trimmedTranslatedText.isEmpty {
                 self.showEmptyTextFieldAlert()
                 return
             }
-            let voca = RealmVocaModel(sourceText: sourcetext, translatedText: translatedtext, realmQeury: realmQuery)
+
+            let voca = RealmVocaModel(sourceText: trimmedSourceText,
+                                      translatedText: trimmedTranslatedText,
+                                      realmQeury: realmQuery)
+
             if !self.isVocaAlreadyExists(voca) {
                 self.addVoca(voca)
                 let newVocaList: [RealmVocaModel] = vocaList
                 self.tableViewUpdate.send(newVocaList)
             } else {
-                presentAlertOfDuplication()
+                self.presentAlertOfDuplication()
             }
         }
+
         alert.addAction(saveAction)
     }
 

@@ -42,8 +42,13 @@ final class VocaWeaveVM {
     }
     // MARK: - Helper
     private func isEnglishAlphabet(_ str: String) -> Bool {
+        let trimmedStr = str.trimmingCharacters(in: .whitespacesAndNewlines)
+        let words = trimmedStr.components(separatedBy: .whitespaces)
         let englishAlphabet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        return str.rangeOfCharacter(from: englishAlphabet.inverted) == nil
+        for word in words where word.rangeOfCharacter(from: englishAlphabet.inverted) != nil {
+            return false
+        }
+        return true
     }
 
     func strikeButtonTapped(sender: UIButton) {
