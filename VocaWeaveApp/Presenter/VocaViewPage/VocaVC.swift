@@ -47,7 +47,6 @@ final class VocaVC: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(vocaListVM.vocaList)
         setup()
         bindModelData()
         vocaListVM.manageEmptyView(vocaVC: self,
