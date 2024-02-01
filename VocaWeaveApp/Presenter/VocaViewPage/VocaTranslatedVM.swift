@@ -110,11 +110,13 @@ final class VocaTranslatedVM {
     }
 
     @MainActor
-    private func nextGoPage(currentView: VocaVC,
-                            nextView: DictionaryVC) {
+    private func goToNextPage(currentView: VocaVC,
+                              nextView: DictionaryVC) {
         let navigationController = UINavigationController(rootViewController: nextView)
         navigationController.modalPresentationStyle = .fullScreen
-        currentView.present(navigationController, animated: true)
+        currentView.present(navigationController, animated: true) {
+            currentView.tabBarController?.tabBar.isHidden = true
+        }
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -201,7 +203,7 @@ extension VocaTranslatedVM {
                                                         dictionaryEnum: .response,
                                                         vocaTranslatedVM: self,
                                                         dictionaryVM: nil)
-                await self.nextGoPage(currentView: currentView,
+                await self.goToNextPage(currentView: currentView,
                                       nextView: dictionaryView)
             } catch {
                 print("Task Response : \(error)")
@@ -253,7 +255,7 @@ extension VocaTranslatedVM {
                                            dictionaryEnum: .edit,
                                            vocaTranslatedVM: self,
                                            dictionaryVM: nil)
-        self.nextGoPage(currentView: currentView,
+        self.goToNextPage(currentView: currentView,
                         nextView: dictionaryView)
     }
 

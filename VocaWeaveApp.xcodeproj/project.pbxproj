@@ -334,8 +334,8 @@
 		F9C6C8632B2808F300428D55 /* DictionaryViewPage */ = {
 			isa = PBXGroup;
 			children = (
-				F9C6C8642B28092900428D55 /* DictionaryVC.swift */,
 				F9C6C8662B28093400428D55 /* Dictionaryview.swift */,
+				F9C6C8642B28092900428D55 /* DictionaryVC.swift */,
 				F9C6C8682B28094300428D55 /* DictionaryVM.swift */,
 			);
 			path = DictionaryViewPage;

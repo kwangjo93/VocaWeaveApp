@@ -90,14 +90,18 @@ final class VocaListVM {
         datamanager.deleteList(list)
     }
 
-    func nightModeButtonAction() {
+    func nightModeButtonAction(button: UIBarButtonItem) {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
+                        button.image = UIImage(systemName: "moon")
+                        button.tintColor = .black
                     } else {
                         window.overrideUserInterfaceStyle = .dark
+                        button.image = UIImage(systemName: "moon.fill")
+                        button.tintColor = .subTinkColor
                     }
                 }
             }

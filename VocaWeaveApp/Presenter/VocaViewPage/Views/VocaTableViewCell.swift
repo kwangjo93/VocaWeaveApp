@@ -97,6 +97,7 @@ final class VocaTableViewCell: UITableViewCell {
         translatedLabel.snp.makeConstraints {
             $0.leading.equalTo(sourceLabel.snp.trailing).offset(defaultValue * 2)
             $0.top.equalTo(sourceLabel.snp.top)
+            $0.bottom.equalTo(sourceLabel.snp.bottom)
             $0.width.equalTo(120)
         }
 
