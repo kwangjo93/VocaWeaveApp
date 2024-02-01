@@ -80,6 +80,7 @@ final class DictionaryVC: UIViewController {
         guard let vocaTranslatedVM = vocaTranslatedVM else { return }
         switch dictionaryEnum {
         case .edit, .response:
+            tabBarController?.tabBar.isHidden = true
             dictionaryView.sourceTextField.text = vocaTranslatedData.sourceText
             dictionaryView.translationText.text = vocaTranslatedData.translatedText
             hideAndPresnetAddButton()
