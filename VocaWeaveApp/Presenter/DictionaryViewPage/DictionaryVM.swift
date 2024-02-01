@@ -167,7 +167,7 @@ final class DictionaryVM {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
-            vocaTranslatedVM.saveDictionaryData(vocaData, vocaTranslatedVM: vocaTranslatedVM)
+            vocaTranslatedVM.saveDictionaryData(vocaData, vocaTranslatedVM: nil)
             vocaTranslatedVM.updateVoca(list: vocaData,
                                         text: vocaData.translatedText,
                                         isSelected: true)

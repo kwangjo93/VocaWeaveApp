@@ -264,16 +264,18 @@ extension VocaVC {
         vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
         let sections = Section.allCases
         for section in sections {
-                   let itemsInSection = newData.filter { $0.section == section.title }
-                   if !itemsInSection.isEmpty {
-                       vocaTranslatedSnapshot.appendSections([section])
-                       vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
-                   }
-               }
+            let itemsInSection = newData.filter { $0.section == section.title }
+            if !itemsInSection.isEmpty {
+                vocaTranslatedSnapshot.appendSections([section])
+                vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
+            }
+        }
         vocaTranslatedVM.manageEmptyView(vocaVC: self,
                                          emptyView: emptyView,
                                          tableView: vocaView.vocaTableView)
-        vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
+        vocaView.vocaTableView.beginUpdates()
+        vocaTranslatedDataSource?.apply(vocaTranslatedSnapshot, animatingDifferences: true)
+        vocaView.vocaTableView.endUpdates()
     }
 }
 // MARK: - TableView Delegate

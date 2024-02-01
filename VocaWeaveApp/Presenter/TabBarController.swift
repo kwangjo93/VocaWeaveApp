@@ -51,7 +51,7 @@ final class TabBarController: UITabBarController {
         let dictionaryViewController = UINavigationController(
             rootViewController: DictionaryVC(vocaTranslatedData: nil,
                                              dictionaryEnum: .new,
-                                             vocaTranslatedVM: nil,
+                                             vocaTranslatedVM: vocaTranslatedVM,
                                              dictionaryVM: dictionaryVM))
 
         vocaViewController.tabBarItem = UITabBarItem(
