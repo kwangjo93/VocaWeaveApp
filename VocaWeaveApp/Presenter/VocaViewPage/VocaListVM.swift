@@ -71,7 +71,7 @@ final class VocaListVM {
     }
 
     private func trimWhitespace(_ text: String) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
         return trimmed
     }
     // MARK: - Action
