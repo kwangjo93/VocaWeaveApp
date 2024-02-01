@@ -118,6 +118,7 @@ final class DictionaryView: UIView {
         let textView = UITextView()
         textView.font = .boldSystemFont(ofSize: 18)
         textView.textColor = UIColor.label
+        textView.isEditable = false
         textView.isScrollEnabled = true
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.label.cgColor
