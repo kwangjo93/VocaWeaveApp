@@ -33,6 +33,8 @@ final class VocaVC: UIViewController {
                                             style: .plain,
                                             target: self,
                                             action: #selector(searchButtonAction))
+    lazy var nightModeButton = nightModeBarButtonItem(target: self,
+                                                 action: #selector(nightModeButtonAction))
     // MARK: - init
     init(vocaTranslatedVM: VocaTranslatedVM, vocaListVM: VocaListVM) {
         self.vocaTranslatedVM = vocaTranslatedVM
@@ -72,9 +74,6 @@ final class VocaVC: UIViewController {
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItem = titleItem
-        let nightModeButton = nightModeBarButtonItem(
-                                                        target: self,
-                                                        action: #selector(nightModeButtonAction))
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -193,7 +192,7 @@ final class VocaVC: UIViewController {
         }
     }
     @objc private func nightModeButtonAction() {
-        vocaListVM.nightModeButtonAction()
+        vocaListVM.nightModeButtonAction(button: nightModeButton)
     }
     @objc private func searchButtonAction() {
         vocaListVM.searchButtonAction(view: self, searchController: searchController)

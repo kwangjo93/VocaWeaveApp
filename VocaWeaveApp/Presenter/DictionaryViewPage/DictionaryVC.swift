@@ -27,6 +27,8 @@ final class DictionaryVC: UIViewController {
                                      style: .plain,
                                      target: self,
                                      action: #selector(addRightBarButtonAction))
+    lazy var nightModeButton = nightModeBarButtonItem(target: self,
+                                                      action: #selector(nightModeBuutonAction))
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,9 +71,6 @@ final class DictionaryVC: UIViewController {
         let titleItem = UIBarButtonItem(customView: titleLabel)
         navigationItem.leftBarButtonItems = [titleItem]
 
-        let nightModeButton = nightModeBarButtonItem(
-                                target: self,
-                                action: #selector(nightModeBuutonAction))
         navigationItem.rightBarButtonItems = [nightModeButton]
         navigationController?.configureBasicAppearance()
     }
@@ -179,9 +178,13 @@ final class DictionaryVC: UIViewController {
                 if let window = windowScene.windows.first {
                     if window.overrideUserInterfaceStyle == .dark {
                         window.overrideUserInterfaceStyle = .light
+                        nightModeButton.image = UIImage(systemName: "moon")
+                        nightModeButton.tintColor = .black
                         dictionaryView.translationText.layer.borderColor = UIColor.label.cgColor
                     } else {
                         window.overrideUserInterfaceStyle = .dark
+                        nightModeButton.image = UIImage(systemName: "moon.fill")
+                        nightModeButton.tintColor = .subTinkColor
                         dictionaryView.translationText.layer.borderColor = UIColor.white.cgColor
                     }
                 }
