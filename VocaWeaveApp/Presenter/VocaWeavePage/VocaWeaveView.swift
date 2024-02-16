@@ -19,6 +19,8 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
@@ -27,6 +29,8 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 27)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
@@ -212,7 +216,7 @@ final class VocaWeaveView: UIView {
         countLabelstackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue * 17)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 15)
             $0.height.equalTo(50)
         }
 
