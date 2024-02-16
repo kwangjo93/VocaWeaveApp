@@ -56,6 +56,7 @@ final class VocaVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
+        vocaListVM.setNightButton(button: nightModeButton)
     }
     // MARK: - Helper
     private func setup() {

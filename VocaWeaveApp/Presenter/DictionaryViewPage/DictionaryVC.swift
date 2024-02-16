@@ -36,6 +36,10 @@ final class DictionaryVC: UIViewController {
         modelDataBinding()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNightButton(button: nightModeButton)
+    }
     // MARK: - init
     init(vocaTranslatedData: RealmTranslateModel?,
          dictionaryEnum: DictionaryEnum,
@@ -51,6 +55,22 @@ final class DictionaryVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     // MARK: - Helper
+    func setNightButton(button: UIBarButtonItem) {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        button.image = UIImage(systemName: "moon.fill")
+                        button.tintColor = .subTinkColor
+                    } else {
+                        button.image = UIImage(systemName: "moon")
+                        button.tintColor = .black
+                    }
+                }
+            }
+        }
+    }
+
     private func setup() {
         view.addSubview(dictionaryView)
         configureNav()
