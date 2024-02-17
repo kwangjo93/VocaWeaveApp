@@ -1,8 +1,8 @@
 //
-//  VocaTableViewCell.swift
+//  CategoryTableViewCell.swift
 //  VocaWeaveApp
 //
-//  Created by 천광조 on 12/8/23.
+//  Created by 천광조 on 2/17/24.
 //
 
 import UIKit
@@ -11,15 +11,23 @@ import AVFoundation
 import Combine
 import Lottie
 
-final class VocaTableViewCell: UITableViewCell {
+class CategoryTableViewCell: UITableViewCell {
     // MARK: - Property
-    static let identifier = "VocaTableViewCell"
+    static let identifier = "CategoryTableViewCell"
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
+
+    var firstVocaData: [RealmVocaModel]?
+    var secondVocaData: [RealmVocaModel]?
+    var allVocaData: [RealmVocaModel]?
 
     var vocaListViewModel: VocaListVM?
     var vocaTanslatedViewModel: VocaTranslatedVM?
 
+    let vocaListTableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
+    let vocaTranslatedTableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
+
+    var distinguishSavedData = true
     var isSelect = false
     var selectedSegmentIndex = 0
 
@@ -81,17 +89,15 @@ final class VocaTableViewCell: UITableViewCell {
                                             for: .normal)
         }
     }
-}
-// MARK: - CategoryView
-extension VocaTableViewCell {
-    func bindVocaListData() {
+
+    func configureVocaListData() {
         guard let vocaListData = vocaListData else { return }
         self.sourceLabel.text = vocaListData.sourceText
         self.translatedLabel.text = vocaListData.translatedText
         self.isSelect = vocaListData.isSelected
     }
 
-    func bindVocaTranslatedData() {
+    func configureVocaTranslatedData() {
         guard let vocaTanslatedData = vocaTanslatedData else { return }
         self.sourceLabel.text = vocaTanslatedData.sourceText
         self.translatedLabel.text = vocaTanslatedData.translatedText
@@ -99,7 +105,7 @@ extension VocaTableViewCell {
     }
 }
 
-private extension VocaTableViewCell {
+private extension CategoryTableViewCell {
     // MARK: - Helper
     func configure() {
         [sourceLabel,
@@ -153,7 +159,7 @@ private extension VocaTableViewCell {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
     // MARK: - Action
-    @objc  func speakerButtonAction() {
+    @objc func speakerButtonAction() {
         if let text = sourceLabel.text, text.containsOnlyEnglish() {
             Language.sourceLanguage = .english
             let speechUtterance = AVSpeechUtterance(string: text)
@@ -178,7 +184,7 @@ private extension VocaTableViewCell {
             updateBookmarkData(isSelect: true)
             animationView.isHidden = false
             animationView.play { [weak self] _ in
-                self?.animationView.isHidden = true
+            self?.animationView.isHidden = true
             }
         } else {
             updateBookmarkData(isSelect: false)
@@ -203,6 +209,8 @@ private extension VocaTableViewCell {
         vocaTanslatedViewModel.updateVoca(list: vocaTanslatedData,
                                            text: vocaTanslatedData.sourceText,
                                            isSelected: isSelect)
+        let newVocaList: [RealmTranslateModel] = vocaTanslatedViewModel.vocaList
+        self.vocaTranslatedTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
         bookmarkButton.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
                                         withConfiguration: image),
                                         for: .normal)
@@ -213,10 +221,25 @@ private extension VocaTableViewCell {
         switch selectedSegmentIndex {
         case 0:
             updateVocaListData(image: imageConfig)
+            if distinguishSavedData {
+                guard let allVocaData = allVocaData else { return }
+                let newVocaList: [RealmVocaModel] = allVocaData.filter {$0.isSelected == true}
+                self.vocaListTableViewUpdate.send(newVocaList)
+            } else {
+                guard let firstVocaData = firstVocaData else { return }
+                self.vocaListTableViewUpdate.send(firstVocaData)
+            }
         case 1:
-            updateVocaTranslatedData(image: imageConfig)
+            if distinguishSavedData {
+                updateVocaTranslatedData(image: imageConfig)
+            } else {
+                updateVocaListData(image: imageConfig)
+                guard let secondVocaData = secondVocaData else { return }
+                self.vocaListTableViewUpdate.send(secondVocaData)
+            }
         default:
             break
         }
     }
+
 }

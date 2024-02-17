@@ -23,7 +23,7 @@ final class DictionaryVM {
         self.vocaTranslatedVM = vocaTranslatedVM
     }
     // MARK: - Helper
- 
+
     func playAnimation(view: DictionaryView, isSelect: Bool, text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }

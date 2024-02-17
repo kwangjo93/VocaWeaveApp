@@ -12,7 +12,7 @@ final class VocaVC: UIViewController {
     // MARK: - Property
     private let vocaTranslatedVM: VocaTranslatedVM
     private let vocaListVM: VocaListVM
-    private let vocaView = VocaView(firstString: "나의 단어장", secondString: "사진 단어장")
+    private let vocaView = VocaView()
     private let emptyView = EmptyListView()
     private let searchController = UISearchController()
     private var isSearchBarVisible = false
@@ -221,10 +221,10 @@ extension VocaVC {
             cell.vocaListData = data
             cell.vocaListViewModel = self.vocaListVM
             vocaListVM.setupCell(cell: cell,
-                                        sourceText: data.sourceText,
-                                        translatedText: data.translatedText,
-                                        isSelected: data.isSelected,
-                                        selectedSegmentIndex: self.segmentIndex)
+                                 sourceText: data.sourceText,
+                                 translatedText: data.translatedText,
+                                 isSelected: data.isSelected,
+                                 selectedSegmentIndex: self.segmentIndex)
             return cell
         }
     }

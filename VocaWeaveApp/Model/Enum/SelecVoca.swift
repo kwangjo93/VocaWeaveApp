@@ -11,7 +11,7 @@ enum SelecVoca {
     case myVoca
     case dicVoca
     case bookmarkVoca
-    
+
     var tagValue: Int {
         switch self {
         case .myVoca:

@@ -13,7 +13,7 @@ final class CategoryDetailVC: UIViewController {
     private let firstString: String
     private let secondString: String
     private let navigationTitle: String
-    private lazy var detailView = VocaView(firstString: firstString, secondString: secondString)
+    private lazy var detailView = DetailView(firstString: firstString, secondString: secondString)
     private var selectedSegmentIndex = 0
     private var indexPath: Int
     private let distinguishSavedData: Bool
@@ -99,16 +99,14 @@ private extension CategoryDetailVC {
 
     func configureUI() {
         view.addSubview(detailView)
-        detailView.vocaTableView.register(
-                                        VocaTableViewCell.self,
-                                        forCellReuseIdentifier: VocaTableViewCell.identifier)
-        detailView.vocaTableView.register(
-                                        VocaTableViewHeaderView.self,
-                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+        detailView.vocaTableView.register(CategoryTableViewCell.self,
+                                          forCellReuseIdentifier: CategoryTableViewCell.identifier)
+        detailView.vocaTableView.register(VocaTableViewHeaderView.self,
+                                          forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         detailView.vocaSegmentedControl.selectedSegmentIndex = 0
         detailView.vocaSegmentedControl.addTarget(self,
-                                                action: #selector(valueChangeForSegmentedControl),
-                                                for: .valueChanged)
+                                                  action: #selector(valueChangeForSegmentedControl),
+                                                  for: .valueChanged)
 
         let defaultValue = 8
         detailView.snp.makeConstraints {
@@ -118,7 +116,7 @@ private extension CategoryDetailVC {
         }
     }
 
-    func bindCellData(cell: VocaTableViewCell) {
+    func bindCellData(cell: CategoryTableViewCell) {
         cell.vocaListTableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
@@ -131,8 +129,7 @@ private extension CategoryDetailVC {
             .store(in: &cancellables)
     }
 
-    func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?,
-                               _ secondVocaDatas: [RealmVocaModel]?) {
+    func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?, _ secondVocaDatas: [RealmVocaModel]?) {
         switch selectedSegmentIndex {
         case 0:
             self.firstVocaData = firstVocaDatas
@@ -201,12 +198,12 @@ extension CategoryDetailVC {
                 -> UITableViewCell? in
                 guard let self = self,
                       let cell = tableView.dequeueReusableCell(
-                                            withIdentifier: VocaTableViewCell.identifier,
-                                            for: indexPath) as? VocaTableViewCell
+                                            withIdentifier: CategoryTableViewCell.identifier,
+                                            for: indexPath) as? CategoryTableViewCell
                                             else { return UITableViewCell() }
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
                 cell.vocaListData = data
-                cell.bindVocaListData()
+                cell.configureVocaListData()
                 cell.configureBookmark()
                 cell.vocaListViewModel = categoryViewModel.vocaListVM
                 cell.selectedSegmentIndex = selectedSegmentIndex
@@ -243,13 +240,13 @@ extension CategoryDetailVC {
             -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                      withIdentifier: VocaTableViewCell.identifier,
-                      for: indexPath) as? VocaTableViewCell
+                      withIdentifier: CategoryTableViewCell.identifier,
+                      for: indexPath) as? CategoryTableViewCell
                       else { return UITableViewCell() }
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
             cell.vocaTanslatedData = data
-            cell.bindVocaTranslatedData()
+            cell.configureVocaTranslatedData()
             cell.configureBookmark()
             cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedVM
             cell.selectedSegmentIndex = selectedSegmentIndex
