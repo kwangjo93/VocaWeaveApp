@@ -19,6 +19,8 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
@@ -27,6 +29,8 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 27)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
@@ -52,6 +56,7 @@ final class VocaWeaveView: UIView {
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.setTitleColor(UIColor.label, for: .normal)
         button.tag = 0
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -59,7 +64,7 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 1
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -67,7 +72,7 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 2
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -84,7 +89,7 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 3
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -92,7 +97,7 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 4
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -212,7 +217,7 @@ final class VocaWeaveView: UIView {
         countLabelstackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue * 17)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 15)
             $0.height.equalTo(50)
         }
 

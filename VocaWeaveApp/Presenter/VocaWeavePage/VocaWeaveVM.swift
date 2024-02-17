@@ -13,6 +13,7 @@ import AVFoundation
 final class VocaWeaveVM {
     // MARK: - Property
     private let vocaListManager: VocaListManager
+    private let vocaTranslatedManager: VocaTranslatedManager
     private let networking = NetworkingManager.shared
 
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -20,25 +21,26 @@ final class VocaWeaveVM {
     let setupStatusCountPublisher = PassthroughSubject<Int, Never>()
     let selectedCountCountPublisher = PassthroughSubject<Int, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let changedVocaPublisher = PassthroughSubject<Int, Never>()
 
+    var selectedVocaType: SelecVoca = .myVoca
     private let speechSynthesizer = AVSpeechSynthesizer()
     private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
-    var vocaList: [RealmVocaModel] {
-        return vocaListManager.getVocaList(query: realmQuery)
-    }
+    lazy var vocaList = vocaListManager.getVocaList(query: realmQuery)
     lazy var vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    var resetData = false {
+    var selectedValue = 0
+    var resetData = 0 {
         didSet {
-            vocaDataArray = vocaListManager.getVocaList(query: realmQuery)
-                                                .filter { isEnglishAlphabet($0.sourceText) }
+            changeVocaData(value: resetData)
             isSelect = false
         }
     }
     // MARK: - init
-    init(vocaListManager: VocaListManager) {
+    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
         self.vocaListManager = vocaListManager
+        self.vocaTranslatedManager = vocaTranslatedManager
     }
     // MARK: - Helper
     private func isEnglishAlphabet(_ str: String) -> Bool {
@@ -142,6 +144,40 @@ final class VocaWeaveVM {
             setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
             vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
         }
+    }
+
+    func selectVoca() {
+        switch selectedVocaType {
+        case .myVoca, .dicVoca, .bookmarkVoca:
+            changedVocaPublisher.send(selectedVocaType.tagValue)
+        }
+    }
+
+    func changeVocaData(value: Int) {
+        switch value {
+        case 0:
+            setMyVocaData()
+        case 1:
+            setDicVocaData()
+        case 2:
+            setBookmarkVocaData()
+        default:
+            break
+        }
+    }
+
+    private func setMyVocaData() {
+         vocaList = vocaListManager.getVocaList(query: realmQuery)
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    private func setDicVocaData() {
+        print("1")
+    }
+
+    private func setBookmarkVocaData() {
+        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
     }
 
     private func copyAlertAction() {
