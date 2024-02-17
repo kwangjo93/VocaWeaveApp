@@ -10,8 +10,8 @@ import SnapKit
 
 final class VocaView: UIView {
     // MARK: - Property
-    let firstSegmentTitle: String
-    let secondSegmentTitle: String
+    private let firstSegmentTitle: String
+    private let secondSegmentTitle: String
     var vocaSegmentedControl: UISegmentedControl
     let vocaTableView = UITableView()
 

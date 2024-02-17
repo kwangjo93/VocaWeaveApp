@@ -15,6 +15,8 @@ final class VocaWeaveVM {
     private let vocaListManager: VocaListManager
     private let vocaTranslatedManager: VocaTranslatedManager
     private let networking = NetworkingManager.shared
+    private let speechSynthesizer = AVSpeechSynthesizer()
+    private let realmQuery = "myVoca"
 
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let setupStatusTextPublisher = PassthroughSubject<String, Never>()
@@ -24,8 +26,6 @@ final class VocaWeaveVM {
     let changedVocaPublisher = PassthroughSubject<Int, Never>()
 
     var selectedVocaType: SelecVoca = .myVoca
-    private let speechSynthesizer = AVSpeechSynthesizer()
-    private let realmQuery = "myVoca"
     var isSelect = false
     var selectedCount = 0
     lazy var vocaList = vocaListManager.getVocaList(query: realmQuery)
@@ -43,16 +43,6 @@ final class VocaWeaveVM {
         self.vocaTranslatedManager = vocaTranslatedManager
     }
     // MARK: - Helper
-    private func isEnglishAlphabet(_ str: String) -> Bool {
-        let trimmedStr = str.trimmingCharacters(in: .whitespacesAndNewlines)
-        let words = trimmedStr.components(separatedBy: .whitespaces)
-        let englishAlphabet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-        for word in words where word.rangeOfCharacter(from: englishAlphabet.inverted) != nil {
-            return false
-        }
-        return true
-    }
-
     func strikeButtonTapped(sender: UIButton) {
         let attributedString: NSAttributedString?
         if isSelect {
@@ -68,7 +58,7 @@ final class VocaWeaveVM {
         }
     }
 
-     func resetStrikeButtons(sender: [UIButton]) {
+    func resetStrikeButtons(sender: [UIButton]) {
         for button in sender {
             button.setAttributedTitle(nil, for: .normal)
             button.titleLabel?.attributedText = nil
@@ -93,14 +83,6 @@ final class VocaWeaveVM {
         }
     }
 
-    private func findWordRange(in text: String, word: String) -> NSRange? {
-        if let range = text.range(of: word) {
-            let nsRange = NSRange(range, in: text)
-            return nsRange
-        }
-        return nil
-    }
-
     func applyAnimation(textField: UITextField, text: String, view: LottieAnimationView) {
         if let wordRange = findWordRange(in: textField.text!, word: text) {
             let textRect = textField.caretRect(for: textField.selectedTextRange!.start)
@@ -110,15 +92,6 @@ final class VocaWeaveVM {
             view.center = CGPoint(x: CGFloat(wordRange.location) * 10, y: yOffset)
             view.play()
         }
-    }
-
-    private func errorResponseAlert() {
-        let alert = UIAlertController(title: "오류!!",
-                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
-                                      preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "cancel", style: .cancel)
-        alert.addAction(cancel)
-        errorAlertPublisher.send(alert)
     }
 
     func setRandomVocaData(buttons: [UIButton]) {
@@ -164,30 +137,6 @@ final class VocaWeaveVM {
         default:
             break
         }
-    }
-
-    private func setMyVocaData() {
-         vocaList = vocaListManager.getVocaList(query: realmQuery)
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    private func setDicVocaData() {
-        print("1")
-    }
-
-    private func setBookmarkVocaData() {
-        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    private func copyAlertAction() {
-        let alert = UIAlertController(title: nil,
-                                      message: "텍스트가 클립보드에 복사되었습니다.",
-                                      preferredStyle: .alert)
-           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-               alert.dismiss(animated: true, completion: nil)
-           }
-        copyAlertPublisher.send(alert)
     }
     // MARK: - Action
     func copyText(text: String?) {
@@ -237,5 +186,58 @@ final class VocaWeaveVM {
             errorResponseAlert()
             return nil
         }
+    }
+}
+
+private extension VocaWeaveVM {
+    func setMyVocaData() {
+        vocaList = vocaListManager.getVocaList(query: realmQuery)
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setDicVocaData() {
+        print("1")
+    }
+
+    func setBookmarkVocaData() {
+        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func copyAlertAction() {
+        let alert = UIAlertController(title: nil,
+                                      message: "텍스트가 클립보드에 복사되었습니다.",
+                                      preferredStyle: .alert)
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+               alert.dismiss(animated: true, completion: nil)
+           }
+        copyAlertPublisher.send(alert)
+    }
+
+    func errorResponseAlert() {
+        let alert = UIAlertController(title: "오류!!",
+                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
+                                      preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        alert.addAction(cancel)
+        errorAlertPublisher.send(alert)
+    }
+
+    func findWordRange(in text: String, word: String) -> NSRange? {
+        if let range = text.range(of: word) {
+            let nsRange = NSRange(range, in: text)
+            return nsRange
+        }
+        return nil
+    }
+
+    func isEnglishAlphabet(_ str: String) -> Bool {
+        let trimmedStr = str.trimmingCharacters(in: .whitespacesAndNewlines)
+        let words = trimmedStr.components(separatedBy: .whitespaces)
+        let englishAlphabet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        for word in words where word.rangeOfCharacter(from: englishAlphabet.inverted) != nil {
+            return false
+        }
+        return true
     }
 }

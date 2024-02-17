@@ -12,7 +12,7 @@ import SnapKit
 final class VocaListVM {
     // MARK: - Property
     private let realmQuery = "myVoca"
-    let datamanager: RealmVocaModelType
+    private let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -69,16 +69,7 @@ final class VocaListVM {
             }
         }
     }
-
-    private func trimWhitespace(_ text: String) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespaces)
-        return trimmed
-    }
     // MARK: - Action
-    private func addVoca(_ list: RealmVocaModel) {
-        datamanager.makeNewList(list)
-    }
-
     func updateVoca(list: RealmVocaModel, sourceText: String, translatedText: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list,
                                    sourceText: sourceText,
@@ -147,12 +138,23 @@ final class VocaListVM {
         alert.addAction(cancelAction)
         alertPublisher.send(alert)
     }
-
-    private func presentOnboadingView(view: UIViewController) {
+}
+// MARK: - Private
+private extension VocaListVM {
+    func presentOnboadingView(view: UIViewController) {
         let onBoardingView = OnboardingVC()
         onBoardingView.modalPresentationStyle = .popover
         onBoardingView.modalTransitionStyle = .crossDissolve
         view.present(onBoardingView, animated: true)
+    }
+
+    func addVoca(_ list: RealmVocaModel) {
+        datamanager.makeNewList(list)
+    }
+
+    func trimWhitespace(_ text: String) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        return trimmed
     }
 }
 // MARK: - Alert - Add, Update Method

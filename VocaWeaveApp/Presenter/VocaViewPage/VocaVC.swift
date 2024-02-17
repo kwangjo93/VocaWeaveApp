@@ -10,30 +10,30 @@ import Combine
 
 final class VocaVC: UIViewController {
     // MARK: - Property
-    let vocaTranslatedVM: VocaTranslatedVM
-    let vocaListVM: VocaListVM
-    let vocaView = VocaView(firstString: "나의 단어장", secondString: "사진 단어장")
-    let emptyView = EmptyListView()
-    let searchController = UISearchController()
-    var isSearchBarVisible = false
-    var segmentIndex = 0
+    private let vocaTranslatedVM: VocaTranslatedVM
+    private let vocaListVM: VocaListVM
+    private let vocaView = VocaView(firstString: "나의 단어장", secondString: "사진 단어장")
+    private let emptyView = EmptyListView()
+    private let searchController = UISearchController()
+    private var isSearchBarVisible = false
+    private var segmentIndex = 0
 
-    var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
-    var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
-    var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
-    var vocaTranslatedSnapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
-    var cancellables = Set<AnyCancellable>()
+    private var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
+    private var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
+    private var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
+    private var vocaTranslatedSnapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
+    private var cancellables = Set<AnyCancellable>()
 
-    lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
+    private lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                           style: .plain,
                                           target: self,
                                           action: #selector(plustButtonAction))
 
-    lazy var searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+    private lazy var searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
                                             style: .plain,
                                             target: self,
                                             action: #selector(searchButtonAction))
-    lazy var nightModeButton = nightModeBarButtonItem(target: self,
+    private lazy var nightModeButton = nightModeBarButtonItem(target: self,
                                                  action: #selector(nightModeButtonAction))
     // MARK: - init
     init(vocaTranslatedVM: VocaTranslatedVM, vocaListVM: VocaListVM) {
@@ -59,13 +59,20 @@ final class VocaVC: UIViewController {
         vocaListVM.setNightButton(button: nightModeButton)
     }
     // MARK: - Helper
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.searchController.searchBar.searchTextField.resignFirstResponder()
+        navigationItem.searchController = nil
+    }
+}
+// MARK: - Private
+private extension VocaVC {
     private func setup() {
         configureNav()
         configureUI()
         setupSearchBar()
         vocaView.vocaTableView.delegate = self
     }
-    private func configureNav() {
+    func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "단어장"
@@ -78,7 +85,7 @@ final class VocaVC: UIViewController {
         navigationItem.rightBarButtonItems = [plusButton, searchButton, nightModeButton]
         navigationController?.configureBasicAppearance()
     }
-    private func configureUI() {
+    func configureUI() {
         view.addSubview(vocaView)
         vocaView.vocaTableView.register(
                                     VocaTableViewCell.self,
@@ -96,7 +103,7 @@ final class VocaVC: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
-    private func setupSearchBar() {
+    func setupSearchBar() {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.autocapitalizationType = .none
@@ -104,7 +111,7 @@ final class VocaVC: UIViewController {
         definesPresentationContext = true
         searchController.isActive = false
     }
-    private func setTableData() {
+    func setTableData() {
         switch segmentIndex {
         case 0:
             vocaListTableViewDatasourceSetup()
@@ -116,7 +123,7 @@ final class VocaVC: UIViewController {
             break
         }
     }
-    private func bindModelData() {
+    func bindModelData() {
         vocaListVM.alertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
@@ -167,12 +174,8 @@ final class VocaVC: UIViewController {
             }
             .store(in: &cancellables)
     }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.searchController.searchBar.searchTextField.resignFirstResponder()
-        navigationItem.searchController = nil
-    }
     // MARK: - Action
-    @objc private func plustButtonAction() {
+    @objc func plustButtonAction() {
         switch segmentIndex {
         case 0:
             vocaListVM.presentActionMenu(view: self, loadAction: showDocumentPicker)
@@ -182,7 +185,7 @@ final class VocaVC: UIViewController {
             break
         }
     }
-    @objc private func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
+    @objc func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         segmentIndex = sender.selectedSegmentIndex
         switch segmentIndex {
         case 0:
@@ -195,10 +198,10 @@ final class VocaVC: UIViewController {
             break
         }
     }
-    @objc private func nightModeButtonAction() {
+    @objc func nightModeButtonAction() {
         vocaListVM.nightModeButtonAction(button: nightModeButton)
     }
-    @objc private func searchButtonAction() {
+    @objc func searchButtonAction() {
         vocaListVM.searchButtonAction(view: self, searchController: searchController)
     }
 }

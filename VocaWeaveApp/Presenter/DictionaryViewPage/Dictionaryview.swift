@@ -11,7 +11,7 @@ import Lottie
 
 final class DictionaryView: UIView {
     // MARK: - Property
-    let defaultValue = 8
+    private let defaultValue = 8
 
     var animationView = LottieAnimationView()
 
@@ -35,7 +35,7 @@ final class DictionaryView: UIView {
         return button
     }()
 
-    lazy var sourceStackView: UIStackView = {
+    private lazy var sourceStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .equalSpacing
@@ -97,7 +97,7 @@ final class DictionaryView: UIView {
         return button
     }()
 
-    lazy var explainStackView: UIStackView = {
+    private lazy var explainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .equalSpacing
@@ -106,7 +106,7 @@ final class DictionaryView: UIView {
         return stackView
     }()
 
-    let translationLabel: UILabel = {
+    private let translationLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = UIColor.label
@@ -140,7 +140,9 @@ final class DictionaryView: UIView {
     }
 
     // MARK: - Helper
-    private func configure() {
+}
+private extension DictionaryView {
+    func configure() {
         [sourceTextSpeakerButton, sourceTextCopyButton].forEach {sourceStackView.addArrangedSubview($0)}
 
         [translatedTextSpeakerButton, translatedTextCopyButton].forEach {explainStackView.addArrangedSubview($0)}
@@ -149,7 +151,7 @@ final class DictionaryView: UIView {
          explainStackView, translationText, translationLabel].forEach {self.addSubview($0)}
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         cancelButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(defaultValue * 4)
             $0.trailing.equalToSuperview()
@@ -178,7 +180,7 @@ final class DictionaryView: UIView {
         }
     }
 
-    private func setupStackViewLayout() {
+    func setupStackViewLayout() {
         sourceStackView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(defaultValue * 4)
             $0.leading.equalToSuperview()

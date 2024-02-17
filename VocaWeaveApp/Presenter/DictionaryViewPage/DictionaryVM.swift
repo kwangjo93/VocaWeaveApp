@@ -13,43 +13,17 @@ import Lottie
 final class DictionaryVM {
     // MARK: - Property
     private let vocaTranslatedVM: VocaTranslatedVM
+    private let speechSynthesizer = AVSpeechSynthesizer()
     private let networking = NetworkingManager.shared
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
-    private let speechSynthesizer = AVSpeechSynthesizer()
     // MARK: - init
     init(vocaTranslatedVM: VocaTranslatedVM) {
         self.vocaTranslatedVM = vocaTranslatedVM
     }
     // MARK: - Helper
-    private func errorResponseAlert() {
-        let alert = UIAlertController(title: "오류!!",
-                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
-                                      preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "cancel", style: .cancel)
-        alert.addAction(cancel)
-        errorAlertPublisher.send(alert)
-    }
-
-    private func copyAlertAction() {
-        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
-           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-               alert.dismiss(animated: true, completion: nil)
-           }
-        copyAlertPublisher.send(alert)
-    }
-
-    private func setupAnimationView(button: UIButton, animationView view: LottieAnimationView) {
-        button.addSubview(view)
-        let animation = LottieAnimation.named("starfill")
-        view.animation = animation
-        view.contentMode = .scaleAspectFit
-        view.loopMode = .playOnce
-        view.isHidden = true
-        view.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
-    }
-
+ 
     func playAnimation(view: DictionaryView, isSelect: Bool, text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
@@ -74,25 +48,6 @@ final class DictionaryVM {
                                     withConfiguration: imageConfig),
                                     for: .normal)
         }
-    }
-
-    @MainActor
-    private func checkForExistingData(with text: String) -> RealmTranslateModel? {
-        let translatedData = vocaTranslatedVM.vocaList
-        if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
-            return duplicatedData
-        }
-        return nil
-    }
-
-    @MainActor
-    private func checkDuplicationData(vocaData: RealmTranslateModel, text: String) -> RealmTranslateModel {
-        if vocaData.sourceText == text {
-            if let duplicatedData = checkForExistingData(with: text) {
-                return duplicatedData
-            }
-        }
-        return vocaData
     }
 
     @MainActor
@@ -149,18 +104,6 @@ final class DictionaryVM {
         }
     }
 
-    private func changeBookmark(vocaData: RealmTranslateModel) {
-        if self.isSelect {
-            vocaTranslatedVM.updateVoca(list: vocaData,
-                                        text: vocaData.translatedText,
-                                        isSelected: true)
-        } else {
-            vocaTranslatedVM.updateVoca(list: vocaData,
-                                        text: vocaData.translatedText,
-                                        isSelected: false)
-        }
-    }
-
     @MainActor
     func bookmarkButtonAction(vocaData: RealmTranslateModel?, text: String, bookmarkButton: UIButton) {
         guard let vocaData = vocaData else { return }
@@ -175,5 +118,65 @@ final class DictionaryVM {
             changeBookmark(vocaData: vocaData)
         }
         setBookmarkStatus(isSelec: self.isSelect, bookmarkButton: bookmarkButton)
+    }
+}
+
+private extension DictionaryVM {
+    func errorResponseAlert() {
+        let alert = UIAlertController(title: "오류!!",
+                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
+                                      preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        alert.addAction(cancel)
+        errorAlertPublisher.send(alert)
+    }
+
+   func copyAlertAction() {
+        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+               alert.dismiss(animated: true, completion: nil)
+           }
+        copyAlertPublisher.send(alert)
+    }
+
+    func setupAnimationView(button: UIButton, animationView view: LottieAnimationView) {
+        button.addSubview(view)
+        let animation = LottieAnimation.named("starfill")
+        view.animation = animation
+        view.contentMode = .scaleAspectFit
+        view.loopMode = .playOnce
+        view.isHidden = true
+        view.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
+    }
+
+    func changeBookmark(vocaData: RealmTranslateModel) {
+        if self.isSelect {
+            vocaTranslatedVM.updateVoca(list: vocaData,
+                                        text: vocaData.translatedText,
+                                        isSelected: true)
+        } else {
+            vocaTranslatedVM.updateVoca(list: vocaData,
+                                        text: vocaData.translatedText,
+                                        isSelected: false)
+        }
+    }
+
+    @MainActor
+    func checkForExistingData(with text: String) -> RealmTranslateModel? {
+        let translatedData = vocaTranslatedVM.vocaList
+        if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
+            return duplicatedData
+        }
+        return nil
+    }
+
+    @MainActor
+    func checkDuplicationData(vocaData: RealmTranslateModel, text: String) -> RealmTranslateModel {
+        if vocaData.sourceText == text {
+            if let duplicatedData = checkForExistingData(with: text) {
+                return duplicatedData
+            }
+        }
+        return vocaData
     }
 }

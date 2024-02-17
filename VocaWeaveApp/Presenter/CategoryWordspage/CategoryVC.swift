@@ -10,9 +10,9 @@ import SnapKit
 
 final class CategoryVC: UIViewController {
     // MARK: - Property
-    let categoryVM: CategoryVM
+    private let categoryVM: CategoryVM
     private var collectionView: UICollectionView!
-    let categoryTittle: [String] = ["나의 단어장\n/ 사전 단어장",
+    private let categoryTittle: [String] = ["나의 단어장\n/ 사전 단어장",
                                     "교통 수단",
                                     "숙소",
                                     "여행 관련 활동\n/ 여행 준비물",
@@ -34,14 +34,17 @@ final class CategoryVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+private extension CategoryVC {
     // MARK: - Helper
-    private func setup() {
+    func setup() {
         configureNav()
         configureUI()
         collectionViewLayout()
     }
 
-    private func configureNav() {
+    func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "암기장"
@@ -54,7 +57,7 @@ final class CategoryVC: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func configureUI() {
+    func configureUI() {
         let layout = createLayout()
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemBackground
@@ -65,7 +68,7 @@ final class CategoryVC: UIViewController {
         collectionView.delegate = self
     }
 
-    private func setGradientColor(for cell: CategoryCell) {
+    func setGradientColor(for cell: CategoryCell) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = UIColor.gradientColor
         gradientLayer.startPoint = CGPoint(x: 1, y: 0)
@@ -76,7 +79,7 @@ final class CategoryVC: UIViewController {
         cell.layer.insertSublayer(gradientLayer, at: 0)
     }
 
-    private func setShadow(view: CAGradientLayer) {
+    func setShadow(view: CAGradientLayer) {
         let mode = traitCollection.userInterfaceStyle
         view.shadowColor = mode == .dark ? UIColor.label.cgColor : UIColor.black.cgColor
         view.shadowOffset = CGSize(width: 0, height: 5)
@@ -84,14 +87,14 @@ final class CategoryVC: UIViewController {
         view.shadowRadius = 8
     }
 
-    private func createLayout() -> UICollectionViewLayout {
+    func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [weak self] _, _ -> NSCollectionLayoutSection? in
                     guard let self = self else { return nil }
                     return createSectionItem()
         }
     }
 
-    private func createSectionItem() -> NSCollectionLayoutSection {
+    func createSectionItem() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
                                               heightDimension: .fractionalHeight(0.7))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -105,7 +108,7 @@ final class CategoryVC: UIViewController {
         return section
     }
 
-    private func collectionViewLayout() {
+    func collectionViewLayout() {
         let defaultValue = 8
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(defaultValue * 2)

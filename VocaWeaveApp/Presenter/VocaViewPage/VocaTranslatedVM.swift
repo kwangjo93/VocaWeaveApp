@@ -13,13 +13,13 @@ import Lottie
 
 final class VocaTranslatedVM {
     // MARK: - Property
-    let datamanager: RealmTranslateType
+    private let datamanager: RealmTranslateType
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
-    let networking = NetworkingManager.shared
+    private let networking = NetworkingManager.shared
     var vocaList: [RealmTranslateModel] {
         return datamanager.getVocaList()
     }
@@ -44,6 +44,29 @@ final class VocaTranslatedVM {
         }
     }
 
+    func setupCell(cell: VocaTableViewCell,
+                   sourceText: String,
+                   translatedText: String,
+                   isSelected: Bool,
+                   selectedSegmentIndex: Int) {
+        cell.sourceLabel.text = sourceText
+        cell.translatedLabel.text = translatedText
+        cell.isSelect = isSelected
+        cell.selectedSegmentIndex = selectedSegmentIndex
+        cell.configureBookmark()
+        cell.selectionStyle = .none
+    }
+    // MARK: - Action
+    func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+        datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
+    }
+
+    func deleteVoca(_ list: RealmTranslateModel) {
+        datamanager.deleteList(list)
+    }
+}
+// MARK: - Private
+private extension VocaTranslatedVM {
     private func removeLeadingAndTrailingSpaces(from string: String) -> String {
         var modifiedString = string
         while modifiedString.hasPrefix(" ") {
@@ -61,35 +84,8 @@ final class VocaTranslatedVM {
                                           && $0.translatedText == voca.translatedText }
       }
 
-    func setupCell(cell: VocaTableViewCell,
-                   sourceText: String,
-                   translatedText: String,
-                   isSelected: Bool,
-                   selectedSegmentIndex: Int) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.configureBookmark()
-        cell.selectionStyle = .none
-    }
-    // MARK: - Action
-    func addVoca(_ list: RealmTranslateModel) {
+    private func addVoca(_ list: RealmTranslateModel) {
         datamanager.makeNewList(list)
-    }
-
-    func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
-        datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
-    }
-
-    private func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
-        datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
-        let newVocaList: [RealmTranslateModel] = vocaList
-        self.tableViewUpdate.send(newVocaList)
-    }
-
-    func deleteVoca(_ list: RealmTranslateModel) {
-        datamanager.deleteList(list)
     }
 
     private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
@@ -115,6 +111,12 @@ final class VocaTranslatedVM {
         let navigationController = UINavigationController(rootViewController: nextView)
         navigationController.modalPresentationStyle = .fullScreen
         currentView.present(navigationController, animated: false)
+    }
+
+    private func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+        datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
+        let newVocaList: [RealmTranslateModel] = vocaList
+        self.tableViewUpdate.send(newVocaList)
     }
 }
 // MARK: - Alert - Add, Update Method

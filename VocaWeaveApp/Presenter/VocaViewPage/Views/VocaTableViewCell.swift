@@ -32,7 +32,7 @@ final class VocaTableViewCell: UITableViewCell {
     var selectedSegmentIndex = 0
 
     private let speechSynthesizer = AVSpeechSynthesizer()
-    var animationView = LottieAnimationView()
+    private var animationView = LottieAnimationView()
 
     let sourceLabel: UILabel = {
         let label = UILabel()
@@ -50,7 +50,7 @@ final class VocaTableViewCell: UITableViewCell {
         return label
     }()
 
-    let speakerButton: UIButton = {
+    private let speakerButton: UIButton = {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "speaker.wave.2", withConfiguration: imageConfig),
@@ -59,7 +59,7 @@ final class VocaTableViewCell: UITableViewCell {
         return button
     }()
 
-    let bookmarkButton: UIButton = {
+    private let bookmarkButton: UIButton = {
         let button = UIButton(type: .custom)
         button.tintColor = UIColor.subTinkColor
         return button
@@ -76,16 +76,47 @@ final class VocaTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    // MARK: - Method
+    func configureBookmark() {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
+        if isSelect == true {
+            bookmarkButton.setImage(UIImage(systemName: "star.fill",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
+        } else {
+            bookmarkButton.setImage(UIImage(systemName: "star",
+                                            withConfiguration: imageConfig),
+                                            for: .normal)
+        }
+    }
+}
+// MARK: - CategoryView
+extension VocaTableViewCell {
+    func bindVocaListData() {
+        guard let vocaListData = vocaListData else { return }
+        self.sourceLabel.text = vocaListData.sourceText
+        self.translatedLabel.text = vocaListData.translatedText
+        self.isSelect = vocaListData.isSelected
+    }
 
+    func bindVocaTranslatedData() {
+        guard let vocaTanslatedData = vocaTanslatedData else { return }
+        self.sourceLabel.text = vocaTanslatedData.sourceText
+        self.translatedLabel.text = vocaTanslatedData.translatedText
+        self.isSelect = vocaTanslatedData.isSelected
+    }
+}
+
+private extension VocaTableViewCell {
     // MARK: - Helper
-    private func configure() {
+    func configure() {
         [sourceLabel,
          translatedLabel,
          speakerButton,
          bookmarkButton].forEach { contentView.addSubview($0) }
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         let defaultValue = 8
 
         sourceLabel.snp.makeConstraints {
@@ -112,7 +143,7 @@ final class VocaTableViewCell: UITableViewCell {
         }
     }
 
-    private func setupAnimationView() {
+    func setupAnimationView() {
         bookmarkButton.addSubview(animationView)
         let animation = LottieAnimation.named("starfill")
         animationView.animation = animation
@@ -121,28 +152,14 @@ final class VocaTableViewCell: UITableViewCell {
         animationView.isHidden = true
         animationView.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
     }
-    // MARK: - Helper
-    private func speakerButtonTapped() {
+
+    func speakerButtonTapped() {
         speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
     }
 
-    private func vocaBookmarkButtonTapped() {
+    func vocaBookmarkButtonTapped() {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
-
-    func configureBookmark() {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
-        if isSelect == true {
-            bookmarkButton.setImage(UIImage(systemName: "star.fill",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
-        } else {
-            bookmarkButton.setImage(UIImage(systemName: "star",
-                                            withConfiguration: imageConfig),
-                                            for: .normal)
-        }
-    }
-
     // MARK: - Action
     @objc func speakerButtonAction() {
         if let text = sourceLabel.text, text.containsOnlyEnglish() {
@@ -176,7 +193,7 @@ final class VocaTableViewCell: UITableViewCell {
         }
     }
 
-    private func updateVocaListData(image: UIImage.SymbolConfiguration) {
+    func updateVocaListData(image: UIImage.SymbolConfiguration) {
         guard let vocaListViewModel = vocaListViewModel else { return }
         guard let vocaListData = vocaListData else { return }
         vocaListViewModel.updateVoca(list: vocaListData,
@@ -188,7 +205,7 @@ final class VocaTableViewCell: UITableViewCell {
                                         for: .normal)
     }
 
-    private func updateVocaTranslatedData(image: UIImage.SymbolConfiguration) {
+    func updateVocaTranslatedData(image: UIImage.SymbolConfiguration) {
         guard let vocaTanslatedViewModel = vocaTanslatedViewModel else { return }
         guard let vocaTanslatedData = vocaTanslatedData else { return }
         vocaTanslatedViewModel.updateVoca(list: vocaTanslatedData,
@@ -201,7 +218,7 @@ final class VocaTableViewCell: UITableViewCell {
                                         for: .normal)
     }
 
-    private func updateBookmarkData(isSelect: Bool) {
+    func updateBookmarkData(isSelect: Bool) {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
         switch selectedSegmentIndex {
         case 0:
@@ -226,21 +243,5 @@ final class VocaTableViewCell: UITableViewCell {
         default:
             break
         }
-    }
-}
-// MARK: - CategoryView
-extension VocaTableViewCell {
-    func bindVocaListData() {
-        guard let vocaListData = vocaListData else { return }
-        self.sourceLabel.text = vocaListData.sourceText
-        self.translatedLabel.text = vocaListData.translatedText
-        self.isSelect = vocaListData.isSelected
-    }
-
-    func bindVocaTranslatedData() {
-        guard let vocaTanslatedData = vocaTanslatedData else { return }
-        self.sourceLabel.text = vocaTanslatedData.sourceText
-        self.translatedLabel.text = vocaTanslatedData.translatedText
-        self.isSelect = vocaTanslatedData.isSelected
     }
 }

@@ -186,14 +186,16 @@ final class DictionaryVC: UIViewController {
         view.endEditing(true)
     }
     // MARK: - Action
-    @objc private func addRightBarButtonAction() {
+}
+private extension DictionaryVC {
+    @objc func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         vocaTranslatedVM?.saveDictionaryData(vocaTranslatedData,
                                             vocaTranslatedVM: vocaTranslatedVM)
         self.dismiss(animated: true)
     }
 
-    @objc private func nightModeBuutonAction() {
+    @objc func nightModeBuutonAction() {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                 if let window = windowScene.windows.first {
@@ -213,29 +215,29 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    @objc private func sourceTextSpeakerButtonAction() {
+    @objc func sourceTextSpeakerButtonAction() {
         guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.sourceTextField.text,
                                           language: Language.sourceLanguage.avLanguageTitle)
     }
 
-    @objc private func sourceTextCopyButtonAction() {
+    @objc func sourceTextCopyButtonAction() {
         dictionaryVM?.copyText(text: dictionaryView.sourceTextField.text)
         view.endEditing(true)
     }
 
-    @objc private func translatedSpeakerButtonAction() {
+    @objc func translatedSpeakerButtonAction() {
         guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.speakerAction(text: dictionaryView.translationText.text,
                                           language: Language.sourceLanguage.avLanguageTitle)
     }
 
-    @objc private func translatedCopyButtonAction() {
+    @objc func translatedCopyButtonAction() {
         dictionaryVM?.copyText(text: dictionaryView.translationText.text)
         view.endEditing(true)
     }
 
-    @objc private func cancelButtonAction() {
+    @objc func cancelButtonAction() {
         dictionaryView.sourceTextField.text = ""
         dictionaryView.translationText.text = ""
         if let dictionaryVM = dictionaryVM {
@@ -250,7 +252,7 @@ final class DictionaryVC: UIViewController {
         view.endEditing(true)
     }
 
-    @objc private func bookmarkButtonAction() {
+    @objc func bookmarkButtonAction() {
         guard let sourceText = dictionaryView.sourceTextField.text else { return }
         switch dictionaryEnum {
         case .new:
@@ -272,7 +274,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    @objc private func backBarButtonAction() {
+    @objc func backBarButtonAction() {
         self.dismiss(animated: true)
     }
 }
