@@ -41,7 +41,7 @@ final class VocaWeaveVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        vocaWeaveVM.resetData = false
+        vocaWeaveVM.resetData = vocaWeaveVM.selectedValue
         refreshButtonAction()
         setNightButton(button: nightModeButton)
     }
@@ -63,8 +63,9 @@ final class VocaWeaveVC: UIViewController {
             return label
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
+        let categoryMenuButton = changeCategoryButton()
         navigationItem.leftBarButtonItem = titleItem
-        navigationItem.rightBarButtonItems = [refreshButton, nightModeButton]
+        navigationItem.rightBarButtonItems = [refreshButton, nightModeButton, categoryMenuButton]
         navigationController?.configureBasicAppearance()
     }
 
@@ -113,6 +114,30 @@ final class VocaWeaveVC: UIViewController {
         }
     }
 
+    private func changeCategoryButton() -> UIBarButtonItem {
+        let myVoca = UIAction(title: "나의 단어장",
+                              image: UIImage(systemName: "figure"),
+                              handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .myVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let dictionayVoca = UIAction(title: "사전 단어장",
+                                     image: UIImage(systemName: "book.pages"),
+                                     handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .dicVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let bookmarkVoca = UIAction(title: "북마크 단어장",
+                                    image: UIImage(systemName: "star.square.fill"),
+                                    handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .bookmarkVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, bookmarkVoca])
+        return UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"),
+                               primaryAction: nil, menu: categoryMenu)
+    }
+
     private func modelDataBinding() {
         vocaWeaveVM.errorAlertPublisher
             .receive(on: DispatchQueue.main)
@@ -149,6 +174,15 @@ final class VocaWeaveVC: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
+
+        vocaWeaveVM.changedVocaPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.vocaWeaveVM.changeVocaData(value: value)
+                self?.vocaWeaveVM.setRandomVocaData(buttons: self!.buttonArray)
+                self?.vocaWeaveVM.selectedValue = value
             }
             .store(in: &cancellables)
     }

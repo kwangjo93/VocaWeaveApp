@@ -18,7 +18,8 @@ final class TabBarController: UITabBarController {
                                              vocaListManager: vocaListManager,
                                              vocaListVM: vocaListVM,
                                              vocaTranslatedVM: vocaTranslatedVM)
-    private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager)
+    private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager,
+                                               vocaTranslatedManager: vocaTranslatedManager)
     private lazy var dictionaryVM = DictionaryVM(vocaTranslatedVM: vocaTranslatedVM)
     // MARK: - init
     init(vocaListManager: VocaListManager,

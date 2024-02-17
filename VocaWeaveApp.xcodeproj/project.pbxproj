@@ -39,6 +39,7 @@
 		F9739F222B25AF7A00FA1F8E /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F212B25AF7A00FA1F8E /* CategoryCell.swift */; };
 		F9739F262B25C24700FA1F8E /* VocaWeaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */; };
 		F9739F282B25C25600FA1F8E /* VocaWeaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9739F272B25C25600FA1F8E /* VocaWeaveVC.swift */; };
+		F98438E52B804DAB0024CEFE /* SelecVoca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98438E42B804DAB0024CEFE /* SelecVoca.swift */; };
 		F98B1BBF2B511C7800C71281 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B1BBE2B511C7800C71281 /* UINavigationController.swift */; };
 		F98B1BC12B511C9800C71281 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B1BC02B511C9800C71281 /* UIViewController.swift */; };
 		F98B1BC32B511CAC00C71281 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B1BC22B511CAC00C71281 /* String.swift */; };
@@ -112,6 +113,7 @@
 		F9739F212B25AF7A00FA1F8E /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		F9739F252B25C24700FA1F8E /* VocaWeaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveView.swift; sourceTree = "<group>"; };
 		F9739F272B25C25600FA1F8E /* VocaWeaveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocaWeaveVC.swift; sourceTree = "<group>"; };
+		F98438E42B804DAB0024CEFE /* SelecVoca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelecVoca.swift; sourceTree = "<group>"; };
 		F98B1BBE2B511C7800C71281 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		F98B1BC02B511C9800C71281 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		F98B1BC22B511CAC00C71281 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				F93319E02B2F27A8007D69F6 /* DictionaryEnum.swift */,
 				F991418D2B2845E500770379 /* Language.swift */,
 				F99141982B29DCE500770379 /* Section.swift */,
+				F98438E42B804DAB0024CEFE /* SelecVoca.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -508,6 +511,7 @@
 				F9331A112B328A7F007D69F6 /* CulturetravelVoca.swift in Sources */,
 				F991419F2B2A951900770379 /* VocaListManager.swift in Sources */,
 				F9739F282B25C25600FA1F8E /* VocaWeaveVC.swift in Sources */,
+				F98438E52B804DAB0024CEFE /* SelecVoca.swift in Sources */,
 				F9739F122B23159400FA1F8E /* VocaTranslatedVM.swift in Sources */,
 				F9739EFF2B230F4F00FA1F8E /* TabBarController.swift in Sources */,
 				F9739EE12B23084600FA1F8E /* AppDelegate.swift in Sources */,
