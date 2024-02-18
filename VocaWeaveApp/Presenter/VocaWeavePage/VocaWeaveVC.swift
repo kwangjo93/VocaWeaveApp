@@ -122,7 +122,7 @@ private extension VocaWeaveVC {
 
     func changeCategoryButton() -> UIBarButtonItem {
         let myVoca = UIAction(title: "나의 단어장",
-                              image: UIImage(systemName: "figure"),
+                              image: UIImage(systemName: "highlighter"),
                               handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .myVoca
             self.vocaWeaveVM.selectVoca()
@@ -133,13 +133,13 @@ private extension VocaWeaveVC {
             self.vocaWeaveVM.selectedVocaType = .dicVoca
             self.vocaWeaveVM.selectVoca()
         })
-        let bookmarkVoca = UIAction(title: "북마크 단어장",
+        let myBookmarkVoca = UIAction(title: "나의 북마크 단어장",
                                     image: UIImage(systemName: "star.square.fill"),
                                     handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .bookmarkVoca
             self.vocaWeaveVM.selectVoca()
         })
-        let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, bookmarkVoca])
+        let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, myBookmarkVoca])
         return UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"),
                                primaryAction: nil, menu: categoryMenu)
     }
@@ -187,7 +187,7 @@ private extension VocaWeaveVC {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 self?.vocaWeaveVM.changeVocaData(value: value)
-                self?.vocaWeaveVM.setRandomVocaData(buttons: self!.buttonArray)
+                self?.vocaWeaveVM.changeDifferentTypeData(value: value, buttons: self!.buttonArray)
                 self?.vocaWeaveVM.selectedValue = value
             }
             .store(in: &cancellables)

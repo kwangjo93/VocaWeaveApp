@@ -28,15 +28,18 @@ final class VocaWeaveVM {
     var selectedVocaType: SelecVoca = .myVoca
     var isSelect = false
     var selectedCount = 0
+    var selectedValue = 0
     lazy var vocaList = vocaListManager.getVocaList(query: realmQuery)
     lazy var vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    var selectedValue = 0
     var resetData = 0 {
         didSet {
             changeVocaData(value: resetData)
             isSelect = false
         }
     }
+
+    lazy var apiVocaList = vocaTranslatedManager.getVocaList()
+    lazy var apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
     // MARK: - init
     init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
         self.vocaListManager = vocaListManager
@@ -94,28 +97,14 @@ final class VocaWeaveVM {
         }
     }
 
-    func setRandomVocaData(buttons: [UIButton]) {
-        if vocaDataArray.count > 4 {
-            let selectedVoca = vocaDataArray.shuffled().prefix(5)
-            selectedCount = 5
-            selectedCountCountPublisher.send(5)
-            for (index, button) in buttons.enumerated() {
-                button.setTitle(selectedVoca[index].sourceText, for: .normal)
-                vocaDataArray.removeAll { $0.sourceText == selectedVoca[index].sourceText}
-            }
-            setupStatusCountPublisher.send(vocaDataArray.count)
-        } else {
-            for index in 0..<5 {
-                if index < vocaDataArray.count {
-                    buttons[index].setTitle(vocaDataArray[index].sourceText, for: .normal)
-                } else {
-                    buttons[index].setTitle("", for: .normal)
-                }
-            }
-            selectedCount = vocaDataArray.count
-            selectedCountCountPublisher.send(vocaDataArray.count)
-            setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
-            vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    func changeDifferentTypeData(value: Int, buttons: [UIButton]) {
+        switch value {
+        case 0, 2:
+            setRandomVocaData(buttons: buttons)
+        case 1:
+            setRandomAPIVocaData(buttons: buttons)
+        default:
+            break
         }
     }
 
@@ -168,7 +157,7 @@ final class VocaWeaveVM {
     func refreshVocaData(buttons: [UIButton]) {
         buttons.forEach { $0.isSelected = false }
         resetStrikeButtons(sender: buttons)
-        setRandomVocaData(buttons: buttons)
+        changeDifferentTypeData(value: selectedValue, buttons: buttons)
     }
 
     func fetchDataAndHandleResult(sourceText: String) async throws -> String? {
@@ -196,7 +185,8 @@ private extension VocaWeaveVM {
     }
 
     func setDicVocaData() {
-        print("1")
+        apiVocaList = vocaTranslatedManager.getVocaList()
+        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
     }
 
     func setBookmarkVocaData() {
@@ -239,5 +229,77 @@ private extension VocaWeaveVM {
             return false
         }
         return true
+    }
+
+    func assignVocaListToButtons(_ buttons: [UIButton],
+                                 with selectedVoca: Array<RealmVocaModel>.SubSequence,
+                                 count: Int) {
+        selectedCount = count
+        selectedCountCountPublisher.send(count)
+        for (index, button) in buttons.enumerated() {
+            button.setTitle(selectedVoca[index].sourceText, for: .normal)
+            vocaDataArray.removeAll { $0.sourceText == selectedVoca[index].sourceText}
+        }
+        setupStatusCountPublisher.send(vocaDataArray.count)
+    }
+
+    func handleLessThanFiveWordsWithVocaList(buttons: [UIButton]) {
+        for index in 0..<5 {
+            if index < vocaDataArray.count {
+                buttons[index].setTitle(vocaDataArray[index].sourceText, for: .normal)
+            } else {
+                buttons[index].setTitle("", for: .normal)
+            }
+        }
+        selectedCount = vocaDataArray.count
+        selectedCountCountPublisher.send(vocaDataArray.count)
+        setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func assignAPIVocaListToButtons(_ buttons: [UIButton],
+                                    with selectedVoca: Array<RealmTranslateModel>.SubSequence,
+                                    count: Int) {
+        selectedCount = count
+        selectedCountCountPublisher.send(count)
+        for (index, button) in buttons.enumerated() {
+            button.setTitle(selectedVoca[index].sourceText, for: .normal)
+            apiVocaDataArray.removeAll { $0.sourceText == selectedVoca[index].sourceText}
+        }
+        setupStatusCountPublisher.send(apiVocaDataArray.count)
+    }
+
+    func handleLessThanFiveWordsWithAPIVocaList(buttons: [UIButton]) {
+        for index in 0..<5 {
+            if index < apiVocaDataArray.count {
+                buttons[index].setTitle(apiVocaDataArray[index].sourceText, for: .normal)
+            } else {
+                buttons[index].setTitle("", for: .normal)
+            }
+        }
+        selectedCount = apiVocaDataArray.count
+        selectedCountCountPublisher.send(apiVocaDataArray.count)
+        setupStatusTextPublisher.send("단어의 개수가 5개 미만입니다.")
+        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setRandomVocaData(buttons: [UIButton]) {
+        let defaultCount = 5
+        if vocaDataArray.count > 4 {
+            let selectedVoca = vocaDataArray.shuffled().prefix(defaultCount)
+            assignVocaListToButtons(buttons, with: selectedVoca, count: defaultCount)
+        } else {
+            handleLessThanFiveWordsWithVocaList(buttons: buttons)
+        }
+    }
+
+    func setRandomAPIVocaData(buttons: [UIButton]) {
+        let defaultCount = 5
+        if apiVocaDataArray.count > 4 {
+            let selectedVoca = apiVocaDataArray.shuffled().prefix(defaultCount)
+            assignAPIVocaListToButtons(buttons, with: selectedVoca, count: defaultCount)
+        } else {
+            handleLessThanFiveWordsWithAPIVocaList(buttons: buttons)
+        }
     }
 }
