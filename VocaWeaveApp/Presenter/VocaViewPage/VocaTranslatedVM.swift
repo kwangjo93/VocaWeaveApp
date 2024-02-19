@@ -14,6 +14,7 @@ import Lottie
 final class VocaTranslatedVM {
     // MARK: - Property
     private let datamanager: RealmTranslateType
+    @Published var segmentIndex = 0
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()

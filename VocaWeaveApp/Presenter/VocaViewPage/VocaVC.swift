@@ -15,7 +15,6 @@ final class VocaVC: UIViewController {
     private let vocaView = VocaView()
     private let emptyView = EmptyListView()
     private let searchController = UISearchController()
-    private var isSearchBarVisible = false
     private var segmentIndex = 0
     private var vocaListDataSource: VocaListDataSource!
     private var apiVocaListDataSource: APIVocaListDatasource!

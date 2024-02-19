@@ -278,6 +278,7 @@ private extension DictionaryVC {
         self.dismiss(animated: true)
     }
 }
+
 extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }

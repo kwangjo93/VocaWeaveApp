@@ -12,6 +12,7 @@ import SnapKit
 final class VocaListVM {
     // MARK: - Property
     private let realmQuery = "myVoca"
+    @Published var segmentIndex = 0
     private let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
