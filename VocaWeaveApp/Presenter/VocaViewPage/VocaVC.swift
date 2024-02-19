@@ -19,6 +19,7 @@ final class VocaVC: UIViewController {
     private var segmentIndex = 0
     private var vocaListDataSource: VocaListDataSource!
     private var apiVocaListDataSource: APIVocaListDatasource!
+    private var vocaSearchHandler: VocaSearchHandler?
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
@@ -69,9 +70,9 @@ private extension VocaVC {
     private func setup() {
         configureNav()
         configureUI()
+        setVocaListDatasource()
         setupSearchBar()
         vocaView.vocaTableView.delegate = self
-        setVocaListDatasource()
     }
 
     func setVocaListDatasource() {
@@ -86,6 +87,22 @@ private extension VocaVC {
                                                       vocaTranlsatedVM: vocaTranslatedVM,
                                                       segmentIndex: segmentIndex)
         vocaView.vocaTableView.dataSource = apiVocaListDataSource
+    }
+
+    func bindSnapshotVocaData(voca: [RealmVocaModel]) {
+        vocaListDataSource.vocaListTableViewSnapshot(with: voca) {
+            vocaListVM.manageEmptyView(vocaVC: self,
+                                       emptyView: emptyView,
+                                       tableView: vocaView.vocaTableView)
+        }
+    }
+
+    func bindSnapshotAPIVocaData(voca: [RealmTranslateModel]) {
+        apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: voca) {
+            vocaTranslatedVM.manageEmptyView(vocaVC: self,
+                                             emptyView: emptyView,
+                                             tableView: vocaView.vocaTableView)
+        }
     }
 
     func configureNav() {
@@ -128,24 +145,22 @@ private extension VocaVC {
         searchController.searchBar.placeholder = "검색어 입력"
         definesPresentationContext = true
         searchController.isActive = false
+        vocaSearchHandler = VocaSearchHandler(vocaListVM: vocaListVM,
+                                              vocaTranslatedVM: vocaTranslatedVM,
+                                              vocaView: vocaView,
+                                              emptyView: emptyView,
+                                              segmentIndex: segmentIndex,
+                                              viewHandler: self)
     }
 
     func setTableData() {
         switch segmentIndex {
         case 0:
             setVocaListDatasource()
-            vocaListDataSource.vocaListTableViewSnapshot(with: vocaListVM.vocaList) {
-                vocaListVM.manageEmptyView(vocaVC: self,
-                                           emptyView: emptyView,
-                                           tableView: vocaView.vocaTableView)
-            }
+            bindSnapshotVocaData(voca: vocaListVM.vocaList)
         case 1:
             setAPIVocaListDataSource()
-            apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList) {
-                vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                           emptyView: emptyView,
-                                           tableView: vocaView.vocaTableView)
-            }
+            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
         default:
             break
         }
@@ -161,11 +176,7 @@ private extension VocaVC {
         vocaListVM.tableViewUpdate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedVocaList in
-                self?.vocaListDataSource.vocaListTableViewSnapshot(with: updatedVocaList) {
-                    self?.vocaListVM.manageEmptyView(vocaVC: self!,
-                                                     emptyView: self!.emptyView,
-                                                     tableView: self!.vocaView.vocaTableView)
-                }
+                self?.bindSnapshotVocaData(voca: updatedVocaList)
             }
             .store(in: &cancellables)
         vocaListVM.whitespacesAlertPublisher
@@ -186,11 +197,7 @@ private extension VocaVC {
         vocaTranslatedVM.tableViewUpdate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedVocaList in
-                self?.apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: updatedVocaList) {
-                    self?.vocaTranslatedVM.manageEmptyView(vocaVC: self!,
-                                                     emptyView: self!.emptyView,
-                                                     tableView: self!.vocaView.vocaTableView)
-                }
+                self?.bindSnapshotAPIVocaData(voca: updatedVocaList)
             }
             .store(in: &cancellables)
         vocaTranslatedVM.errorAlertPublisher
@@ -228,18 +235,10 @@ private extension VocaVC {
         switch segmentIndex {
         case 0:
             setVocaListDatasource()
-            vocaListDataSource.vocaListTableViewSnapshot(with: vocaListVM.vocaList) {
-                vocaListVM.manageEmptyView(vocaVC: self,
-                                           emptyView: emptyView,
-                                           tableView: vocaView.vocaTableView)
-            }
+            bindSnapshotVocaData(voca: vocaListVM.vocaList)
         case 1:
            setAPIVocaListDataSource()
-            apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList) {
-                vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                           emptyView: emptyView,
-                                           tableView: vocaView.vocaTableView)
-            }
+            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
         default:
             break
         }
@@ -313,44 +312,13 @@ extension VocaVC: UITableViewDelegate {
 // MARK: - UISearchBarDelegate Delegate
 extension VocaVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        switch segmentIndex {
-        case 0:
-            guard !searchText.isEmpty else {
-                vocaListDataSource.vocaListTableViewSnapshot(with: vocaListVM.vocaList) {
-                    vocaListVM.manageEmptyView(vocaVC: self,
-                                               emptyView: emptyView,
-                                               tableView: vocaView.vocaTableView)
-                }
-                   return }
-            let filteredData = vocaListVM.vocaList.filter { voca in
-                return voca.sourceText.lowercased().contains(searchText.lowercased())
-            }
-            vocaListDataSource.vocaListTableViewSnapshot(with: filteredData) {
-                vocaListVM.manageEmptyView(vocaVC: self,
-                                           emptyView: emptyView,
-                                           tableView: vocaView.vocaTableView)
-            }
-        case 1:
-            guard !searchText.isEmpty else {
-                apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: vocaTranslatedVM.vocaList) {
-                    vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                                     emptyView: emptyView,
-                                                     tableView: vocaView.vocaTableView)
-                }
-                   return }
-            let filteredData = vocaTranslatedVM.vocaList.filter { voca in
-                return voca.sourceText.lowercased().contains(searchText.lowercased())
-            }
-            apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: filteredData) {
-                vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                                 emptyView: emptyView,
-                                                 tableView: vocaView.vocaTableView)
-            }
-        default:
-            break
-        }
+        vocaSearchHandler?.handleSearchTextChange(searchText,
+                                                  segmentIndex: segmentIndex,
+                                                  voca: { voca in bindSnapshotVocaData(voca: voca) },
+                                                  apiVoca: { voca in bindSnapshotAPIVocaData(voca: voca)})
     }
 }
+
 extension VocaVC: UIDocumentPickerDelegate {
     private func showDocumentPicker() {
         let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText])
