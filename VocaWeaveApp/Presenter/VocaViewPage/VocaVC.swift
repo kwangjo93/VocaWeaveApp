@@ -20,6 +20,7 @@ final class VocaVC: UIViewController {
     private var vocaListDataSource: VocaListDataSource!
     private var apiVocaListDataSource: APIVocaListDatasource!
     private var vocaSearchHandler: VocaSearchHandler?
+    private var documentPicker: VocaDocumentPicker?
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"),
@@ -72,7 +73,12 @@ private extension VocaVC {
         configureUI()
         setVocaListDatasource()
         setupSearchBar()
+        setDocumentPicker()
         vocaView.vocaTableView.delegate = self
+    }
+
+    func setDocumentPicker() {
+        documentPicker = VocaDocumentPicker(viewController: self, vocaListVM: vocaListVM)
     }
 
     func setVocaListDatasource() {
@@ -223,13 +229,15 @@ private extension VocaVC {
     @objc func plustButtonAction() {
         switch segmentIndex {
         case 0:
-            vocaListVM.presentActionMenu(view: self, loadAction: showDocumentPicker)
+            guard let documentPicker = documentPicker else { return }
+            vocaListVM.presentActionMenu(view: self, loadAction: documentPicker.showDocumentPicker)
         case 1:
             vocaTranslatedVM.showAlertWithTextField(currentView: self)
         default:
             break
         }
     }
+
     @objc func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         segmentIndex = sender.selectedSegmentIndex
         switch segmentIndex {
@@ -243,9 +251,11 @@ private extension VocaVC {
             break
         }
     }
+
     @objc func nightModeButtonAction() {
         vocaListVM.nightModeButtonAction(button: nightModeButton)
     }
+
     @objc func searchButtonAction() {
         vocaListVM.searchButtonAction(view: self, searchController: searchController)
     }
@@ -266,6 +276,7 @@ extension VocaVC: UITableViewDelegate {
         headerView.configure(title: sectionTitle)
         return headerView
     }
+
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
@@ -299,6 +310,7 @@ extension VocaVC: UITableViewDelegate {
             }
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if segmentIndex == 0 {
             let vocaData = self.vocaListDataSource.itemIdentifier(for: indexPath)
@@ -317,27 +329,4 @@ extension VocaVC: UISearchBarDelegate {
                                                   voca: { voca in bindSnapshotVocaData(voca: voca) },
                                                   apiVoca: { voca in bindSnapshotAPIVocaData(voca: voca)})
     }
-}
-
-extension VocaVC: UIDocumentPickerDelegate {
-    private func showDocumentPicker() {
-        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.commaSeparatedText])
-        documentPicker.allowsMultipleSelection = false
-        documentPicker.delegate = self
-        present(documentPicker, animated: true, completion: nil)
-    }
-
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let selectedURL = urls.first else { return }
-        if selectedURL.startAccessingSecurityScopedResource() {
-            vocaListVM.processDocument(at: selectedURL) { [weak self] rows in
-                guard let self = self else { return }
-                vocaListVM.processAndSaveData(rows)
-            }
-            selectedURL.stopAccessingSecurityScopedResource()
-        } else {
-            print("Unable to start accessing security scoped resource.")
-        }
-    }
-
 }
