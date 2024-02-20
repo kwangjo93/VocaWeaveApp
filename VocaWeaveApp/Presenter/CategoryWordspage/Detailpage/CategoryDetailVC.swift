@@ -116,13 +116,13 @@ private extension CategoryDetailVC {
         }
     }
 
-    func bindCellData(cell: CategoryTableViewCell) {
-        cell.vocaListTableViewUpdate
+    func bindCellData(viewModel: CategoryTableViewCellVM) {
+        viewModel.vocaListTableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
-        cell.vocaTranslatedTableViewUpdate
+        viewModel.vocaTranslatedTableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
             }
@@ -202,17 +202,22 @@ extension CategoryDetailVC {
                                             for: indexPath) as? CategoryTableViewCell
                                             else { return UITableViewCell() }
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
-                cell.vocaListData = data
-                cell.configureVocaListData()
-                cell.configureBookmark()
-                cell.vocaListViewModel = categoryViewModel.vocaListVM
-                cell.selectedSegmentIndex = selectedSegmentIndex
-                cell.distinguishSavedData = distinguishSavedData
-                cell.firstVocaData = self.firstVocaData
-                cell.secondVocaData = self.secondVocaData
-                cell.allVocaData = categoryViewModel.selectedVoca
-                bindCellData(cell: cell)
-                cell.selectionStyle = .none
+                cell.viewModel = CategoryTableViewCellVM(vocaListData: data,
+                                                         vocaTanslatedData: nil,
+                                                         firstVocaData: self.firstVocaData,
+                                                         secondVocaData: self.secondVocaData,
+                                                         allVocaData: categoryViewModel.selectedVoca,
+                                                         vocaListVM: categoryViewModel.vocaListVM,
+                                                         vocaTanslatedVM: nil,
+                                                         distinguishSavedData: distinguishSavedData,
+                                                         isSelect: data.isSelected,
+                                                         selectedSegmentIndex: selectedSegmentIndex)
+                if let viewModel = cell.viewModel {
+                    viewModel.setupCell(cell: cell,
+                                        sourceText: data.sourceText,
+                                        translatedText: data.translatedText)
+                    bindCellData(viewModel: viewModel)
+                }
                 return cell
             }
         }
@@ -245,14 +250,22 @@ extension CategoryDetailVC {
                       else { return UITableViewCell() }
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
-            cell.vocaTanslatedData = data
-            cell.configureVocaTranslatedData()
-            cell.configureBookmark()
-            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedVM
-            cell.selectedSegmentIndex = selectedSegmentIndex
-            cell.distinguishSavedData = distinguishSavedData
-            bindCellData(cell: cell)
-            cell.selectionStyle = .none
+            cell.viewModel = CategoryTableViewCellVM(vocaListData: nil,
+                                                     vocaTanslatedData: data,
+                                                     firstVocaData: self.firstVocaData,
+                                                     secondVocaData: self.secondVocaData,
+                                                     allVocaData: categoryViewModel.selectedVoca,
+                                                     vocaListVM: nil,
+                                                     vocaTanslatedVM: categoryViewModel.vocaTranslatedVM,
+                                                     distinguishSavedData: distinguishSavedData,
+                                                     isSelect: data.isSelected,
+                                                     selectedSegmentIndex: selectedSegmentIndex)
+            if let viewModel = cell.viewModel {
+                viewModel.setupCell(cell: cell,
+                                    sourceText: data.sourceText,
+                                    translatedText: data.translatedText)
+                bindCellData(viewModel: viewModel)
+            }
             return cell
         }
     }

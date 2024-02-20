@@ -28,7 +28,7 @@ class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmTransla
                                         vocaTanslatedVM: vocaTranlsatedVM,
                                         isSelect: data.isSelected,
                                         selectedSegmentIndex: segmentIndex)
-            if let viewModel = cell.viewModel  {
+            if let viewModel = cell.viewModel {
                 viewModel.setupCell(cell: cell,
                                     sourceText: data.sourceText,
                                     translatedText: data.translatedText)
