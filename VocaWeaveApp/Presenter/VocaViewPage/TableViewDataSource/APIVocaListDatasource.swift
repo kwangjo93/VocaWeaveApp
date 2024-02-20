@@ -22,13 +22,17 @@ class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmTransla
                 fatalError("Failed to dequeue VocaTableViewCell")
             }
             let data = itemIdentifier
-            cell.vocaTanslatedData = data
-            cell.vocaTanslatedViewModel = vocaTranlsatedVM
-            vocaTranlsatedVM.setupCell(cell: cell,
-                                 sourceText: data.sourceText,
-                                 translatedText: data.translatedText,
-                                 isSelected: data.isSelected,
-                                 selectedSegmentIndex: segmentIndex)
+            cell.viewModel = VocaCellVM(vocaListData: nil,
+                                        vocaTanslatedData: data,
+                                        vocaListVM: nil,
+                                        vocaTanslatedVM: vocaTranlsatedVM,
+                                        isSelect: data.isSelected,
+                                        selectedSegmentIndex: segmentIndex)
+            if let viewModel = cell.viewModel  {
+                viewModel.setupCell(cell: cell,
+                                    sourceText: data.sourceText,
+                                    translatedText: data.translatedText)
+            }
             return cell
         }
     }

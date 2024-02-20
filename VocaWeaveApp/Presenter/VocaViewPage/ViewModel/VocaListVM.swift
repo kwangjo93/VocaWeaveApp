@@ -12,7 +12,6 @@ import SnapKit
 final class VocaListVM {
     // MARK: - Property
     private let realmQuery = "myVoca"
-    @Published var segmentIndex = 0
     private let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
@@ -266,19 +265,6 @@ extension VocaListVM {
         let existingVocaList: [RealmVocaModel] = vocaList
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
-    }
-
-    func setupCell(cell: VocaTableViewCell,
-                   sourceText: String,
-                   translatedText: String,
-                   isSelected: Bool,
-                   selectedSegmentIndex: Int) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.configureBookmark()
-        cell.selectionStyle = .none
     }
 
     private func presentAlertOfDuplication() {

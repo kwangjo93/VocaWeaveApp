@@ -14,7 +14,6 @@ import Lottie
 final class VocaTranslatedVM {
     // MARK: - Property
     private let datamanager: RealmTranslateType
-    @Published var segmentIndex = 0
     let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -45,18 +44,6 @@ final class VocaTranslatedVM {
         }
     }
 
-    func setupCell(cell: VocaTableViewCell,
-                   sourceText: String,
-                   translatedText: String,
-                   isSelected: Bool,
-                   selectedSegmentIndex: Int) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.configureBookmark()
-        cell.selectionStyle = .none
-    }
     // MARK: - Action
     func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
