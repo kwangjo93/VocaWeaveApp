@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 import Combine
 
-class CategoryTableViewCellVM {
+final class CategoryTableViewCellVM {
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
 

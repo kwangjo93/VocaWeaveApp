@@ -8,7 +8,7 @@
 import AVFoundation
 import UIKit
 
-class VocaCellVM {
+final class VocaCellVM {
     var vocaListData: RealmVocaModel?
     var vocaTanslatedData: RealmTranslateModel?
 

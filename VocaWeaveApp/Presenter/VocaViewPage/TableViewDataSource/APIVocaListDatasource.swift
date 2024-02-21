@@ -7,7 +7,7 @@
 
 import UIKit
 
-class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmTranslateModel> {
+final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmTranslateModel> {
     private var tableView: UITableView
     private var vocaTranlsatedVM: VocaTranslatedVM
     private var segmentIndex: Int

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class DetailView: UIView {
+final class DetailView: UIView {
     // MARK: - Property
     private let firstSegmentTitle: String
     private let secondSegmentTitle: String

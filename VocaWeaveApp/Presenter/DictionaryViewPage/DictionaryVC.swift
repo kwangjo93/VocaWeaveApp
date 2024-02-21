@@ -54,6 +54,13 @@ final class DictionaryVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    // MARK: - Action
+}
+private extension DictionaryVC {
     // MARK: - Helper
     func setNightButton(button: UIBarButtonItem) {
         if #available(iOS 13.0, *) {
@@ -71,7 +78,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    private func setup() {
+    func setup() {
         view.addSubview(dictionaryView)
         configureNav()
         configureVocaData()
@@ -80,7 +87,7 @@ final class DictionaryVC: UIViewController {
         dictionaryView.sourceTextField.delegate = self
     }
 
-    private func configureNav() {
+    func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "사 전"
@@ -95,7 +102,7 @@ final class DictionaryVC: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func configureVocaData() {
+    func configureVocaData() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         guard let vocaTranslatedVM = vocaTranslatedVM else { return }
         switch dictionaryEnum {
@@ -111,7 +118,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    private func hideAndPresnetAddButton() {
+    func hideAndPresnetAddButton() {
         switch dictionaryEnum {
         case .response:
             navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
@@ -126,7 +133,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    private func handleVocaTranslation(sourceText: String) {
+    func handleVocaTranslation(sourceText: String) {
         if (vocaTranslatedVM?.vocaList.first(where: { $0.sourceText == sourceText })) != nil {
             if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
                 navigationItem.rightBarButtonItems?.remove(at: index)
@@ -136,7 +143,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         let defaultValue = 8
         dictionaryView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -145,7 +152,7 @@ final class DictionaryVC: UIViewController {
         }
     }
 
-    private func modelDataBinding() {
+    func modelDataBinding() {
         guard let dictionaryViewModel = dictionaryVM else { return }
         dictionaryViewModel.errorAlertPublisher
             .receive(on: DispatchQueue.main)
@@ -162,7 +169,7 @@ final class DictionaryVC: UIViewController {
             .store(in: &cancellables)
     }
 
-    private func setButtonAction() {
+    func setButtonAction() {
         dictionaryView.sourceTextSpeakerButton.addTarget(self,
                                                          action: #selector(sourceTextSpeakerButtonAction),
                                                          for: .touchUpInside)
@@ -182,12 +189,6 @@ final class DictionaryVC: UIViewController {
                                                 action: #selector(bookmarkButtonAction),
                                                 for: .touchUpInside)
     }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    // MARK: - Action
-}
-private extension DictionaryVC {
     @objc func addRightBarButtonAction() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         vocaTranslatedVM?.saveDictionaryData(vocaTranslatedData,

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel> {
+final class VocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel> {
     private var tableView: UITableView
     private var vocaListVM: VocaListVM
     private var segmentIndex: Int

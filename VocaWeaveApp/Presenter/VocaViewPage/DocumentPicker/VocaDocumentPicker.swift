@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VocaDocumentPicker: NSObject, UIDocumentPickerDelegate {
+final class VocaDocumentPicker: NSObject, UIDocumentPickerDelegate {
     private weak var viewController: UIViewController?
     private let vocaListVM: VocaListVM
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VocaSearchHandler {
+final class VocaSearchHandler {
     private let vocaListVM: VocaListVM
     private let vocaTranslatedVM: VocaTranslatedVM
     private let vocaView: VocaView

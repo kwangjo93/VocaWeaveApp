@@ -11,7 +11,7 @@ import AVFoundation
 import Combine
 import Lottie
 
-class CategoryTableViewCell: UITableViewCell {
+final class CategoryTableViewCell: UITableViewCell {
     // MARK: - Property
     static let identifier = "CategoryTableViewCell"
     private var animationView = LottieAnimationView()
