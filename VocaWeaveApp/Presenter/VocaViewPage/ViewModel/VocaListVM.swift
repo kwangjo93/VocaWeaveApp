@@ -99,22 +99,6 @@ final class VocaListVM {
         }
     }
 
-    func setNightButton(button: UIBarButtonItem) {
-        if #available(iOS 13.0, *) {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                if let window = windowScene.windows.first {
-                    if window.overrideUserInterfaceStyle == .light {
-                        button.image = UIImage(systemName: "moon")
-                        button.tintColor = .label
-                    } else {
-                        button.image = UIImage(systemName: "moon.fill")
-                        button.tintColor = UIColor(red: 0.91, green: 0.77, blue: 0.42, alpha: 1.00)
-                    }
-                }
-            }
-        }
-    }
-
     func searchButtonAction(view: UIViewController, searchController: UISearchController) {
         if view.navigationItem.searchController != nil {
             view.navigationItem.searchController = nil

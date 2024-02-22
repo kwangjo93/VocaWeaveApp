@@ -9,7 +9,6 @@ import Combine
 import RealmSwift
 import UIKit
 import SnapKit
-import Lottie
 
 final class VocaTranslatedVM {
     // MARK: - Property
@@ -18,7 +17,6 @@ final class VocaTranslatedVM {
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
-    let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     private let networking = NetworkingManager.shared
     var vocaList: [RealmTranslateModel] {
         return datamanager.getVocaList()
@@ -44,7 +42,16 @@ final class VocaTranslatedVM {
         }
     }
 
+    func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
+          let existingVocaList: [RealmTranslateModel] = vocaList
+          return existingVocaList.contains { $0.sourceText == voca.sourceText
+                                          && $0.translatedText == voca.translatedText }
+      }
     // MARK: - Action
+    func addVoca(_ list: RealmTranslateModel) {
+        datamanager.makeNewList(list)
+    }
+
     func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
     }
@@ -52,10 +59,19 @@ final class VocaTranslatedVM {
     func deleteVoca(_ list: RealmTranslateModel) {
         datamanager.deleteList(list)
     }
+
+    @MainActor
+    func editDictionaryData(currentView: VocaVC, vocaData: RealmTranslateModel) {
+        let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: vocaData)
+        let dictionaryView =  DictionaryVC(dictionaryEnum: .edit,
+                                           dictionaryVM: dicVM)
+        self.goToNextPage(currentView: currentView,
+                        nextView: dictionaryView)
+    }
 }
 // MARK: - Private
 private extension VocaTranslatedVM {
-    private func removeLeadingAndTrailingSpaces(from string: String) -> String {
+    func removeLeadingAndTrailingSpaces(from string: String) -> String {
         var modifiedString = string
         while modifiedString.hasPrefix(" ") {
             modifiedString.removeFirst()
@@ -66,17 +82,7 @@ private extension VocaTranslatedVM {
         return modifiedString
     }
 
-    private func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
-          let existingVocaList: [RealmTranslateModel] = vocaList
-          return existingVocaList.contains { $0.sourceText == voca.sourceText
-                                          && $0.translatedText == voca.translatedText }
-      }
-
-    private func addVoca(_ list: RealmTranslateModel) {
-        datamanager.makeNewList(list)
-    }
-
-    private func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
+    func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
         if Language.detectLanguage(text: sourceText) {
             do {
                 let result = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
@@ -94,17 +100,43 @@ private extension VocaTranslatedVM {
     }
 
     @MainActor
-    private func goToNextPage(currentView: VocaVC,
-                              nextView: DictionaryVC) {
+    func goToNextPage(currentView: VocaVC,
+                      nextView: DictionaryVC) {
         let navigationController = UINavigationController(rootViewController: nextView)
         navigationController.modalPresentationStyle = .fullScreen
         currentView.present(navigationController, animated: false)
     }
 
-    private func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+    func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
         let newVocaList: [RealmTranslateModel] = vocaList
         self.tableViewUpdate.send(newVocaList)
+    }
+
+    @MainActor
+    private func checkForExistingData(with text: String) -> RealmTranslateModel? {
+        let translatedData = vocaList
+        if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
+            return duplicatedData
+        }
+        return nil
+    }
+
+    func fetchDictionaryData(sourceText: String, currentView: VocaVC) {
+        Task {
+            do {
+                guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
+                else { return }
+                let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
+                let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: voca)
+                let dictionaryView = await DictionaryVC(dictionaryEnum: .response,
+                                                        dictionaryVM: dicVM)
+                await self.goToNextPage(currentView: currentView,
+                                      nextView: dictionaryView)
+            } catch {
+                print("Task Response : \(error)")
+            }
+        }
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -178,141 +210,4 @@ extension VocaTranslatedVM {
                                     for: .normal)
         }
     }
-}
-// MARK: - Dictionary Method
-extension VocaTranslatedVM {
-    func fetchDictionaryData(sourceText: String, currentView: VocaVC) {
-        Task {
-            do {
-                guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
-                else { return }
-                let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
-                let dictionaryView = await DictionaryVC(vocaTranslatedData: voca,
-                                                        dictionaryEnum: .response,
-                                                        vocaTranslatedVM: self,
-                                                        dictionaryVM: nil)
-                await self.goToNextPage(currentView: currentView,
-                                      nextView: dictionaryView)
-            } catch {
-                print("Task Response : \(error)")
-            }
-        }
-    }
-
-    @MainActor
-    private func checkForExistingData(with text: String) -> RealmTranslateModel? {
-        let translatedData = vocaList
-        if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
-            return duplicatedData
-        }
-        return nil
-    }
-
-    @MainActor
-    private func checkDuplicationData(vocaData: RealmTranslateModel, text: String) -> RealmTranslateModel {
-        if vocaData.sourceText == text {
-            if let duplicatedData = checkForExistingData(with: text) {
-                return duplicatedData
-            }
-        }
-        return vocaData
-    }
-
-    func fetchDicDataResult(sourceText: String) async throws -> RealmTranslateModel? {
-        if Language.detectLanguage(text: sourceText) {
-            do {
-                let responseData = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
-                                                                  target: Language.targetLanguage.languageCode,
-                                                                  text: sourceText)
-                let result = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
-                let vocaData = await checkDuplicationData(vocaData: result, text: sourceText)
-                return vocaData
-            } catch {
-                print("에러 발생: \(error)")
-                throw error
-            }
-        } else {
-            errorResponseAlert()
-            return nil
-        }
-    }
-
-    @MainActor
-    func editDictionaryData(currentView: VocaVC, vocaData: RealmTranslateModel) {
-        let dictionaryView =  DictionaryVC(vocaTranslatedData: vocaData,
-                                           dictionaryEnum: .edit,
-                                           vocaTranslatedVM: self,
-                                           dictionaryVM: nil)
-        self.goToNextPage(currentView: currentView,
-                        nextView: dictionaryView)
-    }
-
-    func saveDictionaryData(_ voca: RealmTranslateModel, vocaTranslatedVM: VocaTranslatedVM?) {
-        if !self.isVocaAlreadyExists(voca) {
-            self.addVoca(voca)
-        } else {
-            guard vocaTranslatedVM != nil else { return }
-            let alert = UIAlertController(title: "중복",
-                                          message: "같은 단어가 이미 있습니다",
-                                          preferredStyle: .alert)
-               DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                   alert.dismiss(animated: true, completion: nil)
-               }
-            duplicationAlertPublisher.send(alert)
-        }
-    }
-
-    @MainActor
-    func updateTranslationView(with vocaData: RealmTranslateModel?,
-                               view: DictionaryView) {
-        guard let vocaData = vocaData else { return }
-        view.translationText.text = vocaData.translatedText
-        self.setBookmarkStatus(isSelec: vocaData.isSelected, bookmarkButton: view.bookmarkButton)
-    }
-
-    private func setupAnimationView(button: UIButton, animationView view: LottieAnimationView) {
-        button.addSubview(view)
-        let animation = LottieAnimation.named("starfill")
-        view.animation = animation
-        view.contentMode = .scaleAspectFit
-        view.loopMode = .playOnce
-        view.isHidden = true
-        view.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
-    }
-
-    func playAnimation(view: DictionaryView, isSelect: Bool, text: String) {
-        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedText.isEmpty else { return }
-        if isSelect {
-            setupAnimationView(button: view.bookmarkButton,
-                               animationView: view.animationView)
-            view.animationView.isHidden = false
-            view.animationView.play { _ in
-                view.animationView.isHidden = true
-            }
-        }
-    }
-
-    @MainActor
-    func bookmarkButtonAction(vocaData: RealmTranslateModel,
-                              text: String,
-                              bookmarkButton: UIButton,
-                              view: DictionaryView) {
-        let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard !trimmedText.isEmpty else { return }
-        if checkForExistingData(with: text) == nil {
-            saveDictionaryData(vocaData, vocaTranslatedVM: nil)
-            updateVoca(list: vocaData, text: vocaData.translatedText, isSelected: true)
-        } else {
-            switch vocaData.isSelected {
-            case true:
-                dictionaryUpdateVoca(list: vocaData, text: vocaData.translatedText, isSelected: false)
-            case false:
-                dictionaryUpdateVoca(list: vocaData, text: vocaData.translatedText, isSelected: true)
-            }
-        }
-        setBookmarkStatus(isSelec: vocaData.isSelected, bookmarkButton: bookmarkButton)
-        playAnimation(view: view, isSelect: vocaData.isSelected, text: vocaData.sourceText)
-    }
-
 }

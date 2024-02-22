@@ -57,7 +57,7 @@ final class VocaVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableData()
-        vocaListVM.setNightButton(button: nightModeButton)
+        setNightButton(button: nightModeButton)
     }
     // MARK: - Helper
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -212,12 +212,6 @@ private extension VocaVC {
             }
             .store(in: &cancellables)
         vocaTranslatedVM.whitespacesAlertPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.present(alert, animated: true)
-            }
-            .store(in: &cancellables)
-        vocaTranslatedVM.duplicationAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
