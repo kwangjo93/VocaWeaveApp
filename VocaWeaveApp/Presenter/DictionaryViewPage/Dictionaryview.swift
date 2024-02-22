@@ -139,16 +139,6 @@ final class DictionaryView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Helper
-    func bindTextData(_ data: RealmTranslateModel) {
-        self.sourceTextField.text = data.sourceText
-        self.translationText.text = data.translatedText
-    }
-
-    func resetText() {
-        self.sourceTextField.text = ""
-        self.translationText.text = ""
-    }
 }
 private extension DictionaryView {
     func configure() {

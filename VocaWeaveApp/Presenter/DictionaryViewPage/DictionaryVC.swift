@@ -93,7 +93,7 @@ private extension DictionaryVC {
         switch dictionaryEnum {
         case .edit, .response:
             tabBarController?.tabBar.isHidden = true
-            dictionaryView.bindTextData(vocaTranslatedData)
+            dictionaryVM.bindTextData(vocaTranslatedData, dictionaryView)
             hideAndPresnetAddButton()
             dictionaryVM.setBookmarkStatus(isSelec: vocaTranslatedData.isSelected,
                                            view: dictionaryView,
@@ -202,7 +202,7 @@ private extension DictionaryVC {
     }
 
     @objc func cancelButtonAction() {
-        dictionaryView.resetText()
+        dictionaryVM.resetText(dictionaryView)
         dictionaryVM.setBookmarkStatus(isSelec: false,
                                        view: dictionaryView,
                                        text: "")

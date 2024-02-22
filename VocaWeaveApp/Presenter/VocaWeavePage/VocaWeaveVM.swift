@@ -46,58 +46,32 @@ final class VocaWeaveVM {
         self.vocaTranslatedManager = vocaTranslatedManager
     }
     // MARK: - Helper
-    func strikeButtonTapped(sender: UIButton) {
-        let attributedString: NSAttributedString?
-        if isSelect {
-            attributedString = sender.titleLabel?.text?.strikethrough()
-            sender.setAttributedTitle(attributedString, for: .normal)
-            selectedCount -= 1
-            selectedCountCountPublisher.send(selectedCount)
-        } else {
-            attributedString = NSAttributedString(string: sender.titleLabel?.text ?? "")
-            sender.setAttributedTitle(attributedString, for: .normal)
-            selectedCount += 1
-            selectedCountCountPublisher.send(selectedCount)
-        }
+    func resetTextData(_ view: VocaWeaveView) {
+        view.weaveVocaTextField.text = ""
+        view.responseDataText.text = ""
     }
 
-    func resetStrikeButtons(sender: [UIButton]) {
-        for button in sender {
-            button.setAttributedTitle(nil, for: .normal)
-            button.titleLabel?.attributedText = nil
-        }
+    func setStatusCount(count: Int, _ view: VocaWeaveView) {
+        view.statusValueLabel.text = String(count)
+        view.statusValueLabel.isHidden = false
+        view.selectedCountLabel.isHidden = false
+        view.lackOfDataLabel.isHidden = true
     }
 
-    func putButtonText(with textFieldText: String,
-                       to buttonText: String) -> String {
-        let space = " "
-        if isSelect {
-            if !buttonText.isEmpty {
-                return textFieldText + space + buttonText + space
-            } else {
-                return buttonText
-            }
-        } else {
-            var originalText = textFieldText
-            if textFieldText.contains(space + buttonText + space) {
-                originalText = originalText.replacingOccurrences(of: space + buttonText + space, with: "")
-            }
-            return originalText
-        }
+    func setStatusText(text: String, _ view: VocaWeaveView) {
+        view.statusValueLabel.isHidden = true
+        view.selectedCountLabel.isHidden = true
+        view.lackOfDataLabel.isHidden = false
+        view.lackOfDataLabel.text = text
     }
 
-    func applyAnimation(textField: UITextField, text: String, view: LottieAnimationView) {
-        if let wordRange = findWordRange(in: textField.text!, word: text) {
-            let textRect = textField.caretRect(for: textField.selectedTextRange!.start)
-            let textFieldOrigin = textField.convert(textRect.origin, to: textField.superview)
-            let yOffset = textFieldOrigin.y + textRect.height
-            view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-            view.center = CGPoint(x: CGFloat(wordRange.location) * 10, y: yOffset)
-            view.play()
-        }
+    func resetCountData() {
+        self.resetData = self.selectedValue
     }
 
     func changeDifferentTypeData(value: Int, buttons: [UIButton]) {
+        changeVocaData(value: value)
+        selectedValue = value
         switch value {
         case 0, 2:
             setRandomVocaData(buttons: buttons)
@@ -114,20 +88,29 @@ final class VocaWeaveVM {
             changedVocaPublisher.send(selectedVocaType.tagValue)
         }
     }
-
-    func changeVocaData(value: Int) {
-        switch value {
-        case 0:
-            setMyVocaData()
-        case 1:
-            setDicVocaData()
-        case 2:
-            setBookmarkVocaData()
-        default:
-            break
+    // MARK: - Action
+    func nightModeButtonAction(buttons: [UIButton], barButton: UIBarButtonItem, view: VocaWeaveView) {
+        if #available(iOS 13.0, *) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let window = windowScene.windows.first {
+                    if window.overrideUserInterfaceStyle == .dark {
+                        window.overrideUserInterfaceStyle = .light
+                        barButton.image = UIImage(systemName: "moon")
+                        barButton.tintColor = .black
+                        view.responseDataText.layer.borderColor = UIColor.label.cgColor
+                        buttons.forEach { view.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
+                    } else {
+                        window.overrideUserInterfaceStyle = .dark
+                        barButton.image = UIImage(systemName: "moon.fill")
+                        barButton.tintColor = .subTinkColor
+                        view.responseDataText.layer.borderColor = UIColor.white.cgColor
+                        buttons.forEach { view.setButtonBorder(button: $0, color: UIColor.white.cgColor) }
+                    }
+                }
+            }
         }
     }
-    // MARK: - Action
+
     func copyText(text: String?) {
         guard let textToCopy = text,
               !textToCopy.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
@@ -155,6 +138,7 @@ final class VocaWeaveVM {
     }
 
     func refreshVocaData(buttons: [UIButton]) {
+        self.isSelect = false
         buttons.forEach { $0.isSelected = false }
         resetStrikeButtons(sender: buttons)
         changeDifferentTypeData(value: selectedValue, buttons: buttons)
@@ -175,6 +159,22 @@ final class VocaWeaveVM {
             errorResponseAlert()
             return nil
         }
+    }
+
+    func vocaButtonAction(isSelec: Bool,
+                          textField: UITextField,
+                          view: LottieAnimationView,
+                          button: UIButton) {
+        self.isSelect = isSelec
+        applyAnimation(textField: textField,
+                       text: button.titleLabel?.text ?? "",
+                       view: view)
+        strikeButtonTapped(sender: button)
+        textField.text = putButtonText(with: textField.text ?? "",
+                                       to: button.titleLabel?.text ?? "")
+        applyAnimation(textField: textField,
+                       text: button.titleLabel?.text ?? "",
+                       view: view)
     }
 }
 
@@ -300,6 +300,70 @@ private extension VocaWeaveVM {
             assignAPIVocaListToButtons(buttons, with: selectedVoca, count: defaultCount)
         } else {
             handleLessThanFiveWordsWithAPIVocaList(buttons: buttons)
+        }
+    }
+
+    func changeVocaData(value: Int) {
+        switch value {
+        case 0:
+            setMyVocaData()
+        case 1:
+            setDicVocaData()
+        case 2:
+            setBookmarkVocaData()
+        default:
+            break
+        }
+    }
+
+    func putButtonText(with textFieldText: String,
+                       to buttonText: String) -> String {
+        let space = " "
+        if isSelect {
+            if !buttonText.isEmpty {
+                return textFieldText + space + buttonText + space
+            } else {
+                return buttonText
+            }
+        } else {
+            var originalText = textFieldText
+            if textFieldText.contains(space + buttonText + space) {
+                originalText = originalText.replacingOccurrences(of: space + buttonText + space, with: "")
+            }
+            return originalText
+        }
+    }
+
+    func applyAnimation(textField: UITextField, text: String, view: LottieAnimationView) {
+        if let wordRange = findWordRange(in: textField.text!, word: text) {
+            let textRect = textField.caretRect(for: textField.selectedTextRange!.start)
+            let textFieldOrigin = textField.convert(textRect.origin, to: textField.superview)
+            let yOffset = textFieldOrigin.y + textRect.height
+            view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            view.center = CGPoint(x: CGFloat(wordRange.location) * 8, y: yOffset)
+            view.play()
+        }
+    }
+
+    func strikeButtonTapped(sender: UIButton) {
+        let attributedString: NSAttributedString?
+        if isSelect {
+            attributedString = sender.titleLabel?.text?.strikethrough()
+            sender.setAttributedTitle(attributedString, for: .normal)
+            selectedCount -= 1
+            selectedCountCountPublisher.send(selectedCount)
+        } else {
+            attributedString = NSAttributedString(string: sender.titleLabel?.text ?? "")
+            sender.setAttributedTitle(attributedString, for: .normal)
+            selectedCount += 1
+            selectedCountCountPublisher.send(selectedCount)
+        }
+    }
+
+    func resetStrikeButtons(sender: [UIButton]) {
+        for button in sender {
+            button.setAttributedTitle(nil, for: .normal)
+            button.titleLabel?.attributedText = nil
         }
     }
 }

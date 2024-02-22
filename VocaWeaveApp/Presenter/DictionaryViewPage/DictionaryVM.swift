@@ -29,6 +29,16 @@ final class DictionaryVM {
         self.vocaTranslatedData = vocaTranslatedData
     }
     // MARK: - Method
+    func bindTextData(_ data: RealmTranslateModel, _ view: DictionaryView) {
+        view.sourceTextField.text = data.sourceText
+        view.translationText.text = data.translatedText
+    }
+
+    func resetText( _ view: DictionaryView) {
+        view.sourceTextField.text = ""
+        view.translationText.text = ""
+    }
+
     func setBookmarkStatus(isSelec: Bool, view: DictionaryView, text: String) {
         self.isSelect = isSelec
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
@@ -210,7 +220,7 @@ private extension DictionaryVM {
             view.animationView.isHidden = true
         }
     }
-    
+
     func setupAnimationView(button: UIButton, animationView view: LottieAnimationView) {
         button.addSubview(view)
         let animation = LottieAnimation.named("starfill")
