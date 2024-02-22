@@ -13,13 +13,13 @@ final class CategoryVC: UIViewController {
     private let categoryVM: CategoryVM
     private var collectionView: UICollectionView!
     private let categoryTittle: [String] = ["나의 단어장\n/ 사전 단어장",
-                                    "교통 수단",
-                                    "숙소",
-                                    "여행 관련 활동\n/ 여행 준비물",
-                                    "식사\n/ 지역 문화",
-                                    "휴양 및 활동",
-                                    "언어 및 소통",
-                                    "장소 관련 시설"]
+                                            "교통 수단",
+                                            "숙소",
+                                            "여행 관련 활동\n/ 여행 준비물",
+                                            "식사\n/ 지역 문화",
+                                            "휴양 및 활동",
+                                            "언어 및 소통",
+                                            "장소 관련 시설"]
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
