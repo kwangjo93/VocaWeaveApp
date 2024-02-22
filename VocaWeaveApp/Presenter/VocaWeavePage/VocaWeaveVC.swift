@@ -12,17 +12,17 @@ import Lottie
 
 final class VocaWeaveVC: UIViewController {
     // MARK: - Property
-    let vocaWeaveVM: VocaWeaveVM
-    let vocaWeaveView = VocaWeaveView()
-    lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
+    private let vocaWeaveVM: VocaWeaveVM
+    private let vocaWeaveView = VocaWeaveView()
+    private lazy var buttonArray = [vocaWeaveView.sourceTextButton1, vocaWeaveView.sourceTextButton2,
                             vocaWeaveView.sourceTextButton3, vocaWeaveView.sourceTextButton4,
                             vocaWeaveView.sourceTextButton5]
-    var cancellables = Set<AnyCancellable>()
-    lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"),
+    private var cancellables = Set<AnyCancellable>()
+    private lazy var refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.clockwise"),
                                      style: .plain,
                                      target: self,
                                      action: #selector(refreshButtonAction))
-    lazy var nightModeButton = nightModeBarButtonItem(
+    private lazy var nightModeButton = nightModeBarButtonItem(
                             target: self,
                             action: #selector(nightModeButtonAction))
     // MARK: - init
@@ -30,6 +30,7 @@ final class VocaWeaveVC: UIViewController {
         self.vocaWeaveVM = vocaWeaveViewModel
         super.init(nibName: nil, bundle: nil)
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -39,13 +40,23 @@ final class VocaWeaveVC: UIViewController {
         setup()
         modelDataBinding()
     }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        vocaWeaveVM.resetData = false
+        vocaWeaveVM.resetCountData()
         refreshButtonAction()
+        setNightButton(button: nightModeButton)
     }
+
+    // MARK: - Method
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+}
+
+private extension VocaWeaveVC {
     // MARK: - Helper
-    private func setup() {
+    func setup() {
         configureNav()
         configure()
         setupLayout()
@@ -53,7 +64,7 @@ final class VocaWeaveVC: UIViewController {
         configureAnimation(vocaWeaveView.animationView)
     }
 
-    private func configureNav() {
+    func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = "학습장"
@@ -62,12 +73,13 @@ final class VocaWeaveVC: UIViewController {
             return label
         }()
         let titleItem = UIBarButtonItem(customView: titleLabel)
+        let categoryMenuButton = changeCategoryButton()
         navigationItem.leftBarButtonItem = titleItem
-        navigationItem.rightBarButtonItems = [refreshButton, nightModeButton]
+        navigationItem.rightBarButtonItems = [refreshButton, nightModeButton, categoryMenuButton]
         navigationController?.configureBasicAppearance()
     }
 
-    private func configure() {
+    func configure() {
         view.addSubview(vocaWeaveView)
         vocaWeaveView.weaveVocaTextField.delegate = self
         vocaWeaveView.responseDataText.isEditable = false
@@ -78,7 +90,7 @@ final class VocaWeaveVC: UIViewController {
                                            for: .touchUpInside) }
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         let defaultValue = 8
         vocaWeaveView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -87,7 +99,7 @@ final class VocaWeaveVC: UIViewController {
         }
     }
 
-    private func setButtonAction() {
+    func setButtonAction() {
         vocaWeaveView.copyButton.addTarget(self,
                                            action: #selector(copyButtonAction),
                                            for: .touchUpInside)
@@ -96,7 +108,31 @@ final class VocaWeaveVC: UIViewController {
                                               for: .touchUpInside)
     }
 
-    private func modelDataBinding() {
+    func changeCategoryButton() -> UIBarButtonItem {
+        let myVoca = UIAction(title: "나의 단어장",
+                              image: UIImage(systemName: "highlighter"),
+                              handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .myVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let dictionayVoca = UIAction(title: "사전 단어장",
+                                     image: UIImage(systemName: "book.pages"),
+                                     handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .dicVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let myBookmarkVoca = UIAction(title: "나의 북마크 단어장",
+                                    image: UIImage(systemName: "star.square.fill"),
+                                    handler: { _ in
+            self.vocaWeaveVM.selectedVocaType = .bookmarkVoca
+            self.vocaWeaveVM.selectVoca()
+        })
+        let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, myBookmarkVoca])
+        return UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"),
+                               primaryAction: nil, menu: categoryMenu)
+    }
+
+    func modelDataBinding() {
         vocaWeaveVM.errorAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
@@ -112,19 +148,15 @@ final class VocaWeaveVC: UIViewController {
 
         vocaWeaveVM.setupStatusCountPublisher
             .sink { [weak self] count in
-                self?.vocaWeaveView.statusValueLabel.text = String(count)
-                self?.vocaWeaveView.statusValueLabel.isHidden = false
-                self?.vocaWeaveView.selectedCountLabel.isHidden = false
-                self?.vocaWeaveView.lackOfDataLabel.isHidden = true
+                guard let self = self else { return }
+                vocaWeaveVM.setStatusCount(count: count, vocaWeaveView)
             }
             .store(in: &cancellables)
 
         vocaWeaveVM.setupStatusTextPublisher
             .sink { [weak self] text in
-                self?.vocaWeaveView.statusValueLabel.isHidden = true
-                self?.vocaWeaveView.selectedCountLabel.isHidden = true
-                self?.vocaWeaveView.lackOfDataLabel.isHidden = false
-                self?.vocaWeaveView.lackOfDataLabel.text = text
+                guard let self = self else { return }
+                vocaWeaveVM.setStatusText(text: text, vocaWeaveView)
             }
             .store(in: &cancellables)
 
@@ -134,69 +166,46 @@ final class VocaWeaveVC: UIViewController {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
+
+        vocaWeaveVM.changedVocaPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.vocaWeaveVM.changeDifferentTypeData(value: value, buttons: self!.buttonArray)
+            }
+            .store(in: &cancellables)
     }
 
-    private func configureAnimation(_ view: LottieAnimationView) {
+    func configureAnimation(_ view: LottieAnimationView) {
         let animation = LottieAnimation.named("disappear")
         view.animation = animation
         view.loopMode = .playOnce
         view.contentMode = .scaleAspectFit
     }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
     // MARK: - Action
-    @objc private func refreshButtonAction() {
-        vocaWeaveVM.isSelect = false
-        vocaWeaveView.weaveVocaTextField.text = ""
-        vocaWeaveView.responseDataText.text = ""
+    @objc func refreshButtonAction() {
+        vocaWeaveVM.resetTextData(vocaWeaveView)
         vocaWeaveVM.refreshVocaData(buttons: buttonArray)
     }
 
-    @objc private func vocaButtonAction(_ sender: UIButton) {
-        vocaWeaveVM.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
-                                          text: sender.titleLabel?.text ?? "",
-                                          view: vocaWeaveView.animationView)
-        var changedText: String
+    @objc func vocaButtonAction(_ sender: UIButton) {
         sender.isSelected.toggle()
-        vocaWeaveVM.isSelect = sender.isSelected
-        vocaWeaveVM.strikeButtonTapped(sender: sender)
-        changedText = vocaWeaveVM.putButtonText(with: vocaWeaveView.weaveVocaTextField.text ?? "",
-                                                       to: sender.titleLabel?.text ?? "")
-        vocaWeaveView.weaveVocaTextField.text = changedText
-        vocaWeaveVM.applyAnimation(textField: vocaWeaveView.weaveVocaTextField,
-                                          text: sender.titleLabel?.text ?? "",
-                                          view: vocaWeaveView.animationView)
+        vocaWeaveVM.vocaButtonAction(isSelec: sender.isSelected,
+                                     textField: vocaWeaveView.weaveVocaTextField,
+                                     view: vocaWeaveView.animationView,
+                                     button: sender)
     }
 
-    @objc private func nightModeButtonAction() {
-        if #available(iOS 13.0, *) {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                if let window = windowScene.windows.first {
-                    if window.overrideUserInterfaceStyle == .dark {
-                        window.overrideUserInterfaceStyle = .light
-                        nightModeButton.image = UIImage(systemName: "moon")
-                        nightModeButton.tintColor = .black
-                        vocaWeaveView.responseDataText.layer.borderColor = UIColor.label.cgColor
-                        buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.label.cgColor) }
-                    } else {
-                        window.overrideUserInterfaceStyle = .dark
-                        nightModeButton.image = UIImage(systemName: "moon.fill")
-                        nightModeButton.tintColor = .subTinkColor
-                        vocaWeaveView.responseDataText.layer.borderColor = UIColor.white.cgColor
-                        buttonArray.forEach { vocaWeaveView.setButtonBorder(button: $0, color: UIColor.white.cgColor) }
-                    }
-                }
-            }
-        }
+    @objc func nightModeButtonAction() {
+        vocaWeaveVM.nightModeButtonAction(buttons: buttonArray,
+                                          barButton: nightModeButton,
+                                          view: vocaWeaveView)
     }
 
-    @objc private func copyButtonAction() {
+    @objc func copyButtonAction() {
         vocaWeaveVM.copyText(text: vocaWeaveView.weaveVocaTextField.text)
     }
 
-    @objc private func speakerButtonAction() {
+    @objc func speakerButtonAction() {
         vocaWeaveVM.speakerAction(text: vocaWeaveView.weaveVocaTextField.text,
                                          language: Language.sourceLanguage.avLanguageTitle)
     }

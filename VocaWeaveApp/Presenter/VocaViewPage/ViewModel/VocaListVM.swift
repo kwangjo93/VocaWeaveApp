@@ -12,7 +12,7 @@ import SnapKit
 final class VocaListVM {
     // MARK: - Property
     private let realmQuery = "myVoca"
-    let datamanager: RealmVocaModelType
+    private let datamanager: RealmVocaModelType
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let tableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -69,16 +69,7 @@ final class VocaListVM {
             }
         }
     }
-
-    private func trimWhitespace(_ text: String) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespaces)
-        return trimmed
-    }
     // MARK: - Action
-    private func addVoca(_ list: RealmVocaModel) {
-        datamanager.makeNewList(list)
-    }
-
     func updateVoca(list: RealmVocaModel, sourceText: String, translatedText: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list,
                                    sourceText: sourceText,
@@ -131,12 +122,23 @@ final class VocaListVM {
         alert.addAction(cancelAction)
         alertPublisher.send(alert)
     }
-
-    private func presentOnboadingView(view: UIViewController) {
+}
+// MARK: - Private
+private extension VocaListVM {
+    func presentOnboadingView(view: UIViewController) {
         let onBoardingView = OnboardingVC()
         onBoardingView.modalPresentationStyle = .popover
         onBoardingView.modalTransitionStyle = .crossDissolve
         view.present(onBoardingView, animated: true)
+    }
+
+    func addVoca(_ list: RealmVocaModel) {
+        datamanager.makeNewList(list)
+    }
+
+    func trimWhitespace(_ text: String) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        return trimmed
     }
 }
 // MARK: - Alert - Add, Update Method
@@ -247,19 +249,6 @@ extension VocaListVM {
         let existingVocaList: [RealmVocaModel] = vocaList
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
-    }
-
-    func setupCell(cell: VocaTableViewCell,
-                   sourceText: String,
-                   translatedText: String,
-                   isSelected: Bool,
-                   selectedSegmentIndex: Int) {
-        cell.sourceLabel.text = sourceText
-        cell.translatedLabel.text = translatedText
-        cell.isSelect = isSelected
-        cell.selectedSegmentIndex = selectedSegmentIndex
-        cell.configureBookmark()
-        cell.selectionStyle = .none
     }
 
     private func presentAlertOfDuplication() {

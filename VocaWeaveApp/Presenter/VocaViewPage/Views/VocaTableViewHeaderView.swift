@@ -10,7 +10,7 @@ import SnapKit
 
 final class VocaTableViewHeaderView: UITableViewHeaderFooterView {
     static let identifier = "VocaTableViewHeaderView"
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.label
         label.font = UIFont.boldSystemFont(ofSize: 24)

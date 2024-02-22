@@ -1,20 +1,21 @@
 //
-//  VocaTableViewCell.swift
+//  CategoryTableViewCell.swift
 //  VocaWeaveApp
 //
-//  Created by 천광조 on 12/8/23.
+//  Created by 천광조 on 2/17/24.
 //
 
 import UIKit
 import SnapKit
 import AVFoundation
+import Combine
 import Lottie
 
-final class VocaTableViewCell: UITableViewCell {
+final class CategoryTableViewCell: UITableViewCell {
     // MARK: - Property
-    static let identifier = "VocaTableViewCell"
+    static let identifier = "CategoryTableViewCell"
     private var animationView = LottieAnimationView()
-    var viewModel: VocaCellVM?
+    var viewModel: CategoryTableViewCellVM?
     let sourceLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Sejong hospital Light", size: 18)
@@ -61,7 +62,7 @@ final class VocaTableViewCell: UITableViewCell {
     func configureBookmark() {
         guard let viewModel = viewModel else { return }
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 22)
-        if viewModel.isSelect == true {
+        if viewModel.isSelect {
             bookmarkButton.setImage(UIImage(systemName: "star.fill",
                                             withConfiguration: imageConfig),
                                             for: .normal)
@@ -73,7 +74,7 @@ final class VocaTableViewCell: UITableViewCell {
     }
 }
 
-private extension VocaTableViewCell {
+private extension CategoryTableViewCell {
     // MARK: - Helper
     func configure() {
         [sourceLabel,
@@ -127,7 +128,7 @@ private extension VocaTableViewCell {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
     // MARK: - Action
-    @objc  func speakerButtonAction() {
+    @objc func speakerButtonAction() {
         guard let viewModel = viewModel else { return }
         viewModel.speakerButtonAction(sourceText: sourceLabel.text)
     }
@@ -140,7 +141,7 @@ private extension VocaTableViewCell {
             viewModel.updateBookmarkData(isSelect: true, button: bookmarkButton)
             animationView.isHidden = false
             animationView.play { [weak self] _ in
-                self?.animationView.isHidden = true
+            self?.animationView.isHidden = true
             }
         } else {
             viewModel.updateBookmarkData(isSelect: false, button: bookmarkButton)

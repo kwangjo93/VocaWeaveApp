@@ -10,29 +10,29 @@ import Combine
 
 final class CategoryDetailVC: UIViewController {
     // MARK: - Property
-    let firstString: String
-    let secondString: String
-    let navigationTitle: String
-    lazy var detailView = VocaView(firstString: firstString, secondString: secondString)
-    var selectedSegmentIndex = 0
-    var indexPath: Int
-    let distinguishSavedData: Bool
-    var cancellables = Set<AnyCancellable>()
-    let categoryViewModel: CategoryVM
+    private let firstString: String
+    private let secondString: String
+    private let navigationTitle: String
+    private lazy var detailView = DetailView(firstString: firstString, secondString: secondString)
+    private var selectedSegmentIndex = 0
+    private var indexPath: Int
+    private let distinguishSavedData: Bool
+    private var cancellables = Set<AnyCancellable>()
+    private let categoryViewModel: CategoryVM
 
-    var firstVocaData: [RealmVocaModel]?
-    var secondVocaData: [RealmVocaModel]?
-    var dicData: [RealmTranslateModel]?
+    private var firstVocaData: [RealmVocaModel]?
+    private var secondVocaData: [RealmVocaModel]?
+    private var dicData: [RealmTranslateModel]?
 
-    var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
-    var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
-    var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
-    var vocaTranslatedSnapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
+    private var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
+    private var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
+    private var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
+    private var vocaTranslatedSnapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
 
-    lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(backBarButtonAction))
+    private lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
+                                                     style: .plain,
+                                                     target: self,
+                                                     action: #selector(backBarButtonAction))
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,14 +63,28 @@ final class CategoryDetailVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Method
+    func bindVocaData() {
+            switch self.indexPath {
+            case 0:
+                setupSelectedVoca()
+            case 1...7:
+                setupSelectedCategoryVoca()
+            default:
+                break
+            }
+        }
+}
+private extension CategoryDetailVC {
     // MARK: - Helper
-    private func setup() {
+    func setup() {
         configureNav()
         configureUI()
         detailView.vocaTableView.delegate = self
     }
 
-    private func configureNav() {
+    func configureNav() {
         let titleLabel: UILabel = {
             let label = UILabel()
             label.text = self.navigationTitle
@@ -83,18 +97,16 @@ final class CategoryDetailVC: UIViewController {
         navigationController?.configureBasicAppearance()
     }
 
-    private func configureUI() {
+    func configureUI() {
         view.addSubview(detailView)
-        detailView.vocaTableView.register(
-                                        VocaTableViewCell.self,
-                                        forCellReuseIdentifier: VocaTableViewCell.identifier)
-        detailView.vocaTableView.register(
-                                        VocaTableViewHeaderView.self,
-                                        forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
+        detailView.vocaTableView.register(CategoryTableViewCell.self,
+                                          forCellReuseIdentifier: CategoryTableViewCell.identifier)
+        detailView.vocaTableView.register(VocaTableViewHeaderView.self,
+                                          forHeaderFooterViewReuseIdentifier: VocaTableViewHeaderView.identifier)
         detailView.vocaSegmentedControl.selectedSegmentIndex = 0
         detailView.vocaSegmentedControl.addTarget(self,
-                                                action: #selector(valueChangeForSegmentedControl),
-                                                for: .valueChanged)
+                                                  action: #selector(valueChangeForSegmentedControl),
+                                                  for: .valueChanged)
 
         let defaultValue = 8
         detailView.snp.makeConstraints {
@@ -104,21 +116,20 @@ final class CategoryDetailVC: UIViewController {
         }
     }
 
-    private func bindCellData(cell: VocaTableViewCell) {
-        cell.vocaListTableViewUpdate
+    func bindCellData(viewModel: CategoryTableViewCellVM) {
+        viewModel.vocaListTableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
-        cell.vocaTranslatedTableViewUpdate
+        viewModel.vocaTranslatedTableViewUpdate
             .sink { [weak self] updatedVocaList in
                 self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
     }
 
-    private func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?,
-                               _ secondVocaDatas: [RealmVocaModel]?) {
+    func setupVocaData(_ firstVocaDatas: [RealmVocaModel]?, _ secondVocaDatas: [RealmVocaModel]?) {
         switch selectedSegmentIndex {
         case 0:
             self.firstVocaData = firstVocaDatas
@@ -136,7 +147,7 @@ final class CategoryDetailVC: UIViewController {
         }
     }
 
-    private func setupSelectedVoca() {
+    func setupSelectedVoca() {
         switch selectedSegmentIndex {
         case 0:
             setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
@@ -150,7 +161,7 @@ final class CategoryDetailVC: UIViewController {
         }
     }
 
-    private func setupSelectedCategoryVoca() {
+    func setupSelectedCategoryVoca() {
         switch self.indexPath {
         case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
         case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
@@ -162,19 +173,8 @@ final class CategoryDetailVC: UIViewController {
         default: return
         }
     }
-
-    func bindVocaData() {
-            switch self.indexPath {
-            case 0:
-                setupSelectedVoca()
-            case 1...7:
-                setupSelectedCategoryVoca()
-            default:
-                break
-            }
-        }
     // MARK: - Action
-    @objc private func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
+    @objc func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
         case 0, 1:
@@ -184,10 +184,11 @@ final class CategoryDetailVC: UIViewController {
         }
     }
 
-    @objc private func backBarButtonAction() {
+    @objc func backBarButtonAction() {
         self.navigationController?.popViewController(animated: true)
     }
 }
+
 // MARK: - VocaList TableView Diffable DataSource
 extension CategoryDetailVC {
         private func vocaListTableViewDatasourceSetup() {
@@ -197,21 +198,26 @@ extension CategoryDetailVC {
                 -> UITableViewCell? in
                 guard let self = self,
                       let cell = tableView.dequeueReusableCell(
-                                            withIdentifier: VocaTableViewCell.identifier,
-                                            for: indexPath) as? VocaTableViewCell
+                                            withIdentifier: CategoryTableViewCell.identifier,
+                                            for: indexPath) as? CategoryTableViewCell
                                             else { return UITableViewCell() }
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
-                cell.vocaListData = data
-                cell.bindVocaListData()
-                cell.configureBookmark()
-                cell.vocaListViewModel = categoryViewModel.vocaListVM
-                cell.selectedSegmentIndex = selectedSegmentIndex
-                cell.distinguishSavedData = distinguishSavedData
-                cell.firstVocaData = self.firstVocaData
-                cell.secondVocaData = self.secondVocaData
-                cell.allVocaData = categoryViewModel.selectedVoca
-                bindCellData(cell: cell)
-                cell.selectionStyle = .none
+                cell.viewModel = CategoryTableViewCellVM(vocaListData: data,
+                                                         vocaTanslatedData: nil,
+                                                         firstVocaData: self.firstVocaData,
+                                                         secondVocaData: self.secondVocaData,
+                                                         allVocaData: categoryViewModel.selectedVoca,
+                                                         vocaListVM: categoryViewModel.vocaListVM,
+                                                         vocaTanslatedVM: nil,
+                                                         distinguishSavedData: distinguishSavedData,
+                                                         isSelect: data.isSelected,
+                                                         selectedSegmentIndex: selectedSegmentIndex)
+                if let viewModel = cell.viewModel {
+                    viewModel.setupCell(cell: cell,
+                                        sourceText: data.sourceText,
+                                        translatedText: data.translatedText)
+                    bindCellData(viewModel: viewModel)
+                }
                 return cell
             }
         }
@@ -239,19 +245,27 @@ extension CategoryDetailVC {
             -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
-                      withIdentifier: VocaTableViewCell.identifier,
-                      for: indexPath) as? VocaTableViewCell
+                      withIdentifier: CategoryTableViewCell.identifier,
+                      for: indexPath) as? CategoryTableViewCell
                       else { return UITableViewCell() }
             guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
-            cell.vocaTanslatedData = data
-            cell.bindVocaTranslatedData()
-            cell.configureBookmark()
-            cell.vocaTanslatedViewModel = categoryViewModel.vocaTranslatedVM
-            cell.selectedSegmentIndex = selectedSegmentIndex
-            cell.distinguishSavedData = distinguishSavedData
-            bindCellData(cell: cell)
-            cell.selectionStyle = .none
+            cell.viewModel = CategoryTableViewCellVM(vocaListData: nil,
+                                                     vocaTanslatedData: data,
+                                                     firstVocaData: self.firstVocaData,
+                                                     secondVocaData: self.secondVocaData,
+                                                     allVocaData: categoryViewModel.selectedVoca,
+                                                     vocaListVM: nil,
+                                                     vocaTanslatedVM: categoryViewModel.vocaTranslatedVM,
+                                                     distinguishSavedData: distinguishSavedData,
+                                                     isSelect: data.isSelected,
+                                                     selectedSegmentIndex: selectedSegmentIndex)
+            if let viewModel = cell.viewModel {
+                viewModel.setupCell(cell: cell,
+                                    sourceText: data.sourceText,
+                                    translatedText: data.translatedText)
+                bindCellData(viewModel: viewModel)
+            }
             return cell
         }
     }

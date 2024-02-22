@@ -18,8 +18,10 @@ final class TabBarController: UITabBarController {
                                              vocaListManager: vocaListManager,
                                              vocaListVM: vocaListVM,
                                              vocaTranslatedVM: vocaTranslatedVM)
-    private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager)
-    private lazy var dictionaryVM = DictionaryVM(vocaTranslatedVM: vocaTranslatedVM)
+    private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager,
+                                               vocaTranslatedManager: vocaTranslatedManager)
+    private lazy var dictionaryVM = DictionaryVM(vocaTranslatedVM: vocaTranslatedVM,
+                                                 vocaTranslatedData: nil)
     // MARK: - init
     init(vocaListManager: VocaListManager,
          vocaTranslatedManager: VocaTranslatedManager,
@@ -49,9 +51,7 @@ final class TabBarController: UITabBarController {
             rootViewController: VocaWeaveVC(vocaWeaveViewModel: vocaWeaveVM))
 
         let dictionaryViewController = UINavigationController(
-            rootViewController: DictionaryVC(vocaTranslatedData: nil,
-                                             dictionaryEnum: .new,
-                                             vocaTranslatedVM: vocaTranslatedVM,
+            rootViewController: DictionaryVC(dictionaryEnum: .new,
                                              dictionaryVM: dictionaryVM))
 
         vocaViewController.tabBarItem = UITabBarItem(

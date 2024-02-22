@@ -11,7 +11,7 @@ import Lottie
 
 final class VocaWeaveView: UIView {
     // MARK: - Property
-    let defaultValue = 8
+    private let defaultValue = 8
     var animationView = LottieAnimationView()
 
     let statusValueLabel: UILabel = {
@@ -19,6 +19,8 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 25)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
@@ -27,10 +29,12 @@ final class VocaWeaveView: UIView {
         label.font = .systemFont(ofSize: 27)
         label.textColor = UIColor.label
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.textAlignment = .center
         return label
     }()
 
-    lazy var countLabelstackView: UIStackView = {
+    private lazy var countLabelstackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .fillEqually
@@ -52,6 +56,7 @@ final class VocaWeaveView: UIView {
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
         button.setTitleColor(UIColor.label, for: .normal)
         button.tag = 0
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -59,7 +64,7 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 1
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
@@ -67,11 +72,27 @@ final class VocaWeaveView: UIView {
         let button = UIButton(type: .custom)
         button.setTitleColor(UIColor.label, for: .normal)
         button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 2
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         return button
     }()
 
-    lazy var buttonstackView1: UIStackView = {
+    let sourceTextButton4: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        return button
+    }()
+
+    let sourceTextButton5: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitleColor(UIColor.label, for: .normal)
+        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        return button
+    }()
+
+    private lazy var buttonstackView1: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .fillEqually
@@ -80,23 +101,7 @@ final class VocaWeaveView: UIView {
         return stackView
     }()
 
-    let sourceTextButton4: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitleColor(UIColor.label, for: .normal)
-        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 3
-        return button
-    }()
-
-    let sourceTextButton5: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitleColor(UIColor.label, for: .normal)
-        button.titleLabel?.font = UIFont(name: "GapyeongHanseokbongL", size: 20)
-        button.tag = 4
-        return button
-    }()
-
-    lazy var buttonstackView2: UIStackView = {
+    private lazy var buttonstackView2: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .fillEqually
@@ -117,7 +122,7 @@ final class VocaWeaveView: UIView {
         return textFeild
     }()
 
-    let responseLabel: UILabel = {
+    private let responseLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = UIColor.label
@@ -139,7 +144,7 @@ final class VocaWeaveView: UIView {
         return button
     }()
 
-    lazy var compsitionStackView: UIStackView = {
+    private lazy var compsitionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution  = .equalSpacing
@@ -174,7 +179,24 @@ final class VocaWeaveView: UIView {
     }
 
     // MARK: - Helper
-    private func configure() {
+    func setButtonBorder(button: UIButton, color: CGColor) {
+        let borderWidth: CGFloat = 0.7
+        let cornerRadius: CGFloat = 15
+        let shadowOpacity: Float = 0.2
+
+        button.layer.borderWidth = borderWidth
+        button.layer.borderColor = color
+        button.layer.cornerRadius = cornerRadius
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 2
+        button.layer.shadowColor = color
+        button.layer.masksToBounds = true
+        button.layer.shadowOpacity = shadowOpacity
+        button.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+    }
+}
+private extension VocaWeaveView {
+    func configure() {
         [sourceTextButton1, sourceTextButton2, sourceTextButton3].forEach { buttonstackView1.addArrangedSubview($0) }
 
         [sourceTextButton4, sourceTextButton5].forEach { buttonstackView2.addArrangedSubview($0) }
@@ -187,7 +209,7 @@ final class VocaWeaveView: UIView {
          countLabelstackView, buttonstackView2, compsitionStackView].forEach { self.addSubview($0) }
     }
 
-    private func setupLayout() {
+    func setupLayout() {
         lackOfDataLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
@@ -208,11 +230,11 @@ final class VocaWeaveView: UIView {
         }
     }
 
-    private func stackViewLayou() {
+    func stackViewLayou() {
         countLabelstackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(defaultValue * 2)
-            $0.leading.trailing.equalToSuperview().inset(defaultValue * 17)
+            $0.leading.trailing.equalToSuperview().inset(defaultValue * 15)
             $0.height.equalTo(50)
         }
 
@@ -233,19 +255,4 @@ final class VocaWeaveView: UIView {
         }
     }
 
-    func setButtonBorder(button: UIButton, color: CGColor) {
-        let borderWidth: CGFloat = 0.7
-        let cornerRadius: CGFloat = 15
-        let shadowOpacity: Float = 0.2
-
-        button.layer.borderWidth = borderWidth
-        button.layer.borderColor = color
-        button.layer.cornerRadius = cornerRadius
-        button.layer.shadowOffset = CGSize(width: 0, height: 2)
-        button.layer.shadowRadius = 2
-        button.layer.shadowColor = color
-        button.layer.masksToBounds = true
-        button.layer.shadowOpacity = shadowOpacity
-        button.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-    }
 }
