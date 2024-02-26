@@ -19,14 +19,18 @@ final class DictionaryVM {
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
+    var dictionaryEnum: DictionaryEnum = .new
     var vocaTranslatedData: RealmTranslateModel?
     var apiVocaList: [RealmTranslateModel] {
         return vocaTranslatedVM.vocaList
     }
     // MARK: - init
-    init(vocaTranslatedVM: VocaTranslatedVM, vocaTranslatedData: RealmTranslateModel?) {
+    init(vocaTranslatedVM: VocaTranslatedVM,
+         vocaTranslatedData: RealmTranslateModel?,
+         dictionaryEnum: DictionaryEnum) {
         self.vocaTranslatedVM = vocaTranslatedVM
         self.vocaTranslatedData = vocaTranslatedData
+        self.dictionaryEnum = dictionaryEnum
     }
     // MARK: - Method
     func bindTextData(_ data: RealmTranslateModel, _ view: DictionaryView) {
@@ -114,7 +118,7 @@ final class DictionaryVM {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
-            saveDictionaryData(vocaData)
+            saveDictionaryData()
             vocaTranslatedVM.updateVoca(list: vocaData,
                                         text: vocaData.translatedText,
                                         isSelected: true)
@@ -124,9 +128,10 @@ final class DictionaryVM {
         setBookmarkStatus(isSelec: self.isSelect, view: view, text: sourceText)
     }
 
-    func saveDictionaryData(_ voca: RealmTranslateModel) {
-        if !vocaTranslatedVM.isVocaAlreadyExists(voca) {
-            vocaTranslatedVM.addVoca(voca)
+    func saveDictionaryData() {
+        guard let vocaTranslatedData = vocaTranslatedData else { return }
+        if !vocaTranslatedVM.isVocaAlreadyExists(vocaTranslatedData) {
+            vocaTranslatedVM.addVoca(vocaTranslatedData)
         } else {
             let alert = UIAlertController(title: "중복",
                                           message: "같은 단어가 이미 있습니다",
@@ -134,7 +139,12 @@ final class DictionaryVM {
                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                    alert.dismiss(animated: true, completion: nil)
                }
-            duplicationAlertPublisher.send(alert)
+            switch dictionaryEnum {
+            case .new:
+                duplicationAlertPublisher.send(alert)
+            case .response, .edit:
+                vocaTranslatedVM.duplicationAlertPublisher.send(alert)
+            }
         }
     }
 

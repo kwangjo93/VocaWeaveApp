@@ -217,6 +217,12 @@ private extension VocaVC {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
+        vocaTranslatedVM.duplicationAlertPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.present(alert, animated: true)
+            }
+            .store(in: &cancellables)
     }
     // MARK: - Action
     @objc func plustButtonAction() {

@@ -17,6 +17,7 @@ final class VocaTranslatedVM {
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     private let networking = NetworkingManager.shared
     var vocaList: [RealmTranslateModel] {
         return datamanager.getVocaList()
@@ -62,9 +63,10 @@ final class VocaTranslatedVM {
 
     @MainActor
     func editDictionaryData(currentView: VocaVC, vocaData: RealmTranslateModel) {
-        let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: vocaData)
-        let dictionaryView =  DictionaryVC(dictionaryEnum: .edit,
-                                           dictionaryVM: dicVM)
+        let dicVM = DictionaryVM(vocaTranslatedVM: self,
+                                 vocaTranslatedData: vocaData,
+                                 dictionaryEnum: .edit)
+        let dictionaryView =  DictionaryVC(dictionaryVM: dicVM)
         self.goToNextPage(currentView: currentView,
                         nextView: dictionaryView)
     }
@@ -128,9 +130,10 @@ private extension VocaTranslatedVM {
                 guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
                 else { return }
                 let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
-                let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: voca)
-                let dictionaryView = await DictionaryVC(dictionaryEnum: .response,
-                                                        dictionaryVM: dicVM)
+                let dicVM = DictionaryVM(vocaTranslatedVM: self,
+                                         vocaTranslatedData: voca,
+                                         dictionaryEnum: .response)
+                let dictionaryView = await DictionaryVC(dictionaryVM: dicVM)
                 await self.goToNextPage(currentView: currentView,
                                       nextView: dictionaryView)
             } catch {

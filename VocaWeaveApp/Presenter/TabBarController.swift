@@ -21,7 +21,8 @@ final class TabBarController: UITabBarController {
     private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager,
                                                vocaTranslatedManager: vocaTranslatedManager)
     private lazy var dictionaryVM = DictionaryVM(vocaTranslatedVM: vocaTranslatedVM,
-                                                 vocaTranslatedData: nil)
+                                                 vocaTranslatedData: nil,
+                                                 dictionaryEnum: .new)
     // MARK: - init
     init(vocaListManager: VocaListManager,
          vocaTranslatedManager: VocaTranslatedManager,
@@ -51,8 +52,7 @@ final class TabBarController: UITabBarController {
             rootViewController: VocaWeaveVC(vocaWeaveViewModel: vocaWeaveVM))
 
         let dictionaryViewController = UINavigationController(
-            rootViewController: DictionaryVC(dictionaryEnum: .new,
-                                             dictionaryVM: dictionaryVM))
+            rootViewController: DictionaryVC(dictionaryVM: dictionaryVM))
 
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",

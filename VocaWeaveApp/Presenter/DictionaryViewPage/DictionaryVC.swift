@@ -13,7 +13,6 @@ final class DictionaryVC: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
     let dictionaryVM: DictionaryVM
-    var dictionaryEnum: DictionaryEnum = .new
     var cancellables = Set<AnyCancellable>()
 
     lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
@@ -40,9 +39,7 @@ final class DictionaryVC: UIViewController {
         setNightButton(button: nightModeButton)
     }
     // MARK: - init
-    init(dictionaryEnum: DictionaryEnum,
-         dictionaryVM: DictionaryVM) {
-        self.dictionaryEnum = dictionaryEnum
+    init(dictionaryVM: DictionaryVM) {
         self.dictionaryVM = dictionaryVM
         super.init(nibName: nil, bundle: nil)
     }
@@ -90,7 +87,7 @@ private extension DictionaryVC {
 
     func configureVocaData() {
         guard let vocaTranslatedData = dictionaryVM.vocaTranslatedData else { return }
-        switch dictionaryEnum {
+        switch dictionaryVM.dictionaryEnum {
         case .edit, .response:
             tabBarController?.tabBar.isHidden = true
             dictionaryVM.bindTextData(vocaTranslatedData, dictionaryView)
@@ -104,7 +101,7 @@ private extension DictionaryVC {
     }
 
     func hideAndPresnetAddButton() {
-        switch dictionaryEnum {
+        switch dictionaryVM.dictionaryEnum {
         case .response:
             navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
             navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
@@ -172,9 +169,13 @@ private extension DictionaryVC {
                                                 for: .touchUpInside)
     }
     @objc func addRightBarButtonAction() {
-        guard let vocaTranslatedData = dictionaryVM.vocaTranslatedData else { return }
-        dictionaryVM.saveDictionaryData(vocaTranslatedData)
-        self.dismiss(animated: true)
+        dictionaryVM.saveDictionaryData()
+        switch dictionaryVM.dictionaryEnum {
+        case .response, .edit:
+            self.dismiss(animated: true)
+        case .new:
+            break
+        }
     }
 
     @objc func nightModeBuutonAction() {
@@ -225,23 +226,10 @@ private extension DictionaryVC {
 extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }
-        switch dictionaryEnum {
-        case .new:
             Task {
                 do {
                     dictionaryVM.vocaTranslatedData = try await dictionaryVM
                                                             .fetchDataAndHandleResult(sourceText: sourceText)
-                    dictionaryVM.updateTranslationView(with: dictionaryVM.vocaTranslatedData,
-                                                       view: dictionaryView)
-                } catch {
-                    print("Task Response error")
-                }
-            }
-        case .edit, .response:
-            Task {
-                do {
-                    dictionaryVM.vocaTranslatedData = try await dictionaryVM
-                                                        .fetchDataAndHandleResult(sourceText: sourceText)
                     dictionaryVM.updateTranslationView(with: dictionaryVM.vocaTranslatedData,
                                                        view: dictionaryView)
                     handleVocaTranslation(sourceText: sourceText)
@@ -249,7 +237,6 @@ extension DictionaryVC: UITextFieldDelegate {
                     print("Task Response error")
                 }
             }
-        }
         textField.resignFirstResponder()
         return true
     }
