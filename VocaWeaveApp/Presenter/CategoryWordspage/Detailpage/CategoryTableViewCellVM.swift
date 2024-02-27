@@ -11,18 +11,18 @@ import Combine
 
 final class CategoryTableViewCellVM {
     var vocaListData: RealmVocaModel?
-    var vocaTanslatedData: RealmTranslateModel?
+    var apiVocaData: APIRealmVocaModel?
 
     var firstVocaData: [RealmVocaModel]?
     var secondVocaData: [RealmVocaModel]?
     var allVocaData: [RealmVocaModel]?
 
     var vocaListVM: VocaListVM?
-    var vocaTanslatedVM: VocaTranslatedVM?
+    var apiVocaListVM: APIVocaListVM?
 
     private var cancellables = Set<AnyCancellable>()
     let vocaListTableViewUpdate = PassthroughSubject<[RealmVocaModel], Never>()
-    let vocaTranslatedTableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
+    let apiVocaTableViewUpdate = PassthroughSubject<[APIRealmVocaModel], Never>()
 
     var distinguishSavedData = true
     var isSelect = false
@@ -30,22 +30,22 @@ final class CategoryTableViewCellVM {
     private let speechSynthesizer = AVSpeechSynthesizer()
 
     init(vocaListData: RealmVocaModel?,
-         vocaTanslatedData: RealmTranslateModel?,
+         apiVocaData: APIRealmVocaModel?,
          firstVocaData: [RealmVocaModel]?,
          secondVocaData: [RealmVocaModel]?,
          allVocaData: [RealmVocaModel]?,
          vocaListVM: VocaListVM?,
-         vocaTanslatedVM: VocaTranslatedVM?,
+         apiVocaListVM: APIVocaListVM?,
          distinguishSavedData: Bool,
          isSelect: Bool,
          selectedSegmentIndex: Int) {
         self.vocaListData = vocaListData
-        self.vocaTanslatedData = vocaTanslatedData
+        self.apiVocaData = apiVocaData
         self.firstVocaData = firstVocaData
         self.secondVocaData = secondVocaData
         self.allVocaData = allVocaData
         self.vocaListVM = vocaListVM
-        self.vocaTanslatedVM = vocaTanslatedVM
+        self.apiVocaListVM = apiVocaListVM
         self.distinguishSavedData = distinguishSavedData
         self.isSelect = isSelect
         self.selectedSegmentIndex = selectedSegmentIndex
@@ -70,28 +70,28 @@ final class CategoryTableViewCellVM {
     }
 
     func updateVocaListData(image: UIImage.SymbolConfiguration, button: UIButton) {
-        guard let vocaListViewModel = vocaListVM else { return }
+        guard let vocaListVM = vocaListVM else { return }
         guard let vocaListData = vocaListData else { return }
-        vocaListViewModel.updateVoca(list: vocaListData,
-                                      sourceText: vocaListData.sourceText,
-                                      translatedText: vocaListData.translatedText,
-                                      isSelected: isSelect)
+        vocaListVM.updateVoca(list: vocaListData,
+                              sourceText: vocaListData.sourceText,
+                              translatedText: vocaListData.translatedText,
+                              isSelected: isSelect)
         button.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
-                                        withConfiguration: image),
-                                        for: .normal)
+                                withConfiguration: image),
+                        for: .normal)
     }
 
-    func updateVocaTranslatedData(image: UIImage.SymbolConfiguration, button: UIButton) {
-        guard let vocaTanslatedViewModel = vocaTanslatedVM else { return }
-        guard let vocaTanslatedData = vocaTanslatedData else { return }
-        vocaTanslatedViewModel.updateVoca(list: vocaTanslatedData,
-                                           text: vocaTanslatedData.sourceText,
-                                           isSelected: isSelect)
-        let newVocaList: [RealmTranslateModel] = vocaTanslatedViewModel.vocaList
-        self.vocaTranslatedTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
+    func updateAPIVocaData(image: UIImage.SymbolConfiguration, button: UIButton) {
+        guard let apiVocaListVM = apiVocaListVM else { return }
+        guard let apiVocaData = apiVocaData else { return }
+        apiVocaListVM.updateVoca(list: apiVocaData,
+                                 text: apiVocaData.sourceText,
+                                 isSelected: isSelect)
+        let newVocaList: [APIRealmVocaModel] = apiVocaListVM.vocaList
+        self.apiVocaTableViewUpdate.send(newVocaList.filter {$0.isSelected == true})
         button.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
-                                        withConfiguration: image),
-                                        for: .normal)
+                                withConfiguration: image),
+                        for: .normal)
     }
 
     func updateBookmarkData(isSelect: Bool, button: UIButton) {
@@ -109,7 +109,7 @@ final class CategoryTableViewCellVM {
             }
         case 1:
             if distinguishSavedData {
-                updateVocaTranslatedData(image: imageConfig, button: button)
+                updateAPIVocaData(image: imageConfig, button: button)
             } else {
                 updateVocaListData(image: imageConfig, button: button)
                 guard let secondVocaData = secondVocaData else { return }

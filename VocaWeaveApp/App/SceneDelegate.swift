@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     let vocaListManager = VocaListManager()
-    let vocaTranslatedManager = VocaTranslatedManager()
+    let vocaTranslatedManager = APIVocaListManager()
     lazy var categoryManager = CategoryDataManager(vocaListManager: vocaListManager)
     func scene(
         _ scene: UIScene,

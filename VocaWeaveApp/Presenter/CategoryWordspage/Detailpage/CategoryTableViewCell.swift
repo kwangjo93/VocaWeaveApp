@@ -73,9 +73,8 @@ final class CategoryTableViewCell: UITableViewCell {
         }
     }
 }
-
+// MARK: - Helper
 private extension CategoryTableViewCell {
-    // MARK: - Helper
     func configure() {
         [sourceLabel,
          translatedLabel,
@@ -119,7 +118,9 @@ private extension CategoryTableViewCell {
         animationView.isHidden = true
         animationView.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
     }
-
+}
+// MARK: - Define Button target
+private extension CategoryTableViewCell {
     func speakerButtonTapped() {
         speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
     }
@@ -127,7 +128,10 @@ private extension CategoryTableViewCell {
     func vocaBookmarkButtonTapped() {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
-    // MARK: - Action
+}
+
+// MARK: - objc Action
+private extension CategoryTableViewCell {
     @objc func speakerButtonAction() {
         guard let viewModel = viewModel else { return }
         viewModel.speakerButtonAction(sourceText: sourceLabel.text)

@@ -13,7 +13,7 @@ final class NetworkingManager {
 
     func fetchData(source: String,
                    target: String,
-                   text: String) async throws -> TranslateReponseModel {
+                   text: String) async throws -> APIReponseModel {
         guard let file = Bundle.main.path(
                                     forResource: "APIInfo",
                                     ofType: "plist") else { throw NetworkError.invalidFile }
@@ -43,7 +43,7 @@ final class NetworkingManager {
             if let httpResponse = response as? HTTPURLResponse, (400...499).contains(httpResponse.statusCode) {
                 throw NetworkError.httpError
             }
-            let decodedData = try JSONDecoder().decode(TranslateReponseModel.self,
+            let decodedData = try JSONDecoder().decode(APIReponseModel.self,
                                                        from: data)
             return decodedData
         } catch {

@@ -1,5 +1,5 @@
 //
-//  DataManager.swift
+//  APIVocaListManager.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/13/23.
@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-final class VocaTranslatedManager: RealmTranslateType {
+final class APIVocaListManager: APIRealmVocaModelType {
     private var realm: Realm? {
         do {
             return try Realm()
@@ -18,11 +18,11 @@ final class VocaTranslatedManager: RealmTranslateType {
         }
     }
 
-    private var list: Results<RealmTranslateModel>? {
-        return realm?.objects(RealmTranslateModel.self)
+    private var list: Results<APIRealmVocaModel>? {
+        return realm?.objects(APIRealmVocaModel.self)
     }
 
-    func getVocaList() -> [RealmTranslateModel] {
+    func getVocaList() -> [APIRealmVocaModel] {
         if let todos = list {
             return Array(todos)
         } else {
@@ -30,7 +30,7 @@ final class VocaTranslatedManager: RealmTranslateType {
         }
     }
 
-    func makeNewList(_ list: RealmTranslateModel) {
+    func makeNewList(_ list: APIRealmVocaModel) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -45,7 +45,7 @@ final class VocaTranslatedManager: RealmTranslateType {
         }
     }
 
-    func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool) {
+    func updateListInfo(list: APIRealmVocaModel, text: String, isSelected: Bool) {
         guard let realm = realm else {
             print("Realm is nil")
             return
@@ -61,7 +61,7 @@ final class VocaTranslatedManager: RealmTranslateType {
         }
     }
 
-    func deleteList(_ list: RealmTranslateModel) {
+    func deleteList(_ list: APIRealmVocaModel) {
             do {
                 guard let realm = realm else { return }
                 try realm.write {

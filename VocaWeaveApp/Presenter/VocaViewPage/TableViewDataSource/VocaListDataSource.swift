@@ -23,9 +23,9 @@ final class VocaListDataSource: UITableViewDiffableDataSource<Section, RealmVoca
             }
             let data = itemIdentifier
             cell.viewModel = VocaCellVM(vocaListData: data,
-                                        vocaTanslatedData: nil,
+                                        apiVocaData: nil,
                                         vocaListVM: vocaListVM,
-                                        vocaTanslatedVM: nil,
+                                        apiVocaListVM: nil,
                                         isSelect: data.isSelected,
                                         selectedSegmentIndex: segmentIndex)
             if let viewModel = cell.viewModel {

@@ -13,7 +13,7 @@ import AVFoundation
 final class VocaWeaveVM {
     // MARK: - Property
     private let vocaListManager: VocaListManager
-    private let vocaTranslatedManager: VocaTranslatedManager
+    private let apiVocaListManager: APIVocaListManager
     private let networking = NetworkingManager.shared
     private let speechSynthesizer = AVSpeechSynthesizer()
     private let realmQuery = "myVoca"
@@ -38,12 +38,12 @@ final class VocaWeaveVM {
         }
     }
 
-    lazy var apiVocaList = vocaTranslatedManager.getVocaList()
+    lazy var apiVocaList = apiVocaListManager.getVocaList()
     lazy var apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
     // MARK: - init
-    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
+    init(vocaListManager: VocaListManager, apiVocaListManager: APIVocaListManager) {
         self.vocaListManager = vocaListManager
-        self.vocaTranslatedManager = vocaTranslatedManager
+        self.apiVocaListManager = apiVocaListManager
     }
     // MARK: - Helper
     func resetTextData(_ view: VocaWeaveView) {
@@ -82,10 +82,14 @@ final class VocaWeaveVM {
         }
     }
 
-    func selectVoca() {
+    func selectVoca(buttons: [UIButton], view: VocaWeaveView) {
         switch selectedVocaType {
         case .myVoca, .dicVoca, .bookmarkVoca:
+            self.isSelect = false
+            buttons.forEach { $0.isSelected = false }
+            resetStrikeButtons(sender: buttons)
             changedVocaPublisher.send(selectedVocaType.tagValue)
+            resetTextData(view)
         }
     }
     // MARK: - Action
@@ -178,22 +182,8 @@ final class VocaWeaveVM {
     }
 }
 
+// MARK: - Alert
 private extension VocaWeaveVM {
-    func setMyVocaData() {
-        vocaList = vocaListManager.getVocaList(query: realmQuery)
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    func setDicVocaData() {
-        apiVocaList = vocaTranslatedManager.getVocaList()
-        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    func setBookmarkVocaData() {
-        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
     func copyAlertAction() {
         let alert = UIAlertController(title: nil,
                                       message: "텍스트가 클립보드에 복사되었습니다.",
@@ -211,6 +201,23 @@ private extension VocaWeaveVM {
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
         alert.addAction(cancel)
         errorAlertPublisher.send(alert)
+    }
+}
+// MARK: - Set func
+private extension VocaWeaveVM {
+    func setMyVocaData() {
+        vocaList = vocaListManager.getVocaList(query: realmQuery)
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setDicVocaData() {
+        apiVocaList = apiVocaListManager.getVocaList()
+        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setBookmarkVocaData() {
+        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
     }
 
     func findWordRange(in text: String, word: String) -> NSRange? {
@@ -230,7 +237,9 @@ private extension VocaWeaveVM {
         }
         return true
     }
-
+}
+// MARK: - About Buttons
+private extension VocaWeaveVM {
     func assignVocaListToButtons(_ buttons: [UIButton],
                                  with selectedVoca: Array<RealmVocaModel>.SubSequence,
                                  count: Int) {
@@ -258,7 +267,7 @@ private extension VocaWeaveVM {
     }
 
     func assignAPIVocaListToButtons(_ buttons: [UIButton],
-                                    with selectedVoca: Array<RealmTranslateModel>.SubSequence,
+                                    with selectedVoca: Array<APIRealmVocaModel>.SubSequence,
                                     count: Int) {
         selectedCount = count
         selectedCountCountPublisher.send(count)

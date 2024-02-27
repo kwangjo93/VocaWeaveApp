@@ -9,13 +9,13 @@ import Foundation
 
 final class CategoryVM {
     // MARK: - Property
-    private let vocaTranslatedManager: VocaTranslatedManager
+    private let apiVocaListManager: APIVocaListManager
     private let vocaListManager: VocaListManager
     let vocaListVM: VocaListVM
-    let vocaTranslatedVM: VocaTranslatedVM
+    let apiVocaListVM: APIVocaListVM
 
     lazy var selectedVoca: [RealmVocaModel] = vocaListManager.getAllVocaData()
-    lazy var selectedDic: [RealmTranslateModel] = vocaTranslatedManager.getVocaList()
+    lazy var selectedDic: [APIRealmVocaModel] = apiVocaListManager.getVocaList()
     lazy var transportationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "Transportation")
     lazy var accommodationVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "Accommodation")
     lazy var travelActivitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "TravelActivitiesVoca")
@@ -26,13 +26,13 @@ final class CategoryVM {
     lazy var facilitiesVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "FacilitiestravelVoca")
     lazy var cultureVoca: [RealmVocaModel] = vocaListManager.getVocaList(query: "CulturetravelVoca")
     // MARK: - init
-    init(vocaTranslatedManager: VocaTranslatedManager,
+    init(apiVocaListManager: APIVocaListManager,
          vocaListManager: VocaListManager,
          vocaListVM: VocaListVM,
-         vocaTranslatedVM: VocaTranslatedVM) {
-        self.vocaTranslatedManager = vocaTranslatedManager
+         apiVocaListVM: APIVocaListVM) {
+        self.apiVocaListManager = apiVocaListManager
         self.vocaListManager = vocaListManager
         self.vocaListVM = vocaListVM
-        self.vocaTranslatedVM = vocaTranslatedVM
+        self.apiVocaListVM = apiVocaListVM
     }
 }
