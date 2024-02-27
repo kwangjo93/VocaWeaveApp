@@ -81,6 +81,13 @@ final class VocaListVM {
         datamanager.deleteList(list)
     }
 
+    func showAlertWithTextField(newData: RealmVocaModel?) {
+        let alert = configureAlert(newData: newData)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        alertPublisher.send(alert)
+    }
+
     func nightModeButtonAction(button: UIBarButtonItem) {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
@@ -142,15 +149,8 @@ private extension VocaListVM {
     }
 }
 // MARK: - Alert - Add, Update Method
-extension VocaListVM {
-    func showAlertWithTextField(newData: RealmVocaModel?) {
-        let alert = configureAlert(newData: newData)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        alert.addAction(cancelAction)
-        alertPublisher.send(alert)
-    }
-
-    private func configureAlert(newData: RealmVocaModel?) -> UIAlertController {
+private extension VocaListVM {
+     func configureAlert(newData: RealmVocaModel?) -> UIAlertController {
         let alert = UIAlertController(title: "단어와 뜻을 입력해 주세요.", message: nil, preferredStyle: .alert)
         if let newData = newData {
             addTextFields(to: alert, sourceText: newData.sourceText, translatedText: newData.translatedText)
@@ -161,7 +161,7 @@ extension VocaListVM {
         }
         return alert
     }
-    private func addTextFields(to alert: UIAlertController, sourceText: String, translatedText: String) {
+    func addTextFields(to alert: UIAlertController, sourceText: String, translatedText: String) {
         alert.addTextField { textField in
             textField.text = sourceText
         }
@@ -170,7 +170,7 @@ extension VocaListVM {
         }
     }
 
-    private func addPlaceholders(to alert: UIAlertController) {
+    func addPlaceholders(to alert: UIAlertController) {
         alert.addTextField { textField in
             textField.placeholder = "단어를 입력해 주세요."
         }
@@ -178,7 +178,7 @@ extension VocaListVM {
             textField.placeholder = "뜻을 입력해 주세요."
         }
     }
-    private func addAlertAction(to alert: UIAlertController, for newData: RealmVocaModel) {
+    func addAlertAction(to alert: UIAlertController, for newData: RealmVocaModel) {
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
             guard let self = self,
                   let alert = alert,
@@ -203,7 +203,7 @@ extension VocaListVM {
         alert.addAction(saveAction)
     }
 
-    private func addAlertAction(for alert: UIAlertController) {
+    func addAlertAction(for alert: UIAlertController) {
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
             guard let self = self,
                   let alert = alert,
@@ -238,20 +238,20 @@ extension VocaListVM {
         alert.addAction(saveAction)
     }
 
-    private func showEmptyTextFieldAlert() {
+    func showEmptyTextFieldAlert() {
         let alert = UIAlertController(title: "경고", message: "단어가 비어 있습니다.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         whitespacesAlertPublisher.send(alert)
     }
 
-  private  func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
+    func isVocaAlreadyExists(_ voca: RealmVocaModel) -> Bool {
         let existingVocaList: [RealmVocaModel] = vocaList
         return existingVocaList.contains { $0.sourceText == voca.sourceText
                                         && $0.translatedText == voca.translatedText }
     }
 
-    private func presentAlertOfDuplication() {
+    func presentAlertOfDuplication() {
         let alert = UIAlertController(title: "중복",
                                       message: "같은 단어가 이미 있습니다",
                                       preferredStyle: .alert)
