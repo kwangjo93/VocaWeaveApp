@@ -7,14 +7,14 @@
 
 import UIKit
 
-final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmTranslateModel> {
+final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, APIRealmVocaModel> {
     private var tableView: UITableView
-    private var vocaTranlsatedVM: VocaTranslatedVM
+    private var apiVocaListVM: APIVocaListVM
     private var segmentIndex: Int
 
-    init(tableView: UITableView, vocaTranlsatedVM: VocaTranslatedVM, segmentIndex: Int) {
+    init(tableView: UITableView, apiVocaListVM: APIVocaListVM, segmentIndex: Int) {
         self.tableView = tableView
-        self.vocaTranlsatedVM = vocaTranlsatedVM
+        self.apiVocaListVM = apiVocaListVM
         self.segmentIndex = segmentIndex
         super.init(tableView: tableView) { tableView, indexPath, itemIdentifier in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: VocaTableViewCell.identifier,
@@ -23,9 +23,9 @@ final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmT
             }
             let data = itemIdentifier
             cell.viewModel = VocaCellVM(vocaListData: nil,
-                                        vocaTanslatedData: data,
+                                        apiVocaData: data,
                                         vocaListVM: nil,
-                                        vocaTanslatedVM: vocaTranlsatedVM,
+                                        apiVocaListVM: apiVocaListVM,
                                         isSelect: data.isSelected,
                                         selectedSegmentIndex: segmentIndex)
             if let viewModel = cell.viewModel {
@@ -37,8 +37,8 @@ final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, RealmT
         }
     }
 
-    func vocaTranslatedTableViewSnapshot(with newData: [RealmTranslateModel], emptyView: () -> Void) {
-        var vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
+    func vocaTranslatedTableViewSnapshot(with newData: [APIRealmVocaModel], emptyView: () -> Void) {
+        var vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, APIRealmVocaModel>()
         let sections = Section.allCases
         for section in sections {
             let itemsInSection = newData.filter { $0.section == section.title }

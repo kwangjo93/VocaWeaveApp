@@ -1,5 +1,5 @@
 //
-//  VocaTranslatedVM.swift
+//  APIVocaListVM.swift
 //  VocaWeaveApp
 //
 //  Created by 천광조 on 12/8/23.
@@ -10,19 +10,20 @@ import RealmSwift
 import UIKit
 import SnapKit
 
-final class VocaTranslatedVM {
+final class APIVocaListVM {
     // MARK: - Property
-    private let datamanager: RealmTranslateType
-    let tableViewUpdate = PassthroughSubject<[RealmTranslateModel], Never>()
+    private let datamanager: APIRealmVocaModelType
+    let tableViewUpdate = PassthroughSubject<[APIRealmVocaModel], Never>()
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let vocaAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     private let networking = NetworkingManager.shared
-    var vocaList: [RealmTranslateModel] {
+    var vocaList: [APIRealmVocaModel] {
         return datamanager.getVocaList()
     }
     // MARK: - init
-    init(datamanager: RealmTranslateType) {
+    init(datamanager: APIRealmVocaModelType) {
         self.datamanager = datamanager
     }
     // MARK: - Helper
@@ -42,35 +43,36 @@ final class VocaTranslatedVM {
         }
     }
 
-    func isVocaAlreadyExists(_ voca: RealmTranslateModel) -> Bool {
-          let existingVocaList: [RealmTranslateModel] = vocaList
+    func isVocaAlreadyExists(_ voca: APIRealmVocaModel) -> Bool {
+          let existingVocaList: [APIRealmVocaModel] = vocaList
           return existingVocaList.contains { $0.sourceText == voca.sourceText
                                           && $0.translatedText == voca.translatedText }
       }
     // MARK: - Action
-    func addVoca(_ list: RealmTranslateModel) {
+    func addVoca(_ list: APIRealmVocaModel) {
         datamanager.makeNewList(list)
     }
 
-    func updateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+    func updateVoca(list: APIRealmVocaModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
     }
 
-    func deleteVoca(_ list: RealmTranslateModel) {
+    func deleteVoca(_ list: APIRealmVocaModel) {
         datamanager.deleteList(list)
     }
 
     @MainActor
-    func editDictionaryData(currentView: VocaVC, vocaData: RealmTranslateModel) {
-        let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: vocaData)
-        let dictionaryView =  DictionaryVC(dictionaryEnum: .edit,
-                                           dictionaryVM: dicVM)
+    func editDictionaryData(currentView: VocaVC, vocaData: APIRealmVocaModel) {
+        let dicVM = DictionaryVM(apiVocaListVM: self,
+                                 apiVocaData: vocaData,
+                                 dictionaryEnum: .edit)
+        let dictionaryView =  DictionaryVC(dictionaryVM: dicVM)
         self.goToNextPage(currentView: currentView,
                         nextView: dictionaryView)
     }
 }
 // MARK: - Private
-private extension VocaTranslatedVM {
+private extension APIVocaListVM {
     func removeLeadingAndTrailingSpaces(from string: String) -> String {
         var modifiedString = string
         while modifiedString.hasPrefix(" ") {
@@ -82,7 +84,7 @@ private extension VocaTranslatedVM {
         return modifiedString
     }
 
-    func fetchDataAndHandleResult(sourceText: String) async throws -> TranslateReponseModel? {
+    func fetchDataAndHandleResult(sourceText: String) async throws -> APIReponseModel? {
         if Language.detectLanguage(text: sourceText) {
             do {
                 let result = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
@@ -107,14 +109,14 @@ private extension VocaTranslatedVM {
         currentView.present(navigationController, animated: false)
     }
 
-    func dictionaryUpdateVoca(list: RealmTranslateModel, text: String, isSelected: Bool) {
+    func dictionaryUpdateVoca(list: APIRealmVocaModel, text: String, isSelected: Bool) {
         datamanager.updateListInfo(list: list, text: text, isSelected: isSelected)
-        let newVocaList: [RealmTranslateModel] = vocaList
+        let newVocaList: [APIRealmVocaModel] = vocaList
         self.tableViewUpdate.send(newVocaList)
     }
 
     @MainActor
-    private func checkForExistingData(with text: String) -> RealmTranslateModel? {
+    private func checkForExistingData(with text: String) -> APIRealmVocaModel? {
         let translatedData = vocaList
         if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
             return duplicatedData
@@ -127,10 +129,11 @@ private extension VocaTranslatedVM {
             do {
                 guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
                 else { return }
-                let voca = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
-                let dicVM = DictionaryVM(vocaTranslatedVM: self, vocaTranslatedData: voca)
-                let dictionaryView = await DictionaryVC(dictionaryEnum: .response,
-                                                        dictionaryVM: dicVM)
+                let voca = APIRealmVocaModel(apiModel: responseData, sourceText: sourceText)
+                let dicVM = DictionaryVM(apiVocaListVM: self,
+                                         apiVocaData: voca,
+                                         dictionaryEnum: .response)
+                let dictionaryView = await DictionaryVC(dictionaryVM: dicVM)
                 await self.goToNextPage(currentView: currentView,
                                       nextView: dictionaryView)
             } catch {
@@ -140,7 +143,7 @@ private extension VocaTranslatedVM {
     }
 }
 // MARK: - Alert - Add, Update Method
-extension VocaTranslatedVM {
+extension APIVocaListVM {
     func showAlertWithTextField(currentView: VocaVC) {
         let alert = configureAlert(currentView: currentView)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

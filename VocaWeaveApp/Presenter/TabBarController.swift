@@ -10,24 +10,25 @@ import UIKit
 final class TabBarController: UITabBarController {
     // MARK: - Property
     private let vocaListManager: VocaListManager
-    private let vocaTranslatedManager: VocaTranslatedManager
+    private let apiVocaListManager: APIVocaListManager
     private let categoryManager: CategoryDataManager
     private lazy var vocaListVM = VocaListVM(datamanager: vocaListManager)
-    private lazy var vocaTranslatedVM = VocaTranslatedVM(datamanager: vocaTranslatedManager)
-    private lazy var categoryVM = CategoryVM(vocaTranslatedManager: vocaTranslatedManager,
+    private lazy var apiVocaListVM = APIVocaListVM(datamanager: apiVocaListManager)
+    private lazy var categoryVM = CategoryVM(apiVocaListManager: apiVocaListManager,
                                              vocaListManager: vocaListManager,
                                              vocaListVM: vocaListVM,
-                                             vocaTranslatedVM: vocaTranslatedVM)
+                                             apiVocaListVM: apiVocaListVM)
     private lazy var vocaWeaveVM = VocaWeaveVM(vocaListManager: vocaListManager,
-                                               vocaTranslatedManager: vocaTranslatedManager)
-    private lazy var dictionaryVM = DictionaryVM(vocaTranslatedVM: vocaTranslatedVM,
-                                                 vocaTranslatedData: nil)
+                                               apiVocaListManager: apiVocaListManager)
+    private lazy var dictionaryVM = DictionaryVM(apiVocaListVM: apiVocaListVM,
+                                                 apiVocaData: nil,
+                                                 dictionaryEnum: .new)
     // MARK: - init
     init(vocaListManager: VocaListManager,
-         vocaTranslatedManager: VocaTranslatedManager,
+         vocaTranslatedManager: APIVocaListManager,
          categoryManager: CategoryDataManager) {
         self.vocaListManager = vocaListManager
-        self.vocaTranslatedManager = vocaTranslatedManager
+        self.apiVocaListManager = vocaTranslatedManager
         self.categoryManager = categoryManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,18 +42,17 @@ final class TabBarController: UITabBarController {
         makeListsForRealm(lists: categoryManager.setWithSavedData())
 
         let vocaViewController = UINavigationController(
-            rootViewController: VocaVC(vocaTranslatedVM: vocaTranslatedVM,
+            rootViewController: VocaVC(apiVocaListVM: apiVocaListVM,
                                         vocaListVM: vocaListVM))
 
         let categoryWordsViewController = UINavigationController(
-            rootViewController: CategoryVC(categoryViewModel: categoryVM))
+            rootViewController: CategoryVC(categoryVM: categoryVM))
 
         let vocaWeaveViewController = UINavigationController(
             rootViewController: VocaWeaveVC(vocaWeaveViewModel: vocaWeaveVM))
 
         let dictionaryViewController = UINavigationController(
-            rootViewController: DictionaryVC(dictionaryEnum: .new,
-                                             dictionaryVM: dictionaryVM))
+            rootViewController: DictionaryVC(dictionaryVM: dictionaryVM))
 
         vocaViewController.tabBarItem = UITabBarItem(
             title: "단어장",
