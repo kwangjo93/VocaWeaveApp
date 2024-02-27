@@ -217,7 +217,7 @@ private extension VocaVC {
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
-        vocaTranslatedVM.duplicationAlertPublisher
+        vocaTranslatedVM.vocaAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)

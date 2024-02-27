@@ -17,7 +17,7 @@ final class VocaTranslatedVM {
     let alertPublisher = PassthroughSubject<UIAlertController, Never>()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let whitespacesAlertPublisher = PassthroughSubject<UIAlertController, Never>()
-    let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let vocaAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     private let networking = NetworkingManager.shared
     var vocaList: [RealmTranslateModel] {
         return datamanager.getVocaList()

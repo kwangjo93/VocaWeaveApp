@@ -17,7 +17,7 @@ final class DictionaryVM {
     private let speechSynthesizer = AVSpeechSynthesizer()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     let copyAlertPublisher = PassthroughSubject<UIAlertController, Never>()
-    let duplicationAlertPublisher = PassthroughSubject<UIAlertController, Never>()
+    let vocaAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
     var dictionaryEnum: DictionaryEnum = .new
     var vocaTranslatedData: RealmTranslateModel?
@@ -131,20 +131,10 @@ final class DictionaryVM {
     func saveDictionaryData() {
         guard let vocaTranslatedData = vocaTranslatedData else { return }
         if !vocaTranslatedVM.isVocaAlreadyExists(vocaTranslatedData) {
+            showAlert(title: "완료", message: "단어가 저장되었습니다.")
             vocaTranslatedVM.addVoca(vocaTranslatedData)
         } else {
-            let alert = UIAlertController(title: "중복",
-                                          message: "같은 단어가 이미 있습니다",
-                                          preferredStyle: .alert)
-               DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                   alert.dismiss(animated: true, completion: nil)
-               }
-            switch dictionaryEnum {
-            case .new:
-                duplicationAlertPublisher.send(alert)
-            case .response, .edit:
-                vocaTranslatedVM.duplicationAlertPublisher.send(alert)
-            }
+            showAlert(title: "중복", message: "같은 단어가 이미 있습니다")
         }
     }
 
@@ -216,6 +206,19 @@ private extension DictionaryVM {
             }
         }
         return vocaData
+    }
+
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            alert.dismiss(animated: true, completion: nil)
+        }
+        switch dictionaryEnum {
+        case .new:
+            vocaAlertPublisher.send(alert)
+        case .response, .edit:
+            vocaTranslatedVM.vocaAlertPublisher.send(alert)
+        }
     }
 }
 // MARK: - Animation

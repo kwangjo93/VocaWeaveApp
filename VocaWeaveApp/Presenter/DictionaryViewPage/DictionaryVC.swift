@@ -140,7 +140,7 @@ private extension DictionaryVC {
             }
             .store(in: &cancellables)
 
-        dictionaryVM.duplicationAlertPublisher
+        dictionaryVM.vocaAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
