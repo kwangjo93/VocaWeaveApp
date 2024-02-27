@@ -115,7 +115,7 @@ private extension DictionaryVC {
         }
     }
 
-    func handleVocaTranslation(sourceText: String) {
+    func handleAPIVoca(sourceText: String) {
         if (dictionaryVM.apiVocaList.first(where: { $0.sourceText == sourceText })) != nil {
             if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
                 navigationItem.rightBarButtonItems?.remove(at: index)
@@ -236,7 +236,7 @@ extension DictionaryVC: UITextFieldDelegate {
                                                             .fetchDataAndHandleResult(sourceText: sourceText)
                     dictionaryVM.updateTranslationView(with: dictionaryVM.apiVocaData,
                                                        view: dictionaryView)
-                    handleVocaTranslation(sourceText: sourceText)
+                    handleAPIVoca(sourceText: sourceText)
                 } catch {
                     print("Task Response error")
                 }

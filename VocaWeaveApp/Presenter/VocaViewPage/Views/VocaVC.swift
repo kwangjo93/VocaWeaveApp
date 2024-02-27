@@ -222,7 +222,7 @@ private extension VocaVC {
     }
 
     func bindSnapshotAPIVocaData(voca: [APIRealmVocaModel]) {
-        apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: voca) {
+        apiVocaListDataSource.apiVocaTableViewSnapshot(with: voca) {
             apiVocaListVM.manageEmptyView(vocaVC: self,
                                              emptyView: emptyView,
                                              tableView: vocaView.vocaTableView)

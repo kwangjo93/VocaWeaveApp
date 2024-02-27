@@ -25,10 +25,10 @@ final class TabBarController: UITabBarController {
                                                  dictionaryEnum: .new)
     // MARK: - init
     init(vocaListManager: VocaListManager,
-         vocaTranslatedManager: APIVocaListManager,
+         apiVocaListManager: APIVocaListManager,
          categoryManager: CategoryDataManager) {
         self.vocaListManager = vocaListManager
-        self.apiVocaListManager = vocaTranslatedManager
+        self.apiVocaListManager = apiVocaListManager
         self.categoryManager = categoryManager
         super.init(nibName: nil, bundle: nil)
     }

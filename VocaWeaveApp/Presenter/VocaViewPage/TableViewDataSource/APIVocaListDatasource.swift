@@ -37,17 +37,17 @@ final class APIVocaListDatasource: UITableViewDiffableDataSource<Section, APIRea
         }
     }
 
-    func vocaTranslatedTableViewSnapshot(with newData: [APIRealmVocaModel], emptyView: () -> Void) {
-        var vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, APIRealmVocaModel>()
+    func apiVocaTableViewSnapshot(with newData: [APIRealmVocaModel], emptyView: () -> Void) {
+        var apivocaSnapshot = NSDiffableDataSourceSnapshot<Section, APIRealmVocaModel>()
         let sections = Section.allCases
         for section in sections {
             let itemsInSection = newData.filter { $0.section == section.title }
             if !itemsInSection.isEmpty {
-                vocaTranslatedSnapshot.appendSections([section])
-                vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
+                apivocaSnapshot.appendSections([section])
+                apivocaSnapshot.appendItems(itemsInSection, toSection: section)
             }
         }
         emptyView()
-        self.apply(vocaTranslatedSnapshot, animatingDifferences: true)
+        self.apply(apivocaSnapshot, animatingDifferences: true)
     }
 }

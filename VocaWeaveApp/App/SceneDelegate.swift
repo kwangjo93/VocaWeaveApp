@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     let vocaListManager = VocaListManager()
-    let vocaTranslatedManager = APIVocaListManager()
+    let apiVocaListManager = APIVocaListManager()
     lazy var categoryManager = CategoryDataManager(vocaListManager: vocaListManager)
     func scene(
         _ scene: UIScene,
@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
         window?.rootViewController = TabBarController(vocaListManager: vocaListManager,
-                                                      vocaTranslatedManager: vocaTranslatedManager,
+                                                      apiVocaListManager: apiVocaListManager,
                                                       categoryManager: categoryManager)
         window?.tintColor = UIColor.mainTintColor
         window?.makeKeyAndVisible()
