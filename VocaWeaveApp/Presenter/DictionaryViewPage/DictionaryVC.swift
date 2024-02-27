@@ -51,8 +51,8 @@ final class DictionaryVC: UIViewController {
         view.endEditing(true)
     }
 }
+// MARK: - Helper
 private extension DictionaryVC {
-    // MARK: - Helper
     func setup() {
         view.addSubview(dictionaryView)
         configureNav()
@@ -168,6 +168,9 @@ private extension DictionaryVC {
                                                 action: #selector(bookmarkButtonAction),
                                                 for: .touchUpInside)
     }
+}
+// MARK: - objc Action
+private extension DictionaryVC {
     @objc func addRightBarButtonAction() {
         dictionaryVM.saveDictionaryData()
         switch dictionaryVM.dictionaryEnum {
@@ -223,6 +226,7 @@ private extension DictionaryVC {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }

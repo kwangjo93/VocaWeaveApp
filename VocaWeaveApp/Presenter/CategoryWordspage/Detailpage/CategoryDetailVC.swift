@@ -173,7 +173,9 @@ private extension CategoryDetailVC {
         default: return
         }
     }
-    // MARK: - Action
+}
+// MARK: - objc Action
+extension CategoryDetailVC {
     @objc func valueChangeForSegmentedControl(_ sender: UISegmentedControl) {
         selectedSegmentIndex = sender.selectedSegmentIndex
         switch selectedSegmentIndex {
@@ -188,7 +190,6 @@ private extension CategoryDetailVC {
         self.navigationController?.popViewController(animated: true)
     }
 }
-
 // MARK: - VocaList TableView Diffable DataSource
 extension CategoryDetailVC {
         private func vocaListTableViewDatasourceSetup() {

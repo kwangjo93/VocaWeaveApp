@@ -65,7 +65,7 @@ final class VocaVC: UIViewController {
         navigationItem.searchController = nil
     }
 }
-// MARK: - Private
+// MARK: - UISetting
 private extension VocaVC {
     private func setup() {
         configureNav()
@@ -78,36 +78,6 @@ private extension VocaVC {
 
     func setDocumentPicker() {
         documentPicker = VocaDocumentPicker(viewController: self, vocaListVM: vocaListVM)
-    }
-
-    func setVocaListDatasource() {
-        vocaListDataSource = VocaListDataSource(tableView: vocaView.vocaTableView,
-                                                vocaListVM: vocaListVM,
-                                                segmentIndex: segmentIndex)
-        vocaView.vocaTableView.dataSource = vocaListDataSource
-    }
-
-    func setAPIVocaListDataSource() {
-        apiVocaListDataSource = APIVocaListDatasource(tableView: vocaView.vocaTableView,
-                                                      vocaTranlsatedVM: vocaTranslatedVM,
-                                                      segmentIndex: segmentIndex)
-        vocaView.vocaTableView.dataSource = apiVocaListDataSource
-    }
-
-    func bindSnapshotVocaData(voca: [RealmVocaModel]) {
-        vocaListDataSource.vocaListTableViewSnapshot(with: voca) {
-            vocaListVM.manageEmptyView(vocaVC: self,
-                                       emptyView: emptyView,
-                                       tableView: vocaView.vocaTableView)
-        }
-    }
-
-    func bindSnapshotAPIVocaData(voca: [RealmTranslateModel]) {
-        apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: voca) {
-            vocaTranslatedVM.manageEmptyView(vocaVC: self,
-                                             emptyView: emptyView,
-                                             tableView: vocaView.vocaTableView)
-        }
     }
 
     func configureNav() {
@@ -157,20 +127,9 @@ private extension VocaVC {
                                               segmentIndex: segmentIndex,
                                               viewHandler: self)
     }
-
-    func setTableData() {
-        switch segmentIndex {
-        case 0:
-            setVocaListDatasource()
-            bindSnapshotVocaData(voca: vocaListVM.vocaList)
-        case 1:
-            setAPIVocaListDataSource()
-            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
-        default:
-            break
-        }
-    }
-
+}
+// MARK: - Data Binding
+private extension VocaVC {
     func bindVocaListModelData() {
         vocaListVM.alertPublisher
             .receive(on: DispatchQueue.main)
@@ -224,7 +183,54 @@ private extension VocaVC {
             }
             .store(in: &cancellables)
     }
-    // MARK: - Action
+}
+// MARK: - TableView Setting
+private extension VocaVC {
+    func setTableData() {
+        switch segmentIndex {
+        case 0:
+            setVocaListDatasource()
+            bindSnapshotVocaData(voca: vocaListVM.vocaList)
+        case 1:
+            setAPIVocaListDataSource()
+            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
+        default:
+            break
+        }
+    }
+
+    func setVocaListDatasource() {
+        vocaListDataSource = VocaListDataSource(tableView: vocaView.vocaTableView,
+                                                vocaListVM: vocaListVM,
+                                                segmentIndex: segmentIndex)
+        vocaView.vocaTableView.dataSource = vocaListDataSource
+    }
+
+    func setAPIVocaListDataSource() {
+        apiVocaListDataSource = APIVocaListDatasource(tableView: vocaView.vocaTableView,
+                                                      vocaTranlsatedVM: vocaTranslatedVM,
+                                                      segmentIndex: segmentIndex)
+        vocaView.vocaTableView.dataSource = apiVocaListDataSource
+    }
+
+    func bindSnapshotVocaData(voca: [RealmVocaModel]) {
+        vocaListDataSource.vocaListTableViewSnapshot(with: voca) {
+            vocaListVM.manageEmptyView(vocaVC: self,
+                                       emptyView: emptyView,
+                                       tableView: vocaView.vocaTableView)
+        }
+    }
+
+    func bindSnapshotAPIVocaData(voca: [RealmTranslateModel]) {
+        apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: voca) {
+            vocaTranslatedVM.manageEmptyView(vocaVC: self,
+                                             emptyView: emptyView,
+                                             tableView: vocaView.vocaTableView)
+        }
+    }
+}
+// MARK: - objc Action
+private extension VocaVC {
     @objc func plustButtonAction() {
         switch segmentIndex {
         case 0:

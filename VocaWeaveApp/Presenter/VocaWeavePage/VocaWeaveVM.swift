@@ -182,22 +182,8 @@ final class VocaWeaveVM {
     }
 }
 
+// MARK: - Alert
 private extension VocaWeaveVM {
-    func setMyVocaData() {
-        vocaList = vocaListManager.getVocaList(query: realmQuery)
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    func setDicVocaData() {
-        apiVocaList = vocaTranslatedManager.getVocaList()
-        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
-    func setBookmarkVocaData() {
-        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
-        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
-    }
-
     func copyAlertAction() {
         let alert = UIAlertController(title: nil,
                                       message: "텍스트가 클립보드에 복사되었습니다.",
@@ -215,6 +201,23 @@ private extension VocaWeaveVM {
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
         alert.addAction(cancel)
         errorAlertPublisher.send(alert)
+    }
+}
+// MARK: - Set func
+private extension VocaWeaveVM {
+    func setMyVocaData() {
+        vocaList = vocaListManager.getVocaList(query: realmQuery)
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setDicVocaData() {
+        apiVocaList = vocaTranslatedManager.getVocaList()
+        apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
+    }
+
+    func setBookmarkVocaData() {
+        vocaList = vocaListManager.getAllVocaData().filter { $0.isSelected == true }
+        vocaDataArray = vocaList.filter { isEnglishAlphabet($0.sourceText) }
     }
 
     func findWordRange(in text: String, word: String) -> NSRange? {
@@ -234,7 +237,9 @@ private extension VocaWeaveVM {
         }
         return true
     }
-
+}
+// MARK: - About Buttons
+private extension VocaWeaveVM {
     func assignVocaListToButtons(_ buttons: [UIButton],
                                  with selectedVoca: Array<RealmVocaModel>.SubSequence,
                                  count: Int) {

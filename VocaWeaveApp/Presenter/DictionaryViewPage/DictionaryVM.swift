@@ -158,25 +158,7 @@ final class DictionaryVM {
         }
     }
 }
-
 private extension DictionaryVM {
-    func errorResponseAlert() {
-        let alert = UIAlertController(title: "오류!!",
-                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
-                                      preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "cancel", style: .cancel)
-        alert.addAction(cancel)
-        errorAlertPublisher.send(alert)
-    }
-
-   func copyAlertAction() {
-        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
-           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-               alert.dismiss(animated: true, completion: nil)
-           }
-        copyAlertPublisher.send(alert)
-    }
-
     func changeBookmark(vocaData: RealmTranslateModel) {
         if self.isSelect {
             vocaTranslatedVM.updateVoca(list: vocaData,
@@ -206,6 +188,25 @@ private extension DictionaryVM {
             }
         }
         return vocaData
+    }
+}
+// MARK: - Alert
+private extension DictionaryVM {
+    func errorResponseAlert() {
+        let alert = UIAlertController(title: "오류!!",
+                                      message: "영어 또는 한글의 언어를 입력해 주세요!",
+                                      preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        alert.addAction(cancel)
+        errorAlertPublisher.send(alert)
+    }
+
+   func copyAlertAction() {
+        let alert = UIAlertController(title: nil, message: "텍스트가 클립보드에 복사되었습니다.", preferredStyle: .alert)
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+               alert.dismiss(animated: true, completion: nil)
+           }
+        copyAlertPublisher.send(alert)
     }
 
     func showAlert(title: String, message: String) {

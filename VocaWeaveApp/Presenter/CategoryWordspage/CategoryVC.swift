@@ -35,9 +35,8 @@ final class CategoryVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
+// MARK: - Helper
 private extension CategoryVC {
-    // MARK: - Helper
     func setup() {
         configureNav()
         configureUI()

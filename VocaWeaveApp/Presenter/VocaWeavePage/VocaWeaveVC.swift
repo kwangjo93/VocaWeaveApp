@@ -53,9 +53,8 @@ final class VocaWeaveVC: UIViewController {
         view.endEditing(true)
     }
 }
-
+// MARK: - Helper
 private extension VocaWeaveVC {
-    // MARK: - Helper
     func setup() {
         configureNav()
         configure()
@@ -181,7 +180,9 @@ private extension VocaWeaveVC {
         view.loopMode = .playOnce
         view.contentMode = .scaleAspectFit
     }
-    // MARK: - Action
+}
+// MARK: - objc Action
+private extension VocaWeaveVC {
     @objc func refreshButtonAction() {
         vocaWeaveVM.resetTextData(vocaWeaveView)
         vocaWeaveVM.refreshVocaData(buttons: buttonArray)
