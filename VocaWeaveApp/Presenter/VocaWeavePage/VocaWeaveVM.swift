@@ -82,9 +82,12 @@ final class VocaWeaveVM {
         }
     }
 
-    func selectVoca() {
+    func selectVoca(buttons: [UIButton]) {
         switch selectedVocaType {
         case .myVoca, .dicVoca, .bookmarkVoca:
+            self.isSelect = false
+            buttons.forEach { $0.isSelected = false }
+            resetStrikeButtons(sender: buttons)
             changedVocaPublisher.send(selectedVocaType.tagValue)
         }
     }

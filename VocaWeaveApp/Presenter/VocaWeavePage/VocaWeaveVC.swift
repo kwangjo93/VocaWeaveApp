@@ -113,19 +113,19 @@ private extension VocaWeaveVC {
                               image: UIImage(systemName: "highlighter"),
                               handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .myVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray)
         })
         let dictionayVoca = UIAction(title: "사전 단어장",
                                      image: UIImage(systemName: "book.pages"),
                                      handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .dicVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray)
         })
         let myBookmarkVoca = UIAction(title: "나의 북마크 단어장",
                                     image: UIImage(systemName: "star.square.fill"),
                                     handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .bookmarkVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray)
         })
         let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, myBookmarkVoca])
         return UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"),
