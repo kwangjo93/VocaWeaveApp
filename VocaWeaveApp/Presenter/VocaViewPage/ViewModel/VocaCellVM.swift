@@ -10,25 +10,25 @@ import UIKit
 
 final class VocaCellVM {
     var vocaListData: RealmVocaModel?
-    var vocaTanslatedData: RealmTranslateModel?
+    var apiVocaData: APIRealmVocaModel?
 
     var vocaListVM: VocaListVM?
-    var vocaTanslatedVM: VocaTranslatedVM?
+    var apiVocaListVM: APIVocaListVM?
 
     private let speechSynthesizer = AVSpeechSynthesizer()
     var isSelect = false
     var selectedSegmentIndex = 0
 
     init(vocaListData: RealmVocaModel?,
-         vocaTanslatedData: RealmTranslateModel?,
+         apiVocaData: APIRealmVocaModel?,
          vocaListVM: VocaListVM?,
-         vocaTanslatedVM: VocaTranslatedVM?,
+         apiVocaListVM: APIVocaListVM?,
          isSelect: Bool,
          selectedSegmentIndex: Int) {
         self.vocaListData = vocaListData
-        self.vocaTanslatedData = vocaTanslatedData
+        self.apiVocaData = apiVocaData
         self.vocaListVM = vocaListVM
-        self.vocaTanslatedVM = vocaTanslatedVM
+        self.apiVocaListVM = apiVocaListVM
         self.isSelect = isSelect
         self.selectedSegmentIndex = selectedSegmentIndex
     }
@@ -63,10 +63,10 @@ final class VocaCellVM {
                         for: .normal)
     }
 
-    func updateVocaTranslatedData(image: UIImage.SymbolConfiguration, button: UIButton) {
-        guard let vocaTanslatedVM = vocaTanslatedVM else { return }
-        guard let vocaTanslatedData = vocaTanslatedData else { return }
-        vocaTanslatedVM.updateVoca(list: vocaTanslatedData,
+    func updateAPIVocaData(image: UIImage.SymbolConfiguration, button: UIButton) {
+        guard let apiVocaListVM = apiVocaListVM else { return }
+        guard let vocaTanslatedData = apiVocaData else { return }
+        apiVocaListVM.updateVoca(list: vocaTanslatedData,
                                    text: vocaTanslatedData.sourceText,
                                    isSelected: isSelect)
         button.setImage(UIImage(systemName: isSelect == true ? "star.fill" : "star",
@@ -80,7 +80,7 @@ final class VocaCellVM {
         case 0:
             updateVocaListData(image: imageConfig, button: button)
         case 1:
-            updateVocaTranslatedData(image: imageConfig, button: button)
+            updateAPIVocaData(image: imageConfig, button: button)
         default:
             break
         }

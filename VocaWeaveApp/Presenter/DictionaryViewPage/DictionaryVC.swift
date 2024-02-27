@@ -86,15 +86,15 @@ private extension DictionaryVC {
     }
 
     func configureVocaData() {
-        guard let vocaTranslatedData = dictionaryVM.vocaTranslatedData else { return }
+        guard let apiVocaData = dictionaryVM.apiVocaData else { return }
         switch dictionaryVM.dictionaryEnum {
         case .edit, .response:
             tabBarController?.tabBar.isHidden = true
-            dictionaryVM.bindTextData(vocaTranslatedData, dictionaryView)
+            dictionaryVM.bindTextData(apiVocaData, dictionaryView)
             hideAndPresnetAddButton()
-            dictionaryVM.setBookmarkStatus(isSelec: vocaTranslatedData.isSelected,
+            dictionaryVM.setBookmarkStatus(isSelec: apiVocaData.isSelected,
                                            view: dictionaryView,
-                                           text: vocaTranslatedData.sourceText)
+                                           text: apiVocaData.sourceText)
         case .new:
             break
         }
@@ -232,9 +232,9 @@ extension DictionaryVC: UITextFieldDelegate {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }
             Task {
                 do {
-                    dictionaryVM.vocaTranslatedData = try await dictionaryVM
+                    dictionaryVM.apiVocaData = try await dictionaryVM
                                                             .fetchDataAndHandleResult(sourceText: sourceText)
-                    dictionaryVM.updateTranslationView(with: dictionaryVM.vocaTranslatedData,
+                    dictionaryVM.updateTranslationView(with: dictionaryVM.apiVocaData,
                                                        view: dictionaryView)
                     handleVocaTranslation(sourceText: sourceText)
                 } catch {

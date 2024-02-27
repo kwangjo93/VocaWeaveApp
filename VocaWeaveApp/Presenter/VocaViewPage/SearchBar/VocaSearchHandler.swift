@@ -9,20 +9,20 @@ import UIKit
 
 final class VocaSearchHandler {
     private let vocaListVM: VocaListVM
-    private let vocaTranslatedVM: VocaTranslatedVM
+    private let apiVocaListVM: APIVocaListVM
     private let vocaView: VocaView
     private let emptyView: EmptyListView
     private var segmentIndex: Int
     private var viewHandler: UIViewController
 
     init(vocaListVM: VocaListVM,
-         vocaTranslatedVM: VocaTranslatedVM,
+         apiVocaListVM: APIVocaListVM,
          vocaView: VocaView,
          emptyView: EmptyListView,
          segmentIndex: Int,
          viewHandler: UIViewController) {
         self.vocaListVM = vocaListVM
-        self.vocaTranslatedVM = vocaTranslatedVM
+        self.apiVocaListVM = apiVocaListVM
         self.vocaView = vocaView
         self.emptyView = emptyView
         self.segmentIndex = segmentIndex
@@ -32,7 +32,7 @@ final class VocaSearchHandler {
     func handleSearchTextChange(_ searchText: String,
                                 segmentIndex: Int,
                                 voca: ([RealmVocaModel]) -> Void,
-                                apiVoca: ([RealmTranslateModel]) -> Void) {
+                                apiVoca: ([APIRealmVocaModel]) -> Void) {
         switch segmentIndex {
         case 0:
             handleSearchForVocaList(searchText, completion: voca)
@@ -55,12 +55,12 @@ final class VocaSearchHandler {
     }
 
     private func handleSearchForApiVocaList(_ searchText: String,
-                                            completion: ([RealmTranslateModel]) -> Void) {
+                                            completion: ([APIRealmVocaModel]) -> Void) {
         guard !searchText.isEmpty else {
-            completion(vocaTranslatedVM.vocaList)
+            completion(apiVocaListVM.vocaList)
             return
         }
-        let filteredData = vocaTranslatedVM.vocaList.filter { voca in
+        let filteredData = apiVocaListVM.vocaList.filter { voca in
             return voca.sourceText.lowercased().contains(searchText.lowercased())
         }
         completion(filteredData)

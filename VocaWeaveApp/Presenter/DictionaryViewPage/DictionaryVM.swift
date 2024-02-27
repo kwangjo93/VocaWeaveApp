@@ -12,7 +12,7 @@ import Lottie
 
 final class DictionaryVM {
     // MARK: - Property
-    private let vocaTranslatedVM: VocaTranslatedVM
+    private let apiVocaListVM: APIVocaListVM
     private let networking = NetworkingManager.shared
     private let speechSynthesizer = AVSpeechSynthesizer()
     let errorAlertPublisher = PassthroughSubject<UIAlertController, Never>()
@@ -20,20 +20,20 @@ final class DictionaryVM {
     let vocaAlertPublisher = PassthroughSubject<UIAlertController, Never>()
     var isSelect = false
     var dictionaryEnum: DictionaryEnum = .new
-    var vocaTranslatedData: RealmTranslateModel?
-    var apiVocaList: [RealmTranslateModel] {
-        return vocaTranslatedVM.vocaList
+    var apiVocaData: APIRealmVocaModel?
+    var apiVocaList: [APIRealmVocaModel] {
+        return apiVocaListVM.vocaList
     }
     // MARK: - init
-    init(vocaTranslatedVM: VocaTranslatedVM,
-         vocaTranslatedData: RealmTranslateModel?,
+    init(apiVocaListVM: APIVocaListVM,
+         apiVocaData: APIRealmVocaModel?,
          dictionaryEnum: DictionaryEnum) {
-        self.vocaTranslatedVM = vocaTranslatedVM
-        self.vocaTranslatedData = vocaTranslatedData
+        self.apiVocaListVM = apiVocaListVM
+        self.apiVocaData = apiVocaData
         self.dictionaryEnum = dictionaryEnum
     }
     // MARK: - Method
-    func bindTextData(_ data: RealmTranslateModel, _ view: DictionaryView) {
+    func bindTextData(_ data: APIRealmVocaModel, _ view: DictionaryView) {
         view.sourceTextField.text = data.sourceText
         view.translationText.text = data.translatedText
     }
@@ -59,7 +59,7 @@ final class DictionaryVM {
     }
 
     @MainActor
-    func updateTranslationView(with vocaData: RealmTranslateModel?,
+    func updateTranslationView(with vocaData: APIRealmVocaModel?,
                                view: DictionaryView) {
         guard let vocaData = vocaData else { return }
         view.translationText.text = vocaData.translatedText
@@ -67,13 +67,13 @@ final class DictionaryVM {
         self.setBookmarkStatus(isSelec: isSelect, view: view, text: vocaData.sourceText)
     }
 
-    func fetchDataAndHandleResult(sourceText: String) async throws -> RealmTranslateModel? {
+    func fetchDataAndHandleResult(sourceText: String) async throws -> APIRealmVocaModel? {
         if Language.detectLanguage(text: sourceText) {
             do {
                 let responseData = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
                                                                   target: Language.targetLanguage.languageCode,
                                                                   text: sourceText)
-                let result = RealmTranslateModel(apiModel: responseData, sourceText: sourceText)
+                let result = APIRealmVocaModel(apiModel: responseData, sourceText: sourceText)
                 let vocaData = await checkDuplicationData(vocaData: result, text: sourceText)
                 return vocaData
             } catch {
@@ -114,14 +114,14 @@ final class DictionaryVM {
 
     @MainActor
     func bookmarkButtonAction(text: String, view: DictionaryView, sourceText: String) {
-        guard let vocaData = vocaTranslatedData else { return }
+        guard let vocaData = apiVocaData else { return }
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedText.isEmpty else { return }
         if checkForExistingData(with: text) == nil {
             saveDictionaryData()
-            vocaTranslatedVM.updateVoca(list: vocaData,
-                                        text: vocaData.translatedText,
-                                        isSelected: true)
+            apiVocaListVM.updateVoca(list: vocaData,
+                                     text: vocaData.translatedText,
+                                     isSelected: true)
         } else {
             changeBookmark(vocaData: vocaData)
         }
@@ -129,10 +129,10 @@ final class DictionaryVM {
     }
 
     func saveDictionaryData() {
-        guard let vocaTranslatedData = vocaTranslatedData else { return }
-        if !vocaTranslatedVM.isVocaAlreadyExists(vocaTranslatedData) {
+        guard let apiVocaData = apiVocaData else { return }
+        if !apiVocaListVM.isVocaAlreadyExists(apiVocaData) {
             showAlert(title: "완료", message: "단어가 저장되었습니다.")
-            vocaTranslatedVM.addVoca(vocaTranslatedData)
+            apiVocaListVM.addVoca(apiVocaData)
         } else {
             showAlert(title: "중복", message: "같은 단어가 이미 있습니다")
         }
@@ -159,21 +159,21 @@ final class DictionaryVM {
     }
 }
 private extension DictionaryVM {
-    func changeBookmark(vocaData: RealmTranslateModel) {
+    func changeBookmark(vocaData: APIRealmVocaModel) {
         if self.isSelect {
-            vocaTranslatedVM.updateVoca(list: vocaData,
-                                        text: vocaData.translatedText,
-                                        isSelected: true)
+            apiVocaListVM.updateVoca(list: vocaData,
+                                     text: vocaData.translatedText,
+                                     isSelected: true)
         } else {
-            vocaTranslatedVM.updateVoca(list: vocaData,
-                                        text: vocaData.translatedText,
-                                        isSelected: false)
+            apiVocaListVM.updateVoca(list: vocaData,
+                                     text: vocaData.translatedText,
+                                     isSelected: false)
         }
     }
 
     @MainActor
-    func checkForExistingData(with text: String) -> RealmTranslateModel? {
-        let translatedData = vocaTranslatedVM.vocaList
+    func checkForExistingData(with text: String) -> APIRealmVocaModel? {
+        let translatedData = apiVocaListVM.vocaList
         if let duplicatedData = translatedData.first(where: { $0.sourceText == text }) {
             return duplicatedData
         }
@@ -181,7 +181,7 @@ private extension DictionaryVM {
     }
 
     @MainActor
-    func checkDuplicationData(vocaData: RealmTranslateModel, text: String) -> RealmTranslateModel {
+    func checkDuplicationData(vocaData: APIRealmVocaModel, text: String) -> APIRealmVocaModel {
         if vocaData.sourceText == text {
             if let duplicatedData = checkForExistingData(with: text) {
                 return duplicatedData
@@ -218,7 +218,7 @@ private extension DictionaryVM {
         case .new:
             vocaAlertPublisher.send(alert)
         case .response, .edit:
-            vocaTranslatedVM.vocaAlertPublisher.send(alert)
+            apiVocaListVM.vocaAlertPublisher.send(alert)
         }
     }
 }

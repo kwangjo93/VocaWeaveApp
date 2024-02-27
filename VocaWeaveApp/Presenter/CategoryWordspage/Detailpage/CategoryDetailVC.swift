@@ -18,16 +18,16 @@ final class CategoryDetailVC: UIViewController {
     private var indexPath: Int
     private let distinguishSavedData: Bool
     private var cancellables = Set<AnyCancellable>()
-    private let categoryViewModel: CategoryVM
+    private let categoryVM: CategoryVM
 
     private var firstVocaData: [RealmVocaModel]?
     private var secondVocaData: [RealmVocaModel]?
-    private var dicData: [RealmTranslateModel]?
+    private var dicData: [APIRealmVocaModel]?
 
     private var vocaListDataSource: UITableViewDiffableDataSource<Section, RealmVocaModel>!
     private var vocaListSnapshot: NSDiffableDataSourceSnapshot<Section, RealmVocaModel>!
-    private var vocaTranslatedDataSource: UITableViewDiffableDataSource<Section, RealmTranslateModel>!
-    private var vocaTranslatedSnapshot: NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>!
+    private var apiVocaDataSource: UITableViewDiffableDataSource<Section, APIRealmVocaModel>!
+    private var apiVocaSnapshot: NSDiffableDataSourceSnapshot<Section, APIRealmVocaModel>!
 
     private lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
                                                      style: .plain,
@@ -49,13 +49,13 @@ final class CategoryDetailVC: UIViewController {
          secondString: String,
          navigationTitle: String,
          indexPath: Int,
-         categoryViewModel: CategoryVM,
+         categoryVM: CategoryVM,
          distinguishSavedData: Bool) {
         self.firstString = firstString
         self.secondString = secondString
         self.navigationTitle = navigationTitle
         self.indexPath = indexPath
-        self.categoryViewModel = categoryViewModel
+        self.categoryVM = categoryVM
         self.distinguishSavedData = distinguishSavedData
         super.init(nibName: nil, bundle: nil)
     }
@@ -122,9 +122,9 @@ private extension CategoryDetailVC {
                 self?.vocaListTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
-        viewModel.vocaTranslatedTableViewUpdate
+        viewModel.apiVocaTableViewUpdate
             .sink { [weak self] updatedVocaList in
-                self?.vocaTranslatedTableViewSnapshot(with: updatedVocaList)
+                self?.apiVocaTableViewSnapshot(with: updatedVocaList)
             }
             .store(in: &cancellables)
     }
@@ -150,12 +150,12 @@ private extension CategoryDetailVC {
     func setupSelectedVoca() {
         switch selectedSegmentIndex {
         case 0:
-            setupVocaData(categoryViewModel.selectedVoca.filter { $0.isSelected }, nil)
+            setupVocaData(categoryVM.selectedVoca.filter { $0.isSelected }, nil)
         case 1:
-            self.dicData = categoryViewModel.selectedDic.filter { $0.isSelected }
+            self.dicData = categoryVM.selectedDic.filter { $0.isSelected }
             guard let dicData = dicData else { return }
-            vocaTranslatedTableViewDatasourceSetup()
-            vocaTranslatedTableViewSnapshot(with: dicData)
+            apiVocaTableViewDatasourceSetup()
+            apiVocaTableViewSnapshot(with: dicData)
         default:
             break
         }
@@ -163,13 +163,13 @@ private extension CategoryDetailVC {
 
     func setupSelectedCategoryVoca() {
         switch self.indexPath {
-        case 1: setupVocaData(categoryViewModel.transportationVoca, nil)
-        case 2: setupVocaData(categoryViewModel.accommodationVoca, nil)
-        case 3: setupVocaData(categoryViewModel.travelActivitiesVoca, categoryViewModel.travelEssentialsVoca)
-        case 4: setupVocaData(categoryViewModel.diningVoca, categoryViewModel.cultureVoca)
-        case 5: setupVocaData(categoryViewModel.leisureVoca, nil)
-        case 6: setupVocaData(categoryViewModel.communicationVoca, nil)
-        case 7: setupVocaData(categoryViewModel.facilitiesVoca, nil)
+        case 1: setupVocaData(categoryVM.transportationVoca, nil)
+        case 2: setupVocaData(categoryVM.accommodationVoca, nil)
+        case 3: setupVocaData(categoryVM.travelActivitiesVoca, categoryVM.travelEssentialsVoca)
+        case 4: setupVocaData(categoryVM.diningVoca, categoryVM.cultureVoca)
+        case 5: setupVocaData(categoryVM.leisureVoca, nil)
+        case 6: setupVocaData(categoryVM.communicationVoca, nil)
+        case 7: setupVocaData(categoryVM.facilitiesVoca, nil)
         default: return
         }
     }
@@ -204,12 +204,12 @@ extension CategoryDetailVC {
                                             else { return UITableViewCell() }
                 guard let data = self.vocaListDataSource.itemIdentifier(for: indexPath) else { return cell}
                 cell.viewModel = CategoryTableViewCellVM(vocaListData: data,
-                                                         vocaTanslatedData: nil,
+                                                         apiVocaData: nil,
                                                          firstVocaData: self.firstVocaData,
                                                          secondVocaData: self.secondVocaData,
-                                                         allVocaData: categoryViewModel.selectedVoca,
-                                                         vocaListVM: categoryViewModel.vocaListVM,
-                                                         vocaTanslatedVM: nil,
+                                                         allVocaData: categoryVM.selectedVoca,
+                                                         vocaListVM: categoryVM.vocaListVM,
+                                                         apiVocaListVM: nil,
                                                          distinguishSavedData: distinguishSavedData,
                                                          isSelect: data.isSelected,
                                                          selectedSegmentIndex: selectedSegmentIndex)
@@ -237,27 +237,27 @@ extension CategoryDetailVC {
             vocaListDataSource.apply(vocaListSnapshot, animatingDifferences: true)
         }
 }
-// MARK: - VocaTranslated TableView Diffable DataSource
+// MARK: - APIVoca TableView Diffable DataSource
 extension CategoryDetailVC {
-    private func vocaTranslatedTableViewDatasourceSetup() {
-        vocaTranslatedDataSource = UITableViewDiffableDataSource<Section, RealmTranslateModel>(
+    private func apiVocaTableViewDatasourceSetup() {
+        apiVocaDataSource = UITableViewDiffableDataSource<Section, APIRealmVocaModel>(
             tableView: detailView.vocaTableView
-        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: RealmTranslateModel)
+        ) { [weak self] (tableView: UITableView, indexPath: IndexPath, _: APIRealmVocaModel)
             -> UITableViewCell? in
             guard let self = self,
                   let cell = tableView.dequeueReusableCell(
                       withIdentifier: CategoryTableViewCell.identifier,
                       for: indexPath) as? CategoryTableViewCell
                       else { return UITableViewCell() }
-            guard let data = self.vocaTranslatedDataSource.itemIdentifier(for: indexPath)
+            guard let data = self.apiVocaDataSource.itemIdentifier(for: indexPath)
                                                                                 else { return cell}
             cell.viewModel = CategoryTableViewCellVM(vocaListData: nil,
-                                                     vocaTanslatedData: data,
+                                                     apiVocaData: data,
                                                      firstVocaData: self.firstVocaData,
                                                      secondVocaData: self.secondVocaData,
-                                                     allVocaData: categoryViewModel.selectedVoca,
+                                                     allVocaData: categoryVM.selectedVoca,
                                                      vocaListVM: nil,
-                                                     vocaTanslatedVM: categoryViewModel.vocaTranslatedVM,
+                                                     apiVocaListVM: categoryVM.apiVocaListVM,
                                                      distinguishSavedData: distinguishSavedData,
                                                      isSelect: data.isSelected,
                                                      selectedSegmentIndex: selectedSegmentIndex)
@@ -271,17 +271,17 @@ extension CategoryDetailVC {
         }
     }
 
-    private func vocaTranslatedTableViewSnapshot(with newData: [RealmTranslateModel]) {
-        vocaTranslatedSnapshot = NSDiffableDataSourceSnapshot<Section, RealmTranslateModel>()
+    private func apiVocaTableViewSnapshot(with newData: [APIRealmVocaModel]) {
+        apiVocaSnapshot = NSDiffableDataSourceSnapshot<Section, APIRealmVocaModel>()
         let sections = Section.allCases
         for section in sections {
                    let itemsInSection = newData.filter { $0.section == section.title }
                    if !itemsInSection.isEmpty {
-                       vocaTranslatedSnapshot.appendSections([section])
-                       vocaTranslatedSnapshot.appendItems(itemsInSection, toSection: section)
+                       apiVocaSnapshot.appendSections([section])
+                       apiVocaSnapshot.appendItems(itemsInSection, toSection: section)
                    }
                }
-        vocaTranslatedDataSource.apply(vocaTranslatedSnapshot, animatingDifferences: true)
+        apiVocaDataSource.apply(apiVocaSnapshot, animatingDifferences: true)
     }
 }
 // MARK: - TableView Delegate
@@ -295,7 +295,7 @@ extension CategoryDetailVC: UITableViewDelegate {
             sectionTitle = snapshot.sectionIdentifiers[section].title
         } else {
             if distinguishSavedData {
-                let snapshot = vocaTranslatedDataSource.snapshot()
+                let snapshot = apiVocaDataSource.snapshot()
                 sectionTitle = snapshot.sectionIdentifiers[section].title
             } else {
                 let snapshot = vocaListDataSource.snapshot()

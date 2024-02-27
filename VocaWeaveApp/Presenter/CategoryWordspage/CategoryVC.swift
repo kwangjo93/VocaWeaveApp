@@ -26,8 +26,8 @@ final class CategoryVC: UIViewController {
         setup()
     }
     // MARK: - init
-    init(categoryViewModel: CategoryVM) {
-        self.categoryVM = categoryViewModel
+    init(categoryVM: CategoryVM) {
+        self.categoryVM = categoryVM
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -146,7 +146,7 @@ extension CategoryVC: UICollectionViewDelegate {
                 secondString: "사전 단어장",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryVM,
+                categoryVM: categoryVM,
                 distinguishSavedData: true)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: true)
@@ -156,7 +156,7 @@ extension CategoryVC: UICollectionViewDelegate {
                 secondString: "",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryVM,
+                categoryVM: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
@@ -166,7 +166,7 @@ extension CategoryVC: UICollectionViewDelegate {
                 secondString: "여행 준비물",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryVM,
+                categoryVM: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)
@@ -176,7 +176,7 @@ extension CategoryVC: UICollectionViewDelegate {
                 secondString: "지역 문화",
                 navigationTitle: categoryTittle,
                 indexPath: indexPath.row,
-                categoryViewModel: categoryVM,
+                categoryVM: categoryVM,
                 distinguishSavedData: false)
             categoryDetailView.bindVocaData()
             self.navigationController?.pushViewController(categoryDetailView, animated: false)

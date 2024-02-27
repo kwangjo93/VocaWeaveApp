@@ -13,7 +13,7 @@ import AVFoundation
 final class VocaWeaveVM {
     // MARK: - Property
     private let vocaListManager: VocaListManager
-    private let vocaTranslatedManager: VocaTranslatedManager
+    private let apiVocaListManager: APIVocaListManager
     private let networking = NetworkingManager.shared
     private let speechSynthesizer = AVSpeechSynthesizer()
     private let realmQuery = "myVoca"
@@ -38,12 +38,12 @@ final class VocaWeaveVM {
         }
     }
 
-    lazy var apiVocaList = vocaTranslatedManager.getVocaList()
+    lazy var apiVocaList = apiVocaListManager.getVocaList()
     lazy var apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
     // MARK: - init
-    init(vocaListManager: VocaListManager, vocaTranslatedManager: VocaTranslatedManager) {
+    init(vocaListManager: VocaListManager, apiVocaListManager: APIVocaListManager) {
         self.vocaListManager = vocaListManager
-        self.vocaTranslatedManager = vocaTranslatedManager
+        self.apiVocaListManager = apiVocaListManager
     }
     // MARK: - Helper
     func resetTextData(_ view: VocaWeaveView) {
@@ -211,7 +211,7 @@ private extension VocaWeaveVM {
     }
 
     func setDicVocaData() {
-        apiVocaList = vocaTranslatedManager.getVocaList()
+        apiVocaList = apiVocaListManager.getVocaList()
         apiVocaDataArray = apiVocaList.filter { isEnglishAlphabet($0.sourceText) }
     }
 
@@ -267,7 +267,7 @@ private extension VocaWeaveVM {
     }
 
     func assignAPIVocaListToButtons(_ buttons: [UIButton],
-                                    with selectedVoca: Array<RealmTranslateModel>.SubSequence,
+                                    with selectedVoca: Array<APIRealmVocaModel>.SubSequence,
                                     count: Int) {
         selectedCount = count
         selectedCountCountPublisher.send(count)

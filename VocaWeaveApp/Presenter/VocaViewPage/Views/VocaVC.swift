@@ -10,7 +10,7 @@ import Combine
 
 final class VocaVC: UIViewController {
     // MARK: - Property
-    private let vocaTranslatedVM: VocaTranslatedVM
+    private let apiVocaListVM: APIVocaListVM
     private let vocaListVM: VocaListVM
     private let vocaView = VocaView()
     private let emptyView = EmptyListView()
@@ -34,8 +34,8 @@ final class VocaVC: UIViewController {
     private lazy var nightModeButton = nightModeBarButtonItem(target: self,
                                                  action: #selector(nightModeButtonAction))
     // MARK: - init
-    init(vocaTranslatedVM: VocaTranslatedVM, vocaListVM: VocaListVM) {
-        self.vocaTranslatedVM = vocaTranslatedVM
+    init(apiVocaListVM: APIVocaListVM, vocaListVM: VocaListVM) {
+        self.apiVocaListVM = apiVocaListVM
         self.vocaListVM = vocaListVM
         super.init(nibName: nil, bundle: nil)
     }
@@ -121,7 +121,7 @@ private extension VocaVC {
         definesPresentationContext = true
         searchController.isActive = false
         vocaSearchHandler = VocaSearchHandler(vocaListVM: vocaListVM,
-                                              vocaTranslatedVM: vocaTranslatedVM,
+                                              apiVocaListVM: apiVocaListVM,
                                               vocaView: vocaView,
                                               emptyView: emptyView,
                                               segmentIndex: segmentIndex,
@@ -152,31 +152,31 @@ private extension VocaVC {
     }
 
     func bindAPIVocaListModelData() {
-        vocaTranslatedVM.alertPublisher
+        apiVocaListVM.alertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
-        vocaTranslatedVM.tableViewUpdate
+        apiVocaListVM.tableViewUpdate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedVocaList in
                 self?.bindSnapshotAPIVocaData(voca: updatedVocaList)
             }
             .store(in: &cancellables)
-        vocaTranslatedVM.errorAlertPublisher
+        apiVocaListVM.errorAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
-        vocaTranslatedVM.whitespacesAlertPublisher
+        apiVocaListVM.whitespacesAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
             }
             .store(in: &cancellables)
-        vocaTranslatedVM.vocaAlertPublisher
+        apiVocaListVM.vocaAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
@@ -193,7 +193,7 @@ private extension VocaVC {
             bindSnapshotVocaData(voca: vocaListVM.vocaList)
         case 1:
             setAPIVocaListDataSource()
-            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
+            bindSnapshotAPIVocaData(voca: apiVocaListVM.vocaList)
         default:
             break
         }
@@ -208,7 +208,7 @@ private extension VocaVC {
 
     func setAPIVocaListDataSource() {
         apiVocaListDataSource = APIVocaListDatasource(tableView: vocaView.vocaTableView,
-                                                      vocaTranlsatedVM: vocaTranslatedVM,
+                                                      apiVocaListVM: apiVocaListVM,
                                                       segmentIndex: segmentIndex)
         vocaView.vocaTableView.dataSource = apiVocaListDataSource
     }
@@ -221,9 +221,9 @@ private extension VocaVC {
         }
     }
 
-    func bindSnapshotAPIVocaData(voca: [RealmTranslateModel]) {
+    func bindSnapshotAPIVocaData(voca: [APIRealmVocaModel]) {
         apiVocaListDataSource.vocaTranslatedTableViewSnapshot(with: voca) {
-            vocaTranslatedVM.manageEmptyView(vocaVC: self,
+            apiVocaListVM.manageEmptyView(vocaVC: self,
                                              emptyView: emptyView,
                                              tableView: vocaView.vocaTableView)
         }
@@ -237,7 +237,7 @@ private extension VocaVC {
             guard let documentPicker = documentPicker else { return }
             vocaListVM.presentActionMenu(view: self, loadAction: documentPicker.showDocumentPicker)
         case 1:
-            vocaTranslatedVM.showAlertWithTextField(currentView: self)
+            apiVocaListVM.showAlertWithTextField(currentView: self)
         default:
             break
         }
@@ -251,7 +251,7 @@ private extension VocaVC {
             bindSnapshotVocaData(voca: vocaListVM.vocaList)
         case 1:
            setAPIVocaListDataSource()
-            bindSnapshotAPIVocaData(voca: vocaTranslatedVM.vocaList)
+            bindSnapshotAPIVocaData(voca: apiVocaListVM.vocaList)
         default:
             break
         }
@@ -305,8 +305,8 @@ extension VocaVC: UITableViewDelegate {
                     snapshot.deleteItems([item])
                     self.apiVocaListDataSource.apply(snapshot,
                                                      animatingDifferences: true)
-                    vocaTranslatedVM.deleteVoca(item)
-                    vocaTranslatedVM.manageEmptyView(vocaVC: self,
+                    apiVocaListVM.deleteVoca(item)
+                    apiVocaListVM.manageEmptyView(vocaVC: self,
                                                      emptyView: emptyView,
                                                      tableView: vocaView.vocaTableView)
                 }
@@ -322,7 +322,7 @@ extension VocaVC: UITableViewDelegate {
             vocaListVM.showAlertWithTextField(newData: vocaData)
         } else {
             guard let vocaData = apiVocaListDataSource.itemIdentifier(for: indexPath) else { return }
-            vocaTranslatedVM.editDictionaryData(currentView: self, vocaData: vocaData)
+            apiVocaListVM.editDictionaryData(currentView: self, vocaData: vocaData)
         }
     }
 }
