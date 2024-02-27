@@ -53,9 +53,8 @@ final class VocaWeaveVC: UIViewController {
         view.endEditing(true)
     }
 }
-
+// MARK: - Helper
 private extension VocaWeaveVC {
-    // MARK: - Helper
     func setup() {
         configureNav()
         configure()
@@ -113,19 +112,19 @@ private extension VocaWeaveVC {
                               image: UIImage(systemName: "highlighter"),
                               handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .myVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray, view: self.vocaWeaveView)
         })
         let dictionayVoca = UIAction(title: "사전 단어장",
                                      image: UIImage(systemName: "book.pages"),
                                      handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .dicVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray, view: self.vocaWeaveView)
         })
         let myBookmarkVoca = UIAction(title: "나의 북마크 단어장",
                                     image: UIImage(systemName: "star.square.fill"),
                                     handler: { _ in
             self.vocaWeaveVM.selectedVocaType = .bookmarkVoca
-            self.vocaWeaveVM.selectVoca()
+            self.vocaWeaveVM.selectVoca(buttons: self.buttonArray, view: self.vocaWeaveView)
         })
         let categoryMenu = UIMenu(title: "", children: [myVoca, dictionayVoca, myBookmarkVoca])
         return UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3"),
@@ -181,7 +180,9 @@ private extension VocaWeaveVC {
         view.loopMode = .playOnce
         view.contentMode = .scaleAspectFit
     }
-    // MARK: - Action
+}
+// MARK: - objc Action
+private extension VocaWeaveVC {
     @objc func refreshButtonAction() {
         vocaWeaveVM.resetTextData(vocaWeaveView)
         vocaWeaveVM.refreshVocaData(buttons: buttonArray)

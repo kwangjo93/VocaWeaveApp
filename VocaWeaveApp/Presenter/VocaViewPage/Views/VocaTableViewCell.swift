@@ -72,9 +72,8 @@ final class VocaTableViewCell: UITableViewCell {
         }
     }
 }
-
+// MARK: - Helper
 private extension VocaTableViewCell {
-    // MARK: - Helper
     func configure() {
         [sourceLabel,
          translatedLabel,
@@ -118,7 +117,10 @@ private extension VocaTableViewCell {
         animationView.isHidden = true
         animationView.frame = CGRect(x: -37, y: -37, width: 100, height: 100)
     }
+}
 
+// MARK: - Define Button target
+private extension VocaTableViewCell {
     func speakerButtonTapped() {
         speakerButton.addTarget(self, action: #selector(speakerButtonAction), for: .touchUpInside)
     }
@@ -126,7 +128,9 @@ private extension VocaTableViewCell {
     func vocaBookmarkButtonTapped() {
         bookmarkButton.addTarget(self, action: #selector(vocaBookmarkButtonAction), for: .touchUpInside)
     }
-    // MARK: - Action
+}
+// MARK: - objc Action
+private extension VocaTableViewCell {
     @objc  func speakerButtonAction() {
         guard let viewModel = viewModel else { return }
         viewModel.speakerButtonAction(sourceText: sourceLabel.text)

@@ -8,11 +8,11 @@
 import Foundation
 import RealmSwift
 
-protocol RealmTranslateType {
-    func getVocaList() -> [RealmTranslateModel]
-    func makeNewList(_ list: RealmTranslateModel)
-    func updateListInfo(list: RealmTranslateModel, text: String, isSelected: Bool)
-    func deleteList(_ list: RealmTranslateModel)
+protocol APIRealmVocaModelType {
+    func getVocaList() -> [APIRealmVocaModel]
+    func makeNewList(_ list: APIRealmVocaModel)
+    func updateListInfo(list: APIRealmVocaModel, text: String, isSelected: Bool)
+    func deleteList(_ list: APIRealmVocaModel)
 }
 
 protocol RealmVocaModelType {

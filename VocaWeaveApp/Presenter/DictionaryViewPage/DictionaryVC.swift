@@ -13,7 +13,6 @@ final class DictionaryVC: UIViewController {
     // MARK: - Property
     let dictionaryView = DictionaryView()
     let dictionaryVM: DictionaryVM
-    var dictionaryEnum: DictionaryEnum = .new
     var cancellables = Set<AnyCancellable>()
 
     lazy var backBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"),
@@ -40,9 +39,7 @@ final class DictionaryVC: UIViewController {
         setNightButton(button: nightModeButton)
     }
     // MARK: - init
-    init(dictionaryEnum: DictionaryEnum,
-         dictionaryVM: DictionaryVM) {
-        self.dictionaryEnum = dictionaryEnum
+    init(dictionaryVM: DictionaryVM) {
         self.dictionaryVM = dictionaryVM
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,8 +51,8 @@ final class DictionaryVC: UIViewController {
         view.endEditing(true)
     }
 }
+// MARK: - Helper
 private extension DictionaryVC {
-    // MARK: - Helper
     func setup() {
         view.addSubview(dictionaryView)
         configureNav()
@@ -89,22 +86,22 @@ private extension DictionaryVC {
     }
 
     func configureVocaData() {
-        guard let vocaTranslatedData = dictionaryVM.vocaTranslatedData else { return }
-        switch dictionaryEnum {
+        guard let apiVocaData = dictionaryVM.apiVocaData else { return }
+        switch dictionaryVM.dictionaryEnum {
         case .edit, .response:
             tabBarController?.tabBar.isHidden = true
-            dictionaryVM.bindTextData(vocaTranslatedData, dictionaryView)
+            dictionaryVM.bindTextData(apiVocaData, dictionaryView)
             hideAndPresnetAddButton()
-            dictionaryVM.setBookmarkStatus(isSelec: vocaTranslatedData.isSelected,
+            dictionaryVM.setBookmarkStatus(isSelec: apiVocaData.isSelected,
                                            view: dictionaryView,
-                                           text: vocaTranslatedData.sourceText)
+                                           text: apiVocaData.sourceText)
         case .new:
             break
         }
     }
 
     func hideAndPresnetAddButton() {
-        switch dictionaryEnum {
+        switch dictionaryVM.dictionaryEnum {
         case .response:
             navigationItem.leftBarButtonItems?.insert(backBarButton, at: 0)
             navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
@@ -118,7 +115,7 @@ private extension DictionaryVC {
         }
     }
 
-    func handleVocaTranslation(sourceText: String) {
+    func handleAPIVoca(sourceText: String) {
         if (dictionaryVM.apiVocaList.first(where: { $0.sourceText == sourceText })) != nil {
             if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
                 navigationItem.rightBarButtonItems?.remove(at: index)
@@ -143,7 +140,7 @@ private extension DictionaryVC {
             }
             .store(in: &cancellables)
 
-        dictionaryVM.duplicationAlertPublisher
+        dictionaryVM.vocaAlertPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] alert in
                 self?.present(alert, animated: true)
@@ -171,10 +168,17 @@ private extension DictionaryVC {
                                                 action: #selector(bookmarkButtonAction),
                                                 for: .touchUpInside)
     }
+}
+// MARK: - objc Action
+private extension DictionaryVC {
     @objc func addRightBarButtonAction() {
-        guard let vocaTranslatedData = dictionaryVM.vocaTranslatedData else { return }
-        dictionaryVM.saveDictionaryData(vocaTranslatedData)
-        self.dismiss(animated: true)
+        dictionaryVM.saveDictionaryData()
+        switch dictionaryVM.dictionaryEnum {
+        case .response, .edit:
+            self.dismiss(animated: true)
+        case .new:
+            break
+        }
     }
 
     @objc func nightModeBuutonAction() {
@@ -222,34 +226,21 @@ private extension DictionaryVC {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension DictionaryVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let sourceText = dictionaryView.sourceTextField.text else { return false }
-        switch dictionaryEnum {
-        case .new:
             Task {
                 do {
-                    dictionaryVM.vocaTranslatedData = try await dictionaryVM
+                    dictionaryVM.apiVocaData = try await dictionaryVM
                                                             .fetchDataAndHandleResult(sourceText: sourceText)
-                    dictionaryVM.updateTranslationView(with: dictionaryVM.vocaTranslatedData,
+                    dictionaryVM.updateTranslationView(with: dictionaryVM.apiVocaData,
                                                        view: dictionaryView)
+                    handleAPIVoca(sourceText: sourceText)
                 } catch {
                     print("Task Response error")
                 }
             }
-        case .edit, .response:
-            Task {
-                do {
-                    dictionaryVM.vocaTranslatedData = try await dictionaryVM
-                                                        .fetchDataAndHandleResult(sourceText: sourceText)
-                    dictionaryVM.updateTranslationView(with: dictionaryVM.vocaTranslatedData,
-                                                       view: dictionaryView)
-                    handleVocaTranslation(sourceText: sourceText)
-                } catch {
-                    print("Task Response error")
-                }
-            }
-        }
         textField.resignFirstResponder()
         return true
     }
