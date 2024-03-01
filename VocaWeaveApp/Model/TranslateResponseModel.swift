@@ -9,14 +9,13 @@ import Foundation
 import RealmSwift
 
 // APIData
-final class APIReponseModel: Decodable {
-    private let message: Message
-        struct Message: Decodable {
-            let result: Result
-        }
-            struct Result: Decodable {
-                let translatedText: String
-            }
+    struct APIReponseModel: Decodable {
+        let translations: [Translation]
+    }
+    struct Translation: Codable {
+        let text: String
 
-    var translatedText: String { message.result.translatedText }
-}
+        enum CodingKeys: String, CodingKey {
+            case text
+        }
+    }

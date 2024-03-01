@@ -13,40 +13,40 @@ final class NetworkingManager {
 
     func fetchData(source: String,
                    target: String,
-                   text: String) async throws -> APIReponseModel {
-        guard let file = Bundle.main.path(
-                                    forResource: "APIInfo",
-                                    ofType: "plist") else { throw NetworkError.invalidFile }
+                   text: String) async throws -> String {
+        guard let file = Bundle.main.path(forResource: "APIInfo", ofType: "plist")
+                                                                    else { throw NetworkError.invalidFile }
         guard let resource = NSDictionary(contentsOfFile: file),
-              let keyId = resource["API_id"] as? String,
-              let keyscret = resource["API_scret"] as? String else {
+              let apiKey = resource["API_key"] as? String else {
             throw NetworkError.invalidCredentials
         }
 
-        guard let url = URL(string: "https://openapi.naver.com/v1/papago/n2mt") else {
+        guard let url = URL(string: "https://api-free.deepl.com/v2/translate") else {
             throw NetworkError.invalidURL
         }
 
         var request = URLRequest(url: url)
-
         request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded",
-                         forHTTPHeaderField: "Content-Type")
-        request.setValue(keyId, forHTTPHeaderField: "X-Naver-Client-Id")
-        request.setValue(keyscret, forHTTPHeaderField: "X-Naver-Client-Secret")
-        let stringWithParameters = "source=\(source)&target=\(target)&text=\(text)"
-        let data = stringWithParameters.data(using: .utf8)!
-        request.httpBody = data
+        request.setValue("DeepL-Auth-Key \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let requestData: [String: Any] = [
+            "text": [text],
+            "target_lang": target
+        ]
+        let jsonData = try JSONSerialization.data(withJSONObject: requestData, options: [])
+        request.httpBody = jsonData
 
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             if let httpResponse = response as? HTTPURLResponse, (400...499).contains(httpResponse.statusCode) {
+                print(response)
                 throw NetworkError.httpError
             }
-            let decodedData = try JSONDecoder().decode(APIReponseModel.self,
-                                                       from: data)
-            return decodedData
+            let decodedData = try JSONDecoder().decode(APIReponseModel.self, from: data)
+            return decodedData.translations.first?.text ?? ""
         } catch {
+            print(error)
             throw NetworkError.decodingError
         }
     }

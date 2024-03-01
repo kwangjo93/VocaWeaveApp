@@ -154,7 +154,7 @@ final class VocaWeaveVM {
                 let result = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
                                                             target: Language.targetLanguage.languageCode,
                                                             text: sourceText)
-                return result.translatedText
+                return result
             } catch {
                 print("에러 발생: \(error)")
                 throw error

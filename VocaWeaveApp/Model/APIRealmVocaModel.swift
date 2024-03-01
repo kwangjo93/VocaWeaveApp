@@ -15,10 +15,10 @@ final class APIRealmVocaModel: Object {
     @Persisted var isSelected: Bool
     @Persisted var section: String
 
-    convenience init(apiModel: APIReponseModel, sourceText: String) {
+    convenience init(translatedText: String, sourceText: String) {
         self.init()
         self.sourceText = sourceText
-        self.translatedText = apiModel.translatedText
+        self.translatedText = translatedText
         self.isSelected = false
         self.section = sourceText.getFirstLetter()
     }

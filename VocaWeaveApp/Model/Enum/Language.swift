@@ -7,8 +7,8 @@
 
 import Foundation
 enum Language: String {
-    case korean = "ko"
-    case english = "en"
+    case korean = "KO"
+    case english = "EN"
 
     static var sourceLanguage: Language = .korean
     static var targetLanguage: Language = .english
