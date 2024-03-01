@@ -16,7 +16,8 @@
 + UI - CodaBase
 + Design Pattern - MVVM
 + Database - Realm
-+ API - Papago.naver API
++ API - Papago.naver API (2024. 02. 29 서비스 종료) -> DeepL (2024. 03. 01 ~)
+
 
 ## 구현 기능
 + 단어만 제공해 주는 영어 단어장 앱이 아니라 나만의 영어 공부에 따라 원하는 단어를 빠르게 저장
