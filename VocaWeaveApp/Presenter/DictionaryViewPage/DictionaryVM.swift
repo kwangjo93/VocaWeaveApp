@@ -73,7 +73,7 @@ final class DictionaryVM {
                 let responseData = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
                                                                   target: Language.targetLanguage.languageCode,
                                                                   text: sourceText)
-                let result = APIRealmVocaModel(apiModel: responseData, sourceText: sourceText)
+                let result = APIRealmVocaModel(translatedText: responseData, sourceText: sourceText)
                 let vocaData = await checkDuplicationData(vocaData: result, text: sourceText)
                 return vocaData
             } catch {

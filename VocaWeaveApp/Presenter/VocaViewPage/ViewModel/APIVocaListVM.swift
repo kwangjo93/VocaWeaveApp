@@ -84,7 +84,7 @@ private extension APIVocaListVM {
         return modifiedString
     }
 
-    func fetchDataAndHandleResult(sourceText: String) async throws -> APIReponseModel? {
+    func fetchDataAndHandleResult(sourceText: String) async throws -> String? {
         if Language.detectLanguage(text: sourceText) {
             do {
                 let result = try await networking.fetchData(source: Language.sourceLanguage.languageCode,
@@ -129,7 +129,7 @@ private extension APIVocaListVM {
             do {
                 guard let responseData = try await self.fetchDataAndHandleResult(sourceText: sourceText)
                 else { return }
-                let voca = APIRealmVocaModel(apiModel: responseData, sourceText: sourceText)
+                let voca = APIRealmVocaModel(translatedText: responseData, sourceText: sourceText)
                 let dicVM = DictionaryVM(apiVocaListVM: self,
                                          apiVocaData: voca,
                                          dictionaryEnum: .response)

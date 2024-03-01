@@ -116,12 +116,20 @@ private extension DictionaryVC {
     }
 
     func handleAPIVoca(sourceText: String) {
-        if (dictionaryVM.apiVocaList.first(where: { $0.sourceText == sourceText })) != nil {
+        let isExisting = dictionaryVM.apiVocaList.contains { $0.sourceText == sourceText }
+        let isButtonAlreadyExists = navigationItem.rightBarButtonItems?.contains(addRightBarButton) ?? false
+        if isExisting && isButtonAlreadyExists {
             if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
                 navigationItem.rightBarButtonItems?.remove(at: index)
             }
-        } else {
+        } else if !isExisting && !isButtonAlreadyExists {
             navigationItem.rightBarButtonItems?.insert(addRightBarButton, at: 0)
+        }
+    }
+
+    func removeAddRightBarButton() {
+        if let index = navigationItem.rightBarButtonItems?.firstIndex(of: addRightBarButton) {
+            navigationItem.rightBarButtonItems?.remove(at: index)
         }
     }
 
